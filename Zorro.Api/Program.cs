@@ -26,16 +26,12 @@ app.MapPost("/ProcessPayment", async (TransactionRequest transactionRequest) =>
 app.Run();
 
 class TransactionRequest
-{
-    public TransactionRequest()
-    {
-    }
-
+{ 
     public Guid UserID { get; set; }
     public decimal Amount { get; set; }
 }
 
-public class TransactionResponse
+class TransactionResponse
 {
     public string ReceiptNumber => "123456";
 }

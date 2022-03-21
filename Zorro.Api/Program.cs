@@ -18,8 +18,10 @@ app.UseHttpsRedirection();
 
 app.MapPost("/ProcessPayment", async (TransactionRequest transactionRequest) =>
 {
-    Console.WriteLine($"Received eCommerce payment request of {transactionRequest.Amount:c} for UserID {transactionRequest.UserID}");
+    await Task.Delay(100);
 
+    Console.WriteLine($"Processed eCommerce payment request of {transactionRequest.Amount:c} for UserID {transactionRequest.UserID}");
+    
     return new TransactionResponse();
 });
 

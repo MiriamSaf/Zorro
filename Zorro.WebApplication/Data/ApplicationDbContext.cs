@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Zorro.WebApplication.Models;
 
 namespace Zorro.WebApplication.Data
 {
@@ -9,5 +10,7 @@ namespace Zorro.WebApplication.Data
             : base(options)
         {
         }
+
+        public DbSet<Transaction> Transactions { get; set; }
     }
 }

@@ -59,6 +59,7 @@ namespace Zorro.WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
+                transaction.TransactionType = TransactionType.Payment;
                 transaction.ID = Guid.NewGuid();
                 _context.Add(transaction);
                 await _context.SaveChangesAsync();

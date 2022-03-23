@@ -23,3 +23,10 @@ body {
 #nav-logo{
     max-width: 25%;
 }
+
+/* to overide default style*/
+.navbar-brand {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-right: -30vh;
+}

@@ -16,3 +16,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* layout page css */
+
+/* image in nav bar */
+#nav-logo{
+    max-width: 25%;
+}

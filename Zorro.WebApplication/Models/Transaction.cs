@@ -1,4 +1,6 @@
-﻿namespace Zorro.WebApplication.Models
+﻿using Zorro.WebApplication.Data;
+
+namespace Zorro.WebApplication.Models
 {
     public class Transaction
     {
@@ -8,6 +10,8 @@
         public DateTime CreatedDateTime { get; set; }
         public DateTime CompletedDateTime { get; set; }
         public TransactionStatus TransactionStatus { get; set; } = TransactionStatus.Pending;
+
+        public ApplicationUser ApplicationUser { get; set; }
 
     }
 

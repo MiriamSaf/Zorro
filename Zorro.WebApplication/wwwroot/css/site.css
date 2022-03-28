@@ -34,3 +34,15 @@ body {
 .spacer {
 height: 30px;
 }
+
+/*Home view styles*/
+
+#homeview-img {
+    max-width: 50%;
+    text-align: center;
+    margin: auto;
+}
+
+#home-container{
+    text-align: center;
+}

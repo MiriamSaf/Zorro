@@ -14,16 +14,19 @@ namespace Zorro.WebApplication.Controllers
     public class TransactionsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public TransactionsController(ApplicationDbContext context)
+        private readonly ITransactionSampleDataService _transactionSampleDataService;
+        public TransactionsController(ApplicationDbContext context, ITransactionSampleDataService transactionSampleDataService)
         {
             _context = context;
+            _transactionSampleDataService = transactionSampleDataService;
         }
 
         // GET: Transactions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Transactions.ToListAsync());
+            var transactions = _transactionSampleDataService.GetData();
+            return View(transactions.ToList());
+            //return View(await _context.Transactions.ToListAsync());
         }
 
         // GET: Transactions/Details/5

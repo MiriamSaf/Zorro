@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace VirtualWalletApp.Models
+namespace Zorro.WebApplication.Models
 {
     //customer model
     public class Customer

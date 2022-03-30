@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "BPAY";
+}
+
+<h1>BPAY</h1>
+<form>
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <label for="billerInput" class="form-label">Biller</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="billerInput">
+                <button class="btn btn-outline-secondary" type="button" id="billerInput">Search</button>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <label for="billerName" class="form-label">Biller name</label>
+            <input class="form-control" type="text" id="billerName" placeholder="Disabled input" aria-label="Disabled input example" disabled>
+        </div>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="rememberBiller">
+        <label class="form-check-label" for="rememberBiller">Remember biller</label>
+    </div>
+
+    <div class="mb-3">
+      <label for="crn" class="form-label">Customer reference number</label>
+      <input type="text" class="form-control" id="crn"/>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <label for="amount" class="form-label">Amount (maximum $10,000)</label>
+            <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="number" class="form-control" id="amount"  min="0.00" max="10000.00" step="0.01"/>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <label for="paymentDate" class="form-label">When</label>
+            <input type="Date" id="paymentDate" class="form-control"/>
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-dark">Pay</button>
+</form>

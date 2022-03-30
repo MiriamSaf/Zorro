@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Zorro.WebApplication.Models;
+using Zorro.WebApplication.ViewModels;
 
 namespace Zorro.WebApplication.Controllers
 {
@@ -16,8 +17,28 @@ namespace Zorro.WebApplication.Controllers
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Transactions");
+            {
+                return RedirectToAction("Dashboard");
+            }
+                
             return View();
+        }
+
+        public IActionResult Dashboard()
+        {
+            var dashboardData = new DashboardViewModel()
+            {
+                Balance = 55.42M,
+                WalletId = User.Identity.Name
+            };
+            dashboardData.RecentTransactions.Add(
+            new TransactionViewModel()
+            {
+                Amount = 21.32M,
+                Date = DateTime.Now,
+                Description = "Maccas"
+            });
+            return View("Dashboard", dashboardData);
         }
 
         public IActionResult Privacy()

@@ -1,0 +1,53 @@
+﻿@model Zorro.WebApplication.ViewModels.DashboardViewModel
+
+<h1>Dashboard</h1>
+
+<h2>Wallet</h2>
+
+<!-- Wallet details -->
+<ul class="list-group pb-3">
+  <li class="list-group-item">@Html.DisplayFor(model => model.WalletId)</li>
+  <li class="list-group-item">@Html.DisplayFor(model => model.Balance)</li>
+</ul>
+
+<!-- Payment buttons-->
+<div>
+  <button type="button" class="p-2 btn btn-dark">Transfer</button>
+  <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("Bpay", "Transactions")'">BPay</button>
+</div>
+
+<hr class="my-3"/>
+
+<h2>Transactions</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RecentTransactions[0].Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecentTransactions[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecentTransactions[0].Amount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+<tbody>
+@foreach (var item in Model.RecentTransactions) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

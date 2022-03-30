@@ -53,6 +53,11 @@ namespace Zorro.WebApplication.Controllers
             return View();
         }
 
+        public IActionResult Transfer()
+        {
+            return View("CreateTransfer");
+        }
+
         // GET: Transactions/Create
         public IActionResult Bpay()
         {

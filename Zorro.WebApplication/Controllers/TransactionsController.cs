@@ -114,6 +114,7 @@ namespace Zorro.WebApplication.Controllers
             {
                 try
                 {
+                    transaction.CreatedDateTime = DateTime.UtcNow;
                     _context.Update(transaction);
                     await _context.SaveChangesAsync();
                 }

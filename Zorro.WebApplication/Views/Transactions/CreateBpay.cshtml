@@ -5,13 +5,13 @@
 }
 
 <h1>BPAY</h1>
-<form asp-action="CreateBpay" method="post">
+<form asp-action="CreateBPay" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row mb-3">
         <div class="col-sm-6">
-            <label asp-for="BillerCode" class="form-label">Biller</label>
+            <label asp-for="PayeeId" class="form-label">Biller</label>
             <div class="input-group">
-                <input asp-for="BillerCode" type="text" class="form-control" id="billerInput">
+                <input asp-for="PayeeId" type="text" class="form-control" id="billerInput">
                 <button class="btn btn-outline-secondary" type="button" id="billerInput">Search</button>
             </div>
         </div>

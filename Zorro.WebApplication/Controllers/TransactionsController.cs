@@ -64,6 +64,8 @@ namespace Zorro.WebApplication.Controllers
             return View("CreateBpay");
         }
 
+
+
         // POST: Transactions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -74,6 +76,7 @@ namespace Zorro.WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 transaction.TransactionType = TransactionType.Payment;
+                transaction.CreatedDateTime = DateTime.UtcNow;
                 transaction.ID = Guid.NewGuid();
                 _context.Add(transaction);
                 await _context.SaveChangesAsync();
@@ -81,6 +84,27 @@ namespace Zorro.WebApplication.Controllers
             }
             return View(transaction);
         }
+
+
+        // POST: Transactions/CreateBPay
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateBPay([Bind("ID,TransactionType,Amount")] Transaction transaction)
+        {
+            if (ModelState.IsValid)
+            {
+                transaction.TransactionType = TransactionType.Payment;
+                transaction.CreatedDateTime = DateTime.UtcNow;
+                transaction.ID = Guid.NewGuid();
+                _context.Add(transaction);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(transaction);
+        }
+
 
         // GET: Transactions/Edit/5
         public async Task<IActionResult> Edit(Guid? id)

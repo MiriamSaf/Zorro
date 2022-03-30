@@ -2,10 +2,10 @@
 {
     public class BpayRequestDto
     {
-        public string BillerCode { get; set; } = "";
+        public string BillPayID { get; set; }
         public bool RememberBiller { get; set; }
-        public string CustomerReferenceNumber { get; set; } = "";
+        public int PayeeId { get; set; }
         public decimal Amount { get; set; }
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
     }
 }

@@ -6,6 +6,6 @@
         public bool RememberBiller { get; set; }
         public int PayeeId { get; set; }
         public decimal Amount { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime ScheduleTimeUtc { get; set; }
     }
 }

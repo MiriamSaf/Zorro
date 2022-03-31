@@ -40,7 +40,8 @@ body {
 .navbar-brand {
     padding-top: 0px;
     padding-bottom: 0px;
-    margin-right: -30vh;
+    margin-right: -10vh;
+    padding-left: 4vh;
 }
 
 .spacer {
@@ -57,4 +58,21 @@ height: 30px;
 
 #home-container{
     text-align: center;
+}
+
+.navbar-nav{
+align-items: center;
+}
+
+.flex1layout {
+    max-width: 10%;
+}
+/** RESPONSIVE DESIGN */
+media (min-width: 576px)
+.navbar-expand-sm .navbar-nav {
+    //margin-left: 5vh;
+}
+
+@media (min-width: 1440px){
+   
 }

@@ -8,12 +8,5 @@ namespace Zorro.WebApplication.Models
         [Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PayeeId { get; set; }
         public string BusinessName { get; set; }
-        public decimal Amount { get; set; }
-
-        public DateTime ScheduleTimeUTC { get; set; }
-
-        public string PaymentFrequency { get; set; }
-
-
     }
 }

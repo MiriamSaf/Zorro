@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-Zorro.WebApplication-4BB61DB1-C7C9-4727-8644-3B6005B63F18</UserSecretsId>
   </PropertyGroup>

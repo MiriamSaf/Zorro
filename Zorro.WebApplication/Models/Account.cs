@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zorro.WebApplication.Models
@@ -24,7 +23,7 @@ namespace Zorro.WebApplication.Models
         [Required, Range(0, 4, ErrorMessage = "Error: Invalid Free Transactions Number")]
         public int FreeTransactions { get; set; }
 
-        public virtual List<Transaction>? Transactions { get; set; }
+        public virtual List<Transaction> Transactions { get; set; }
 
     }
 }

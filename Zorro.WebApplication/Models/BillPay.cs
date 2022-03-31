@@ -14,12 +14,13 @@ namespace Zorro.WebApplication.Models
         //virtual allows to be overidden
         public virtual Account Account { get; set; }
 
-        //must make foreign after creates payee
+
+        [Required, ForeignKey("Payee")]
         public int PayeeId { get; set; }
         public decimal Amount { get; set; }
         public DateTime ScheduleTimeUtc { get; set; }
 
-        public String PaymentFrequency { get; set; }
+        public string PaymentFrequency { get; set; }
 
         //was set in table as string but makes more sense as boolean
         public bool BillState { get; set; }

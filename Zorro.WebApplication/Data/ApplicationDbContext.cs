@@ -12,5 +12,7 @@ namespace Zorro.WebApplication.Data
         }
 
         public DbSet<Transaction> Transactions { get; set; }
+
+        public DbSet<Zorro.WebApplication.Models.BillPay> BillPay { get; set; }
     }
 }

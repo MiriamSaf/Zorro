@@ -11,10 +11,15 @@ namespace Zorro.WebApplication.Models
         public Guid TransactionID { get; set; }
         public TransactionType TransactionType { get; set; }
 
-        [Required, ForeignKey("Account"), Display(Name = "Account Number")]
+        [ForeignKey("DestinationAccount")]
         [RegularExpression(@"^(\d{4})$", ErrorMessage = "Error: Must be 4 Digits.")]
-        public int AccountNumber { get; set; }
-        public virtual Account Account { get; set; }
+        public int? DestinationAccountNumber { get; set; }
+        public virtual Account DestinationAccount { get; set; }
+
+        /* [Required, ForeignKey("Account"), Display(Name = "Account Number")]
+         [RegularExpression(@"^(\d{4})$", ErrorMessage = "Error: Must be 4 Digits.")]
+         public int AccountNumber { get; set; }
+         public virtual Account Account { get; set; }*/
         public decimal Amount { get; set; }
         public DateTime TransactionTimeUTC { get; set; }
 

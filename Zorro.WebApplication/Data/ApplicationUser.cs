@@ -19,7 +19,7 @@ namespace Zorro.WebApplication.Data
         public string Surname { get; set; }
         public string AvatarUrl { get; set; }
 
-        public DateOnly BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
 
         [RegularExpression(@"^(\d{10})$", ErrorMessage = "Error: Must be 10 Digits.")]

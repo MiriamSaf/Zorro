@@ -12,7 +12,7 @@ namespace Zorro.WebApplication.Data
             var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
             // Look for customers.
-            if(context.Customers.Any())
+            /*if(context.Customers.Any())
                 return; // DB has already been seeded.
 
             context.Customers.AddRange(

@@ -11,7 +11,7 @@
         <section>
             <form id="account" method="post">
                 <h2>Login to your Zorro e-Wallet!</h2>
-                <sup>Only Local Acocunts Are Supported Currently</sup>
+                <p style="padding-left:15px;"> Dont have an account? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Signup Today</a> </p>
                 <div class="spacer"></div>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating" style="margin-bottom:15px;">
@@ -41,7 +41,7 @@
                         <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
                     </p>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                      
                     </p>
                     <p>
                         <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>

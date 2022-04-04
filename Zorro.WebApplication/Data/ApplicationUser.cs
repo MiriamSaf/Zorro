@@ -9,15 +9,15 @@ namespace Zorro.WebApplication.Data
     {
         private DateOnly birthDate;
 
-        [Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public String CustomerID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string CustomerID { get; set; }
 
 
-        [Required, StringLength(50, ErrorMessage = "Error: First Name has a maximum of 50 Characters.")]
+        [StringLength(50, ErrorMessage = "Error: First Name has a maximum of 50 Characters.")]
         public string FirstName { get; set; }
 
 
-        [Required, StringLength(60, ErrorMessage = "Error: Surname has a maximum of 60 Characters.")]
+        [StringLength(60, ErrorMessage = "Error: Surname has a maximum of 60 Characters.")]
         public string Surname { get; set; }
         public string AvatarUrl { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zorro.WebApplication.Models
@@ -11,7 +11,7 @@ namespace Zorro.WebApplication.Models
         public int AccountNumber { get; set; }
 
         [Required, ForeignKey("ApplicationUser")]
-        public String CustomerID { get; set; }
+        public string CustomerID { get; set; }
 
         [Required, Range(0, float.MaxValue, ErrorMessage = "Error: Please enter a number that is positive.")]
         [DataType(DataType.Currency)]

@@ -19,7 +19,7 @@ namespace Zorro.WebApplication.Data
                 new Account
                 {
                     AccountNumber = 1234,
-                    CustomerID = "d9df625b-d2cd-4429-9fdf-0637ed1cad3b",
+                    CustomerID = "cust1234",
                     Balance = 10000,
                     FreeTransactions = 1,
                 });

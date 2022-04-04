@@ -7,8 +7,10 @@ namespace Zorro.WebApplication.Data
 {
     public class ApplicationUser : IdentityUser
     {
-        [Required, DatabaseGenerated(DatabaseGeneratedOption.Identity) ]
-        public int CustomerID { get; set; }
+        private DateOnly birthDate;
+
+        [Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public String CustomerID { get; set; }
 
 
         [Required, StringLength(50, ErrorMessage = "Error: First Name has a maximum of 50 Characters.")]
@@ -19,7 +21,7 @@ namespace Zorro.WebApplication.Data
         public string Surname { get; set; }
         public string AvatarUrl { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime ? BirthDate { get; set; }
 
 
         [RegularExpression(@"^(\d{10})$", ErrorMessage = "Error: Must be 10 Digits.")]

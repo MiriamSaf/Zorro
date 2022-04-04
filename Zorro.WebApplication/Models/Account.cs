@@ -10,9 +10,8 @@ namespace Zorro.WebApplication.Models
         [RegularExpression(@"^(\d{4})$", ErrorMessage = "Error: Must be 4 Digits.")]
         public int AccountNumber { get; set; }
 
-        [Required, ForeignKey("ApplicationDbContext")]
-        [RegularExpression(@"^(\d{4})$", ErrorMessage = "Error: Must be 4 Digits.")]
-        public string CustomerID { get; set; }
+        [Required, ForeignKey("ApplicationUser")]
+        public String CustomerID { get; set; }
 
         [Required, Range(0, float.MaxValue, ErrorMessage = "Error: Please enter a number that is positive.")]
         [DataType(DataType.Currency)]

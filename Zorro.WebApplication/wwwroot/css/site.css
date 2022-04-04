@@ -13,6 +13,7 @@
 :root {
     --headings-font-family: 'Saira Semi Condensed', sans-serif;
     --body-font-family: 'Darker Grotesque', sans-serif;
+    --color-dark-blue: #213440;
 }
 
 html, body, nav {
@@ -21,6 +22,7 @@ html, body, nav {
 }
 h1, h2, h3, h4, h5 {
     font-family: 'Saira Semi Condensed', sans-serif;
+    color: #213440;
 }
 @media (min-width: 768px) {
   html {

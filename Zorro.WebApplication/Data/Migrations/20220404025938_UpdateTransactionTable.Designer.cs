@@ -12,8 +12,8 @@ using Zorro.WebApplication.Data;
 namespace Zorro.WebApplication.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220403210820_RemoveAccountNumFromTransact3")]
-    partial class RemoveAccountNumFromTransact3
+    [Migration("20220404025938_UpdateTransactionTable")]
+    partial class UpdateTransactionTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -267,7 +267,7 @@ namespace Zorro.WebApplication.Data.Migrations
 
                     b.HasKey("AccountNumber");
 
-                    b.ToTable("Acconuts");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("Zorro.WebApplication.Models.BillPay", b =>
@@ -340,9 +340,6 @@ namespace Zorro.WebApplication.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("AccountNumber")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
@@ -355,6 +352,9 @@ namespace Zorro.WebApplication.Data.Migrations
                     b.Property<int>("CurrencyType")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DestinationAccountNumber")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("TransactionTimeUTC")
                         .HasColumnType("datetime2");
 
@@ -363,9 +363,9 @@ namespace Zorro.WebApplication.Data.Migrations
 
                     b.HasKey("TransactionID");
 
-                    b.HasIndex("AccountNumber");
-
                     b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("DestinationAccountNumber");
 
                     b.ToTable("Transactions");
                 });
@@ -434,15 +434,17 @@ namespace Zorro.WebApplication.Data.Migrations
 
             modelBuilder.Entity("Zorro.WebApplication.Models.Transaction", b =>
                 {
-                    b.HasOne("Zorro.WebApplication.Models.Account", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("AccountNumber");
-
                     b.HasOne("Zorro.WebApplication.Data.ApplicationUser", "ApplicationUser")
                         .WithMany("Transactions")
                         .HasForeignKey("ApplicationUserId");
 
+                    b.HasOne("Zorro.WebApplication.Models.Account", "DestinationAccount")
+                        .WithMany("Transactions")
+                        .HasForeignKey("DestinationAccountNumber");
+
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("DestinationAccount");
                 });
 
             modelBuilder.Entity("Zorro.WebApplication.Data.ApplicationUser", b =>

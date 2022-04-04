@@ -265,7 +265,7 @@ namespace Zorro.WebApplication.Data.Migrations
 
                     b.HasKey("AccountNumber");
 
-                    b.ToTable("Acconuts");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("Zorro.WebApplication.Models.BillPay", b =>

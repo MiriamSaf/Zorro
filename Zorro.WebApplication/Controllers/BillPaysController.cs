@@ -15,9 +15,12 @@ namespace Zorro.WebApplication.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public BillPaysController(ApplicationDbContext context)
+        private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
+
+        public BillPaysController(ApplicationDbContext context, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: BillPays
@@ -52,6 +55,11 @@ namespace Zorro.WebApplication.Controllers
             ViewData["AccountNumber"] = new SelectList(_context.Set<Account>(), "AccountNumber", "AccountNumber");
             return View();
         }
+        // GET: Transactions/Create
+        public IActionResult CreateBpay()
+        {
+            return View("CreateBillpay");
+        }
 
         // POST: BillPays/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -60,8 +68,10 @@ namespace Zorro.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BillPayID,AccountNumber,PayeeId,Amount,ScheduleTimeUtc,PaymentFrequency,BillState")] BillPay billPay)
         {
+            var user = await _userManager.GetUserAsync(User);
             if (ModelState.IsValid)
             {
+               // billPay.AccountNumber = Account.a
                 _context.Add(billPay);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

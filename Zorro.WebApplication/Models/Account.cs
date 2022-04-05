@@ -1,5 +1,6 @@
-﻿ using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Zorro.WebApplication.Data;
 
 namespace Zorro.WebApplication.Models
 {
@@ -22,6 +23,9 @@ namespace Zorro.WebApplication.Models
         public int FreeTransactions { get; set; }
 
         public virtual List<Transaction> Transactions { get; set; }
+
+
+        public ApplicationUser ApplicationUser { get; set; }
 
     }
 }

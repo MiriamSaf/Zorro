@@ -255,12 +255,14 @@ namespace Zorro.WebApplication.Data.Migrations
 
                     b.Property<string>("CustomerID")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("FreeTransactions")
                         .HasColumnType("int");
 
                     b.HasKey("AccountNumber");
+
+                    b.HasIndex("CustomerID");
 
                     b.ToTable("Accounts");
                 });
@@ -414,6 +416,17 @@ namespace Zorro.WebApplication.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Zorro.WebApplication.Models.Account", b =>
+                {
+                    b.HasOne("Zorro.WebApplication.Data.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Zorro.WebApplication.Models.BillPay", b =>

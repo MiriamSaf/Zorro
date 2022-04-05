@@ -102,9 +102,12 @@ namespace Zorro.WebApplication.Controllers
                 transaction.TransactionType = TransactionType.Payment;
                 transaction.TransactionTimeUTC = DateTime.UtcNow;
                 transaction.TransactionID = Guid.NewGuid();
+                transaction.Comment = "BillPay";
                 _context.Add(transaction);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+
+                
             }
             return View(transaction);
         }

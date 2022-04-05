@@ -106,7 +106,7 @@ max-width:1250px;
 
 .navbar, .nav-link {
     background-color: #1A2238 !important;
-    border-bottom-color: #1A2238 !important;
+
     /*font-family: 'Kanit', sans-serif;*/
     font-weight: 500;
 }
@@ -154,5 +154,50 @@ max-width:1250px;
 }
 
 .btn-logout {
-    background-color: FF6A3D !important;
+    background-color: #FF6A3D !important;
+    border: 2px solid green;  
+}
+
+.btn-hover {
+    width: 100px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 15px;
+    height: 40px;
+    text-align: center;
+    border: none;
+    background-size: 400% 100%;
+    border-radius: 10px;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+   
+}
+
+.btn-hover:hover {
+    background-position: 100% 0;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+.btn-hover:focus {
+    outline: none;
+}
+
+    .btn-hover.ff6a3d {
+        background-image: linear-gradient(to right, #ff6a3d, #e43603, #fa7199, #e85a19);
+        //box-shadow: 0 2px 7px 0 rgba(229, 66, 10, 0.75);
+    }
+
+    .btn-hover.5ebec4 {
+        background-image: linear-gradient(to right, #5ebec4, #e43603, #fa7199, #e85a19);
+        //box-shadow: 0 2px 7px 0 rgba(229, 66, 10, 0.75);
+    }
+
+.navbar-toggler {
+    background-color: #ff6a3d;
 }

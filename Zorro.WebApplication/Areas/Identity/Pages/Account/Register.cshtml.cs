@@ -99,13 +99,18 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            public int CreditCardNumber { get; set; }
+           
 
             public string FirstName { get; set; }
 
             public string Surname { get; set; }
 
-            public int CCExpiry { get; set; }
+            public string CustomerID { get; set;}
+            public DateTime? BirthDate { get; set; }
+
+            // should be once signed in - not by register
+            // public int CCExpiry { get; set; }
+            //public int CreditCardNumber { get; set; }
         }
 
 

@@ -25,8 +25,8 @@ using Zorro.WebApplication.Data;
 
 
             var app = builder.Build();
-
-
+          
+          
 
             using (var scope = app.Services.CreateScope())
             {

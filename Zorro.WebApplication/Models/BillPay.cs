@@ -14,7 +14,6 @@ namespace Zorro.WebApplication.Models
         //virtual allows to be overidden
         public virtual Account Account { get; set; }
 
-
         [Required, ForeignKey("Payee")]
         public int PayeeId { get; set; }
         public decimal Amount { get; set; }

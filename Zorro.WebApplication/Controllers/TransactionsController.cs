@@ -22,7 +22,7 @@ namespace Zorro.WebApplication.Controllers
         }
 
         // GET: Transactions
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var transactions = _transactionSampleDataService.GetData();
             return View(transactions.ToList());

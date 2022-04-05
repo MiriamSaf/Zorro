@@ -64,7 +64,7 @@ h2 {
 .navbar-brand {
     padding-top: 0px;
     padding-bottom: 0px;
-    max-width: 300px;
+    max-width: 150px;
     margin-left: 25px;
     color: #FFFFFF;
 }
@@ -114,7 +114,7 @@ max-width:1250px;
 .pretty-underline-animation {
     display: inline-block;
     position: relative;
-    color: #A62E44;
+    color: #FF6A3D;
 }
 
     .pretty-underline-animation::after {
@@ -125,7 +125,7 @@ max-width:1250px;
         height: 3px;
         bottom: 0;
         left: 0;
-        background-color: #A62E44;
+        background-color: #FF6A3D;
         transform-origin: bottom right;
         transition: transform 0.25s ease-out;
     }
@@ -150,5 +150,9 @@ max-width:1250px;
     transition: all ease-in-out 0.5s;
 }
 .btn-dark :hover::after {
-    background-color: #F4DB7D;
+    background-color: #FF6A3D;
+}
+
+.btn-logout {
+    background-color: FF6A3D !important;
 }

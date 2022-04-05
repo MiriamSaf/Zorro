@@ -12,21 +12,31 @@ namespace Zorro.WebApplication.Data
             var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
             // Look for customers.
-            if(context.Customers.Any())
+            if(context.Transactions.Any())
                 return; // DB has already been seeded.
 
-            context.Customers.AddRange(
-                new Customer
+            context.Accounts.AddRange(
+                new Account
                 {
-                    CustomerID = 2100,
-                    Name = "Matthew Bolger",
-                    TFN = "12345678912",
-                    Address = "123 Fake Street",
-                    Suburb = "Melbourne",
-                    State = "VIC",
-                    PostCode = "3000",
-                    Mobile = "0412345678"
+                    AccountNumber = 1234,
+                    CustomerID = "1111",
+                    Balance = 10000,
+                    FreeTransactions = 1,
                 });
+
+            context.Transactions.AddRange(
+                new Transaction
+                {
+                    TransactionID = new Guid(),
+                    TransactionType = (TransactionType)1,
+                    DestinationAccountNumber = 1234,
+                    Amount = 1000,
+                    TransactionTimeUTC = DateTime.Now,
+                    CurrencyType = (CurrencyType)1,
+                    Comment = "Test Payment",
+                });
+
+
 
  /*           context.Logins.AddRange(
                 new Login

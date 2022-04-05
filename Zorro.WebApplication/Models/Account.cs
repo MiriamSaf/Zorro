@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zorro.WebApplication.Models
@@ -10,10 +10,8 @@ namespace Zorro.WebApplication.Models
         [RegularExpression(@"^(\d{4})$", ErrorMessage = "Error: Must be 4 Digits.")]
         public int AccountNumber { get; set; }
 
-        [Required, ForeignKey("Customer")]
-        [RegularExpression(@"^(\d{4})$", ErrorMessage = "Error: Must be 4 Digits.")]
-        public int CustomerID { get; set; }
-        public virtual Customer Customer { get; set; }
+        [Required, ForeignKey("ApplicationUser")]
+        public string CustomerID { get; set; }
 
         [Required, Range(0, float.MaxValue, ErrorMessage = "Error: Please enter a number that is positive.")]
         [DataType(DataType.Currency)]

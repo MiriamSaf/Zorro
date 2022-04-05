@@ -38,7 +38,7 @@ namespace Zorro.WebApplication.Controllers
             }
 
             var transaction = await _context.Transactions
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.TransactionID == id);
             if (transaction == null)
             {
                 return NotFound();
@@ -76,8 +76,8 @@ namespace Zorro.WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 transaction.TransactionType = TransactionType.Payment;
-                transaction.CreatedDateTime = DateTime.UtcNow;
-                transaction.ID = Guid.NewGuid();
+                transaction.TransactionTimeUTC = DateTime.UtcNow;
+                transaction.TransactionID = Guid.NewGuid();
                 _context.Add(transaction);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -96,8 +96,8 @@ namespace Zorro.WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 transaction.TransactionType = TransactionType.Payment;
-                transaction.CreatedDateTime = DateTime.UtcNow;
-                transaction.ID = Guid.NewGuid();
+                transaction.TransactionTimeUTC = DateTime.UtcNow;
+                transaction.TransactionID = Guid.NewGuid();
                 _context.Add(transaction);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -129,7 +129,7 @@ namespace Zorro.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("ID,TransactionType,Amount")] Transaction transaction)
         {
-            if (id != transaction.ID)
+            if (id != transaction.TransactionID)
             {
                 return NotFound();
             }
@@ -138,13 +138,13 @@ namespace Zorro.WebApplication.Controllers
             {
                 try
                 {
-                    transaction.CreatedDateTime = DateTime.UtcNow;
+                    transaction.TransactionTimeUTC = DateTime.UtcNow;
                     _context.Update(transaction);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TransactionExists(transaction.ID))
+                    if (!TransactionExists(transaction.TransactionID))
                     {
                         return NotFound();
                     }
@@ -167,7 +167,7 @@ namespace Zorro.WebApplication.Controllers
             }
 
             var transaction = await _context.Transactions
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.TransactionID == id);
             if (transaction == null)
             {
                 return NotFound();
@@ -189,7 +189,7 @@ namespace Zorro.WebApplication.Controllers
 
         private bool TransactionExists(Guid id)
         {
-            return _context.Transactions.Any(e => e.ID == id);
+            return _context.Transactions.Any(e => e.TransactionID == id);
         }
     }
 }

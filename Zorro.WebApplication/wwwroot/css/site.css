@@ -99,7 +99,12 @@ h2 {
 max-width:1250px;
 }
 
-.navbar {
+/*** navbar styles
+    *********************
+    *********************
+*/
+
+.navbar, .nav-link {
     background-color: #1A2238 !important;
     border-bottom-color: #1A2238 !important;
     /*font-family: 'Kanit', sans-serif;*/
@@ -128,3 +133,22 @@ max-width:1250px;
             transform: scaleX(1);
             transform-origin: bottom left;
         }
+
+
+.nav-item{
+    color: #FFFFFF !important;
+}
+
+.left-aligned-nav{
+    text-align: left;
+}
+
+/** button styling 
+    **************
+    ***************/
+.btn-dark{
+    transition: all ease-in-out 0.5s;
+}
+.btn-dark :hover::after {
+    background-color: #F4DB7D;
+}

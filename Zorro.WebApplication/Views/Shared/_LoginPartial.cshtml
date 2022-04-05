@@ -4,8 +4,15 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
+@if (SignInManager.IsSignedIn(User))  { 
+    <ul class="navbar-nav flex-grow-1">
+    <li class="nav-item left-aligned-nav">
+        <a class="nav-link text-dark pretty-underline-animation" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+    </li>
+     <li class="nav-item left-aligned-nav">
+       <a class="nav-link text-dark pretty-underline-animation" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </li>
+    </ul>
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
     </li>

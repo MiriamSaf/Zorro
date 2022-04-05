@@ -1,9 +1,11 @@
-/** site colours 
-    #A62E44 -  redish color
-    #213440 -  dark blue
-    #8AABBF - water blue
-    #A3BFB7 - green
-    #BF9C88 - pastel
+/** site colours 4/4/22
+    #FFFFFF - white
+    #5EBEC4 - blue (buttons)
+    #EFF3F8 - pale blue/whitish tinge
+    #F4DB7D - mustard/yellow
+    #FF6A3D - burnt orange (buttons)/ contrast
+    #1A2238 - dark blue
+
 */
 
 /* heading font*/
@@ -36,17 +38,17 @@ html {
 
 body {
     margin-bottom: 60px;
-    background-color: #8AABBF;
+    background-color: #EFF3F8;
 }
 
 h1 {
-    font-family: 'Kanit', sans-serif;
-    font-weight: 700;
+    font-family: 'Saira Semi Condensed', sans-serif;
+   
 }
 
 h2 {
-    font-family: 'Kanit', sans-serif;
-    font-weight: 700;
+    font-family: 'Saira Semi Condensed', sans-serif;
+ 
 }
 
 
@@ -55,7 +57,7 @@ h2 {
 
 /* image in nav bar */
 #nav-logo{
-    max-width: 100%;
+    max-width: 70%;
 }
 
 /* to overide default style*/
@@ -63,11 +65,16 @@ h2 {
     padding-top: 0px;
     padding-bottom: 0px;
     max-width: 300px;
-    margin-left:25px;
+    margin-left: 25px;
+    color: #FFFFFF;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #FFFFFF !important;
 }
 
 .spacer {
-height: 30px;
+    height: 30px;
 }
 
 /*Home view styles*/
@@ -89,13 +96,13 @@ height: 30px;
 .container-lg,
 .container-md,
 .container-sm {
-max-width:1180px;
+max-width:1250px;
 }
 
 .navbar {
-    background-color: #A3BFB7 !important;
-    border-bottom-color: #A3BFB7 !important;
-    font-family: 'Kanit', sans-serif;
+    background-color: #1A2238 !important;
+    border-bottom-color: #1A2238 !important;
+    /*font-family: 'Kanit', sans-serif;*/
     font-weight: 500;
 }
 

@@ -57,7 +57,7 @@ h2 {
 
 /* image in nav bar */
 #nav-logo{
-    max-width: 70%;
+    max-width: 40%;
 }
 
 /* to overide default style*/
@@ -106,6 +106,7 @@ max-width:1250px;
 
 .navbar, .nav-link {
     background-color: #1A2238 !important;
+    font-size: 2.4vh;
 
     /*font-family: 'Kanit', sans-serif;*/
     font-weight: 500;

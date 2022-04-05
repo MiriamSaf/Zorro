@@ -15,10 +15,12 @@ namespace Zorro.WebApplication.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ITransactionSampleDataService _transactionSampleDataService;
-        public TransactionsController(ApplicationDbContext context, ITransactionSampleDataService transactionSampleDataService)
+        private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
+        public TransactionsController(ApplicationDbContext context, ITransactionSampleDataService transactionSampleDataService, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _transactionSampleDataService = transactionSampleDataService;
+            _userManager = userManager;
         }
 
         // GET: Transactions
@@ -93,8 +95,10 @@ namespace Zorro.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateBPay([Bind("ID,TransactionType,Amount")] Transaction transaction)
         {
+            var user = await _userManager.GetUserAsync(User);
             if (ModelState.IsValid)
             {
+                transaction.ApplicationUser = user;
                 transaction.TransactionType = TransactionType.Payment;
                 transaction.TransactionTimeUTC = DateTime.UtcNow;
                 transaction.TransactionID = Guid.NewGuid();

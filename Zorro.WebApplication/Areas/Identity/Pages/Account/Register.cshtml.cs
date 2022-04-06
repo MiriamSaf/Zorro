@@ -183,7 +183,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
         private async Task CreateAccount(ApplicationUser user)
         {
             var account = await _context.FindAsync<Models.Account>(user.Id);
-            if (account is null)
+            if (account is not null)
             {
                 _logger.LogWarning("Account with ID {accountId} already exists", user.NormalizedEmail);
                 return;

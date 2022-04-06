@@ -8,9 +8,8 @@ namespace Zorro.WebApplication.Models
         [Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string BillPayID { get; set; }
 
-        [Required, ForeignKey("Account"), Display(Name = "Account Number")]
-        [RegularExpression(@"^(\d{4})$", ErrorMessage = "Error: Must be 4 Digits.")]
-        public int AccountNumber { get; set; }
+        [Required, ForeignKey("Account"), Display(Name = "Account Identifier")]
+        public string AccountId { get; set; }
         //virtual allows to be overidden
         public virtual Account Account { get; set; }
 

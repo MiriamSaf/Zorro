@@ -12,7 +12,7 @@ namespace Zorro.WebApplication.Models
         public TransactionType TransactionType { get; set; }
 
         [ForeignKey("DestinationAccount")]
-        public int? DestinationAccountNumber { get; set; }
+        public string DestinationAccountId { get; set; }
         public virtual Account DestinationAccount { get; set; }
 
         public decimal Amount { get; set; }

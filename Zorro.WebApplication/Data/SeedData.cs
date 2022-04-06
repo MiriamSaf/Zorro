@@ -15,26 +15,26 @@ namespace Zorro.WebApplication.Data
             if(context.Transactions.Any())
                 return; // DB has already been seeded.
 
-            context.Accounts.AddRange(
-                new Account
-                {
-                    AccountNumber = 1234,
-                    CustomerID = "1111",
-                    Balance = 10000,
-                    FreeTransactions = 1,
-                });
+            //context.Accounts.AddRange(
+            //    new Account
+            //    {
+            //        Id = 1234,
+            //        CustomerID = "1111",
+            //        Balance = 10000,
+            //        FreeTransactions = 1,
+            //    });
 
-            context.Transactions.AddRange(
-                new Transaction
-                {
-                    TransactionID = new Guid(),
-                    TransactionType = (TransactionType)1,
-                    DestinationAccountNumber = 1234,
-                    Amount = 1000,
-                    TransactionTimeUTC = DateTime.Now,
-                    CurrencyType = (CurrencyType)1,
-                    Comment = "Test Payment",
-                });
+            //context.Transactions.AddRange(
+            //    new Transaction
+            //    {
+            //        TransactionID = new Guid(),
+            //        TransactionType = (TransactionType)1,
+            //        DestinationAccountNumber = 1234,
+            //        Amount = 1000,
+            //        TransactionTimeUTC = DateTime.Now,
+            //        CurrencyType = (CurrencyType)1,
+            //        Comment = "Test Payment",
+            //    });
 
 
 

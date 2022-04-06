@@ -76,7 +76,7 @@ namespace Zorro.WebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AccountNumber"] = new SelectList(_context.Set<Account>(), "AccountNumber", "AccountNumber", billPay.AccountNumber);
+            ViewData["AccountNumber"] = new SelectList(_context.Set<Account>(), "AccountNumber", "AccountNumber", billPay.AccountId);
             return View(billPay);
         }
 
@@ -93,7 +93,7 @@ namespace Zorro.WebApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["AccountNumber"] = new SelectList(_context.Set<Account>(), "AccountNumber", "AccountNumber", billPay.AccountNumber);
+            ViewData["AccountNumber"] = new SelectList(_context.Set<Account>(), "AccountNumber", "AccountNumber", billPay.AccountId);
             return View(billPay);
         }
 
@@ -129,7 +129,7 @@ namespace Zorro.WebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AccountNumber"] = new SelectList(_context.Set<Account>(), "AccountNumber", "AccountNumber", billPay.AccountNumber);
+            ViewData["AccountNumber"] = new SelectList(_context.Set<Account>(), "AccountNumber", "AccountNumber", billPay.AccountId);
             return View(billPay);
         }
 

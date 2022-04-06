@@ -7,9 +7,8 @@ namespace Zorro.WebApplication.Models
     //account model
     public class Account
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None), Display(Name = "Account Number")]
-        [RegularExpression(@"^(\d{4})$", ErrorMessage = "Error: Must be 4 Digits.")]
-        public int AccountNumber { get; set; }
+        [Key, Display(Name = "Account Identifier")]
+        public string Id { get; set; }
 
         [Required, ForeignKey("ApplicationUser")]
         public string CustomerID { get; set; }

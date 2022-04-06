@@ -30,7 +30,6 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-
         private readonly ApplicationDbContext _context;
 
         public RegisterModel(
@@ -38,7 +37,8 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext applicationDbContext)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -46,6 +46,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = applicationDbContext;
         }
 
         /// <summary>
@@ -145,16 +146,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    // Create default wallet for new registered user
-                   /* Models.Account account = new()
-                    {
-                        ApplicationUser = user
-
-                    };
-                    _context.Add(account);*/
-                    await _context.SaveChangesAsync();
-                    _logger.LogInformation("Auto created wallet for new registered user");
-
+                    await CreateAccount(user);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -186,6 +178,26 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private async Task CreateAccount(ApplicationUser user)
+        {
+            var account = await _context.FindAsync<Models.Account>(user.Id);
+            if (account is null)
+            {
+                _logger.LogWarning("Account with ID {accountId} already exists", user.NormalizedEmail);
+                return;
+            }
+
+            // Create default wallet for new registered user
+            account = new()
+            {
+                ApplicationUser = user,
+                Id = user.NormalizedEmail
+            };
+            _context.Add(account);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Created account for new user with ID {accountId}", user.NormalizedEmail);
         }
 
         private ApplicationUser CreateUser()

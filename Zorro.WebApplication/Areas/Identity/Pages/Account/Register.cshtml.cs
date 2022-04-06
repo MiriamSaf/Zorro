@@ -31,6 +31,8 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
+        private readonly ApplicationDbContext _context;
+
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
@@ -132,11 +134,27 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.FirstName = Input.FirstName;
+                user.Surname = Input.Surname;
+                user.CustomerID = Input.CustomerID;
+                user.BirthDate = Input.BirthDate;
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    // Create default wallet for new registered user
+                   /* Models.Account account = new()
+                    {
+                        ApplicationUser = user
+
+                    };
+                    _context.Add(account);*/
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Auto created wallet for new registered user");
+
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

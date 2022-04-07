@@ -17,6 +17,8 @@ using Zorro.WebApplication.Data;
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddSingleton<ITransactionSampleDataService, TransactionSampleDataService>();
+            builder.Services.AddTransient<IBanker, Banker>();
+
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();

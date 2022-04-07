@@ -3,19 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zorro.WebApplication.Data;
 
 #nullable disable
 
-namespace Zorro.WebApplication.Data.Migrations
+namespace Zorro.WebApplication.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220404140321_ChangeAccountIDToRefApplUser")]
-    partial class ChangeAccountIDToRefApplUser
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,18 +170,12 @@ namespace Zorro.WebApplication.Data.Migrations
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("BirthDate")
+                    b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CustomerID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerID"), 1L, 1);
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -193,7 +185,6 @@ namespace Zorro.WebApplication.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -203,8 +194,8 @@ namespace Zorro.WebApplication.Data.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("Mobile")
-                        .HasColumnType("int");
+                    b.Property<string>("Mobile")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -227,7 +218,6 @@ namespace Zorro.WebApplication.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
-                        .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
@@ -251,74 +241,7 @@ namespace Zorro.WebApplication.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.Account", b =>
-                {
-                    b.Property<int>("AccountNumber")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("CustomerID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("FreeTransactions")
-                        .HasColumnType("int");
-
-                    b.HasKey("AccountNumber");
-
-                    b.ToTable("Accounts");
-                });
-
             modelBuilder.Entity("Zorro.WebApplication.Models.BillPay", b =>
-                {
-                    b.Property<string>("BillPayID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccountNumber")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool>("BillState")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("PayeeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PaymentFrequency")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ScheduleTimeUtc")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("BillPayID");
-
-                    b.HasIndex("AccountNumber");
-
-                    b.ToTable("BillPay");
-                });
-
-            modelBuilder.Entity("Zorro.WebApplication.Models.Payee", b =>
-                {
-                    b.Property<int>("PayeeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PayeeId"), 1L, 1);
-
-                    b.Property<string>("BusinessName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PayeeId");
-
-                    b.ToTable("Payees");
-                });
-
-            modelBuilder.Entity("Zorro.WebApplication.Models.Shop", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -326,26 +249,48 @@ namespace Zorro.WebApplication.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("BpayBillerCode")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TransactionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shops");
+                    b.HasIndex("BpayBillerCode");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("BillPays");
+                });
+
+            modelBuilder.Entity("Zorro.WebApplication.Models.BpayBiller", b =>
+                {
+                    b.Property<int>("BillerCode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillerCode"), 1L, 1);
+
+                    b.Property<string>("BillerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BillerCode");
+
+                    b.ToTable("Payees");
                 });
 
             modelBuilder.Entity("Zorro.WebApplication.Models.Transaction", b =>
                 {
-                    b.Property<Guid>("TransactionID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
@@ -353,22 +298,40 @@ namespace Zorro.WebApplication.Data.Migrations
                     b.Property<int>("CurrencyType")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DestinationAccountNumber")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TransactionTimeUTC")
+                    b.Property<DateTime>("TransactionTimeUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("TransactionType")
                         .HasColumnType("int");
 
-                    b.HasKey("TransactionID");
+                    b.Property<Guid>("WalletId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WalletId");
+
+                    b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("Zorro.WebApplication.Models.Wallet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("DestinationAccountNumber");
-
-                    b.ToTable("Transactions");
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -424,36 +387,46 @@ namespace Zorro.WebApplication.Data.Migrations
 
             modelBuilder.Entity("Zorro.WebApplication.Models.BillPay", b =>
                 {
-                    b.HasOne("Zorro.WebApplication.Models.Account", "Account")
+                    b.HasOne("Zorro.WebApplication.Models.BpayBiller", "BpayBiller")
                         .WithMany()
-                        .HasForeignKey("AccountNumber")
+                        .HasForeignKey("BpayBillerCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Account");
+                    b.HasOne("Zorro.WebApplication.Models.Transaction", "Transaction")
+                        .WithMany()
+                        .HasForeignKey("TransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BpayBiller");
+
+                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("Zorro.WebApplication.Models.Transaction", b =>
                 {
-                    b.HasOne("Zorro.WebApplication.Data.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Zorro.WebApplication.Models.Wallet", "Wallet")
                         .WithMany("Transactions")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Zorro.WebApplication.Models.Account", "DestinationAccount")
-                        .WithMany("Transactions")
-                        .HasForeignKey("DestinationAccountNumber");
+                    b.Navigation("Wallet");
+                });
+
+            modelBuilder.Entity("Zorro.WebApplication.Models.Wallet", b =>
+                {
+                    b.HasOne("Zorro.WebApplication.Data.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("DestinationAccount");
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Data.ApplicationUser", b =>
-                {
-                    b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("Zorro.WebApplication.Models.Account", b =>
+            modelBuilder.Entity("Zorro.WebApplication.Models.Wallet", b =>
                 {
                     b.Navigation("Transactions");
                 });

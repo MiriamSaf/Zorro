@@ -8,43 +8,33 @@ namespace Zorro.WebApplication.Models
     {
         //transaction id - each unique
         [Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid TransactionID { get; set; }
+        public Guid Id { get; set; }
         public TransactionType TransactionType { get; set; }
-
-        [ForeignKey("DestinationAccount")]
-        public string DestinationAccountId { get; set; }
-        public virtual Account DestinationAccount { get; set; }
-
+        [ForeignKey("Wallet")]
+        public Guid WalletId { get; set; }
         public decimal Amount { get; set; }
-        public DateTime TransactionTimeUTC { get; set; }
-
-        public CurrencyType CurrencyType { get; set; }
-
+        public DateTime TransactionTimeUtc { get; set; }
+        public Currency CurrencyType { get; set; } = Currency.Aud;
         public string Comment { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
-
+        public virtual Wallet Wallet { get; set; }
     }
 
     public enum TransactionType
     {
+        Transfer,
         Payment,
-        Refund
+        Refund,
+        BPay
     }
 
-    public enum TransactionStatus
+    public enum Currency
     {
-        Approved,
-        Declined,
-        Pending
-    }
-
-    public enum CurrencyType
-    {
-        USD = 1,
+        Aud = 0,
+        Usd = 1,
         Euro = 2,
         Yen = 3,
         Pound = 4,
-        CAD = 5,
+        Cad = 5,
         Franc = 6
     }
 

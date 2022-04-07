@@ -7,12 +7,12 @@
 <div class="card">
   <h5 class="card-header">Transfer</h5>
   <div class="card-body">
-    <form asp-action="CreateBpay" method="post">
+    <form asp-action="CreateTransfer" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row mb-3">
-        <label asp-for="RecipientId" class="form-label">Recipient</label>
+        <label asp-for="RecipientWallet" class="form-label">Recipient</label>
         <div class="input-group">
-            <input asp-for="RecipientId" type="text" class="form-control" id="billerInput">
+            <input asp-for="RecipientWallet" type="text" class="form-control" id="billerInput">
             <button class="btn btn-outline-secondary" type="button" id="billerInput">Search</button>
         </div>
     </div>

@@ -9,10 +9,9 @@ namespace Zorro.WebApplication.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options)
         {}
 
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<BillPay> BillPay { get; set; }
-        public DbSet<Payee> Payees { get; set; }
-        public DbSet<Shop> Shops { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<BillPay> BillPays { get; set; }
+        public DbSet<BpayBiller> Payees { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
     }
 }

@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Zorro.WebApplication.Data;
+using Zorro.WebApplication.Models;
 
 namespace Zorro.WebApplication.Areas.Identity.Pages.Account
 {
@@ -113,9 +114,8 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
 
 
             [RegularExpression(@"^(\d{10})$", ErrorMessage = "Error: Must be 10 Digits.")]
-            public int Mobile { get; set; }
+            public string Mobile { get; set; }
 
-            public string CustomerID { get; set;}
             public DateTime? BirthDate { get; set; }
 
             // should be once signed in - not by register
@@ -144,7 +144,6 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.FirstName = Input.FirstName;
                 user.Surname = Input.Surname;
-                user.CustomerID = Input.Email;
                 user.BirthDate = Input.BirthDate;
                 user.Mobile = Input.Mobile;
 
@@ -190,20 +189,12 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
 
         private async Task CreateAccount(ApplicationUser user)
         {
-            var account = await _context.FindAsync<Models.Account>(user.Id);
-            if (account is not null)
-            {
-                _logger.LogWarning("Account with ID {accountId} already exists", user.NormalizedEmail);
-                return;
-            }
-
             // Create default wallet for new registered user
-            account = new()
+            Wallet wallet = new()
             {
-                ApplicationUser = user,
-                Id = user.NormalizedEmail
+                ApplicationUser = user
             };
-            _context.Add(account);
+            _context.Add(wallet);
             await _context.SaveChangesAsync();
             _logger.LogInformation("Created account for new user with ID {accountId}", user.NormalizedEmail);
         }

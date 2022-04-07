@@ -202,3 +202,7 @@ max-width:1250px;
 .navbar-toggler {
     background-color: #ff6a3d;
 }
+
+.content-width {
+    width:85%;
+}

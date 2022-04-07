@@ -102,11 +102,18 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-           
 
+            [Required, System.ComponentModel.DisplayName("First Name")]
+            [StringLength(50, ErrorMessage = "Error: First Name has a maximum of 50 Characters.")]
             public string FirstName { get; set; }
 
+            [Required]
+            [StringLength(60, ErrorMessage = "Error: Surname has a maximum of 60 Characters.")]
             public string Surname { get; set; }
+
+
+            [RegularExpression(@"^(\d{10})$", ErrorMessage = "Error: Must be 10 Digits.")]
+            public int Mobile { get; set; }
 
             public string CustomerID { get; set;}
             public DateTime? BirthDate { get; set; }
@@ -137,8 +144,9 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.FirstName = Input.FirstName;
                 user.Surname = Input.Surname;
-                user.CustomerID = Input.CustomerID;
+                user.CustomerID = Input.Email;
                 user.BirthDate = Input.BirthDate;
+                user.Mobile = Input.Mobile;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

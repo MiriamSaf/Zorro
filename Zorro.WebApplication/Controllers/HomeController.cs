@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Zorro.WebApplication.Models;
 using Zorro.WebApplication.ViewModels;
@@ -24,6 +25,7 @@ namespace Zorro.WebApplication.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Dashboard()
         {
             var dashboardData = new DashboardViewModel()

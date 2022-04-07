@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Zorro.WebApplication.Data;
 using Zorro.WebApplication.Models;
 using Zorro.WebApplication.ViewModels;
 
@@ -9,10 +11,16 @@ namespace Zorro.WebApplication.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _applicationDBContext;
+        private readonly IBanker _banker;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext applicationDBContext, IBanker banker, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
+            _applicationDBContext = applicationDBContext;
+            _banker = banker;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -26,20 +34,29 @@ namespace Zorro.WebApplication.Controllers
         }
 
         [Authorize]
-        public IActionResult Dashboard()
+        public async Task<IActionResult> Dashboard()
         {
+            // validate wallet and show balance
+            var wallet = await _banker.GetWalletByDisplayName(User.Identity.Name);
             var dashboardData = new DashboardViewModel()
             {
-                Balance = 55.42M,
-                WalletId = User.Identity.Name
+                Balance = wallet.Balance,
+                WalletId = wallet.DisplayName
             };
-            dashboardData.RecentTransactions.Add(
-            new TransactionViewModel()
+
+            // get transactions and return transactions view models
+            var transactions = await _banker.GetTransactionsByWallet(wallet.Id);
+            foreach (var transaction in transactions)
             {
-                Amount = 21.32M,
-                Date = DateTime.Now,
-                Description = "Maccas"
-            });
+                dashboardData.RecentTransactions.Add(
+                    new TransactionViewModel()
+                    {
+                        Amount = transaction.Amount,
+                        Date = transaction.TransactionTimeUtc,
+                        Description = transaction.Comment,
+                    });
+            }
+            
             return View("Dashboard", dashboardData);
         }
 

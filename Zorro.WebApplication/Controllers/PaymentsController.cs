@@ -24,7 +24,6 @@ namespace Zorro.WebApplication.Controllers
             _banker = banker;
         }
 
-        // GET: PaymentsController
         public ActionResult Transfer()
         {
             return View("CreateTransfer");

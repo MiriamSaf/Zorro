@@ -7,6 +7,7 @@ namespace Zorro.WebApplication.Data
     {
         Task<Wallet> GetWalletByDisplayName(string displayName);
         Task TransferFunds(Wallet sourceWallet, Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud, TransactionType transactionType = TransactionType.Transfer);
+        Task<List<Transaction>> GetTransactionsByWallet(Guid walletId);
     }
 
     public class Banker : IBanker
@@ -28,7 +29,7 @@ namespace Zorro.WebApplication.Data
                 .Where(y => y.ApplicationUser.NormalizedEmail == normalizedDisplayName);
             if (!result.Any())
                 throw new Exception($"Unable to find recipient wallet {normalizedDisplayName}");
-            return result.First();
+            return await result.FirstAsync();
         }
 
         public async Task TransferFunds(Wallet sourceWallet, Wallet destinationWallet,
@@ -57,8 +58,23 @@ namespace Zorro.WebApplication.Data
             };
 
             await _applicationDbContext.AddAsync(sourceTransaction);
+            sourceWallet.Balance += sourceTransaction.Amount;
+            _applicationDbContext.Wallets.Update(sourceWallet);
+
             await _applicationDbContext.AddAsync(destinationTransaction);
+            destinationWallet.Balance += destinationTransaction.Amount;
+            _applicationDbContext.Wallets.Update(sourceWallet);
+
             await _applicationDbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<Transaction>> GetTransactionsByWallet(Guid walletId)
+        {
+            var results = await _applicationDbContext
+                .Transactions
+                .Where(x => x.WalletId == walletId).ToListAsync();
+
+            return results;
         }
     }
 }

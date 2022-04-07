@@ -3,7 +3,9 @@
 @{
     ViewData["Title"] = "BPAY";
 }
-
+<div class="spacer"></div>
+<div class="center-block" style="display:flex;justify-content:center;" >
+<div class="content-width">
 <h1>BPAY</h1>
 <form asp-action="CreateBPay" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -47,3 +49,4 @@
     
     <input type="submit" class="btn btn-dark" value="Pay"/>
 </form>
+</div></div>

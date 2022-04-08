@@ -46,7 +46,7 @@ namespace Zorro.WebApplication.Controllers
 
             // get transactions and return transactions view models
             var transactions = await _banker.GetTransactionsByWallet(wallet.Id);
-            foreach (var transaction in transactions)
+            foreach (var transaction in transactions.OrderByDescending(t => t.TransactionTimeUtc))
             {
                 dashboardData.RecentTransactions.Add(
                     new TransactionViewModel()

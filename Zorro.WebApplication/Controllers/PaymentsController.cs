@@ -58,6 +58,16 @@ namespace Zorro.WebApplication.Controllers
                 RecipientDisplayName = request.RecipientWallet,
                 Comment = request.Description
             };
+            if (request.RecipientWallet is null)
+            {
+                transferResult.Status = TransferResultViewModelStatus.InvalidRecipient;
+                return View("TransferResult", transferResult);
+            }
+            if(!(request.Amount > 0))
+            {
+                transferResult.Status = TransferResultViewModelStatus.InvalidAmount;
+                return View("TransferResult", transferResult);
+            }
 
             var user = await _userManager.GetUserAsync(User);
             var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);

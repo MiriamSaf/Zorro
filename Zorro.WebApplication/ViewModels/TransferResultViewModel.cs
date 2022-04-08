@@ -12,6 +12,7 @@
     {
         Approved,
         InvalidRecipient,
-        InsufficientFunds
+        InsufficientFunds,
+        InvalidAmount
     }
 }

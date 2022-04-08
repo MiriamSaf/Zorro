@@ -8,6 +8,7 @@ namespace Zorro.WebApplication.Data
         Task<Wallet> GetWalletByDisplayName(string displayName);
         Task TransferFunds(Wallet sourceWallet, Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud, TransactionType transactionType = TransactionType.Transfer);
         Task<List<Transaction>> GetTransactionsByWallet(Guid walletId);
+        Task<bool> VerifyBalance(Guid walletId, decimal amount);
     }
 
     public class Banker : IBanker
@@ -75,6 +76,12 @@ namespace Zorro.WebApplication.Data
                 .Where(x => x.WalletId == walletId).ToListAsync();
 
             return results;
+        }
+
+        public async Task<bool> VerifyBalance(Guid walletId, decimal amount)
+        {
+            var result = await _applicationDbContext.Wallets.FindAsync(walletId);
+            return result.Balance >= amount;
         }
     }
 }

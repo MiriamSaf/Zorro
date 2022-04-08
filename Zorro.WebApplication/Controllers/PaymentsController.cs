@@ -67,6 +67,12 @@ namespace Zorro.WebApplication.Controllers
                 return View("TransferResult", transferResult);
             }
             var destinationWallet = await _banker.GetWalletByDisplayName(request.RecipientWallet);
+            if (destinationWallet is null)
+            {
+                transferResult.Status = TransferResultViewModelStatus.InvalidRecipient;
+                return View("TransferResult", transferResult);
+            }
+
             await _banker.TransferFunds(sourceWallet, destinationWallet, request.Amount, request.Description);
 
             transferResult.Status = TransferResultViewModelStatus.Approved;

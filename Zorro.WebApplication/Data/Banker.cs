@@ -28,9 +28,8 @@ namespace Zorro.WebApplication.Data
             var result = _applicationDbContext.Wallets
                 .Include(x => x.ApplicationUser)
                 .Where(y => y.ApplicationUser.NormalizedEmail == normalizedDisplayName);
-            if (!result.Any())
-                throw new Exception($"Unable to find recipient wallet {normalizedDisplayName}");
-            return await result.FirstAsync();
+
+            return await result.FirstOrDefaultAsync();
         }
 
         public async Task TransferFunds(Wallet sourceWallet, Wallet destinationWallet,

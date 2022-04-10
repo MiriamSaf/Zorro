@@ -68,6 +68,26 @@ namespace Zorro.WebApplication.Data
             await _applicationDbContext.SaveChangesAsync();
         }
 
+        public async Task DepositFunds(Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud,
+          TransactionType transactionType = TransactionType.Payment)
+        {
+            var now = DateTime.Now;
+            var depositTransaction = new Transaction()
+            {
+                Amount = amount,
+                Comment = comment,
+                CurrencyType = currency,
+                TransactionTimeUtc = now,
+                TransactionType = transactionType,
+                Wallet = destinationWallet
+            };
+
+            await _applicationDbContext.AddAsync(depositTransaction);
+            await _applicationDbContext.SaveChangesAsync();
+        }
+
+
+
         public async Task<List<Transaction>> GetTransactionsByWallet(Guid walletId)
         {
             var results = await _applicationDbContext

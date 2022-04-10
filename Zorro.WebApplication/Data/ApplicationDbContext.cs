@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Zorro.WebApplication.Models;
+using Zorro.WebApplication.Dtos;
 
 namespace Zorro.WebApplication.Data
 {
@@ -13,5 +14,6 @@ namespace Zorro.WebApplication.Data
         public DbSet<BillPay> BillPays { get; set; }
         public DbSet<BpayBiller> Payees { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Zorro.WebApplication.Dtos.DepositRequestDto> DepositRequestDto { get; set; }
     }
 }

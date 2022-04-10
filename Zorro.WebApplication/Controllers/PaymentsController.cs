@@ -89,6 +89,48 @@ namespace Zorro.WebApplication.Controllers
             return View("TransferResult", transferResult);
         }
 
+        public ActionResult CreateDeposit()
+        {
+            return View("CreateDeposit");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateDeposit(DepositRequestDto request)
+        {
+            var transferResult = new DepositViewModel()
+            {
+                Amount = request.Amount,
+                Description = request.Description,
+                Date = DateTime.UtcNow,
+                Id = request.Id,
+            };
+           /* if (request.Id is null)
+            {
+                transferResult.Status = TransferResultViewModelStatus.InvalidRecipient;
+                return View("TransferResult", transferResult);
+            }*/
+            if (!(request.Amount > 0))
+            {
+               // transferResult.Status = TransferResultViewModelStatus.InvalidAmount;
+                return View("TransferResult", transferResult);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
+            if (!await _banker.VerifyBalance(sourceWallet.Id, request.Amount))
+            {
+                //transferResult.Status = TransferResultViewModelStatus.InsufficientFunds;
+                return View("TransferResult", transferResult);
+            }
+          
+          //  await _banker.DepositFunds
+            //await _banker.De(sourceWallet, destinationWallet, request.Amount, request.Description);
+
+            //transferResult.Status = TransferResultViewModelStatus.Approved;
+            return View("TransferResult", transferResult);
+        }
+
         // POST: PaymentsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]

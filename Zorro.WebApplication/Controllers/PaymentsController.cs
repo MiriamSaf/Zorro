@@ -89,6 +89,7 @@ namespace Zorro.WebApplication.Controllers
             return View("TransferResult", transferResult);
         }
 
+
         public ActionResult CreateDeposit()
         {
             return View("CreateDeposit");
@@ -113,7 +114,7 @@ namespace Zorro.WebApplication.Controllers
             if (!(request.Amount > 0))
             {
                // transferResult.Status = TransferResultViewModelStatus.InvalidAmount;
-                return View("TransferResult", transferResult);
+                return View("CreateDeposit", transferResult);
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -130,6 +131,8 @@ namespace Zorro.WebApplication.Controllers
             //transferResult.Status = TransferResultViewModelStatus.Approved;
             return View("TransferResult", transferResult);
         }
+
+
 
         // POST: PaymentsController/Create
         [HttpPost]

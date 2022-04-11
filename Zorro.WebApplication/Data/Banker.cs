@@ -5,7 +5,7 @@ namespace Zorro.WebApplication.Data
 {
     public interface IBanker
     {
-        Task BpayTransfer(Wallet sourceWallet, decimal amount, int BpayBillerCode, string comment, Currency currency = Currency.Aud, TransactionType transaction = TransactionType.BPay);
+        Task<bool> BpayTransfer(Wallet sourceWallet, decimal amount, int BpayBillerCode, string comment, Currency currency = Currency.Aud, TransactionType transaction = TransactionType.BPay);
         Task DepositFunds(Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud,
           TransactionType transactionType = TransactionType.Payment);
 
@@ -86,6 +86,8 @@ namespace Zorro.WebApplication.Data
                 Wallet = destinationWallet
             };
 
+           
+
             if (amount > 0)
             {
                 destinationWallet.Balance += amount;
@@ -113,7 +115,7 @@ namespace Zorro.WebApplication.Data
             return result.Balance >= amount;
         }
 
-        public async Task BpayTransfer(Wallet sourceWallet, decimal amount, int BpayBillerCode, string comment, Currency currency, TransactionType transaction)
+        public async Task<bool> BpayTransfer(Wallet sourceWallet, decimal amount, int BpayBillerCode, string comment, Currency currency, TransactionType transaction)
         {
             var now = DateTime.Now;
             var bpayTransaction = new Transaction()
@@ -127,6 +129,12 @@ namespace Zorro.WebApplication.Data
 
             };
 
+            //cannot transfer more than have in balance
+            if (amount >= sourceWallet.Balance)
+            {
+                return false;
+            }
+
             if (amount > 0)
             {
                 //minus amount from balance
@@ -134,8 +142,15 @@ namespace Zorro.WebApplication.Data
 
                 await _applicationDbContext.AddAsync(bpayTransaction);
 
+                await _applicationDbContext.SaveChangesAsync();
+                return true;
+
+
             }
-            await _applicationDbContext.SaveChangesAsync();
+
+            return false;
+
+           
         }
     }
 }

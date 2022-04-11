@@ -113,21 +113,24 @@ namespace Zorro.WebApplication.Controllers
             if (!(request.Amount >= 0))
             {
                 ModelState.AddModelError("error", "number must be above 0");
-                return View("CreateDeposit");
+                deResult.Status = DepResultViewModelStatus.InvalidAmount;
+                return View("DepositResult", deResult);
             }
 
             if (request.Amount == 0)
             {
                 ModelState.AddModelError("error", "number must be a posotive number above 0");
-                return View("CreateDeposit");
+                deResult.Status = DepResultViewModelStatus.InvalidAmount;
+                return View("DepositResult", deResult);
             }
 
             var user = await _userManager.GetUserAsync(User);
             var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
            
             await _banker.DepositFunds(sourceWallet, request.Amount, request.Description);
+            deResult.Status = DepResultViewModelStatus.Approved;
 
-            return View("Success");
+            return View("DepositResult", deResult);
         }
 
         //bpay task post 
@@ -145,14 +148,24 @@ namespace Zorro.WebApplication.Controllers
             if (!(request.Amount >= 0))
             {
                 ModelState.AddModelError("error", "number must be above 0");
+                
                 return View("CreateBpay");
             }
 
-            if (request.Amount == 0)
+
+                if (request.Amount == 0)
             {
                 ModelState.AddModelError("error", "number must be a posotive number above 0");
                 return View("CreateBpay");
             }
+
+            /*
+
+        if (!await _banker.VerifyBalance(request.Id, request.Amount))
+        {
+            deResult.Status = DepResultViewModelStatus.InsufficientFunds;
+            return View("DepositResult", deResult);
+        }*/
 
             var user = await _userManager.GetUserAsync(User);
             var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);

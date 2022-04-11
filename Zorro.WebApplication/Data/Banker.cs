@@ -5,6 +5,9 @@ namespace Zorro.WebApplication.Data
 {
     public interface IBanker
     {
+        Task DepositFunds(Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud,
+          TransactionType transactionType = TransactionType.Payment);
+
         Task<Wallet> GetWalletByDisplayName(string displayName);
         Task TransferFunds(Wallet sourceWallet, Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud, TransactionType transactionType = TransactionType.Transfer);
         Task<List<Transaction>> GetTransactionsByWallet(Guid walletId);
@@ -82,7 +85,13 @@ namespace Zorro.WebApplication.Data
                 Wallet = destinationWallet
             };
 
-            await _applicationDbContext.AddAsync(depositTransaction);
+            if (amount > 0)
+            {
+                destinationWallet.Balance += amount;
+
+                await _applicationDbContext.AddAsync(depositTransaction);
+
+            }
             await _applicationDbContext.SaveChangesAsync();
         }
 

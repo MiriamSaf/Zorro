@@ -95,42 +95,39 @@ namespace Zorro.WebApplication.Controllers
             return View("CreateDeposit");
         }
 
+
+        //deposit task post 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateDeposit(DepositRequestDto request)
+        public async Task<ActionResult> View(DepositRequestDto request)
         {
-            var transferResult = new DepositViewModel()
+            var deResult = new DepositViewModel()
             {
                 Amount = request.Amount,
                 Description = request.Description,
                 Date = DateTime.UtcNow,
                 Id = request.Id,
             };
-           /* if (request.Id is null)
+            if (!(request.Amount >= 0))
             {
-                transferResult.Status = TransferResultViewModelStatus.InvalidRecipient;
-                return View("TransferResult", transferResult);
-            }*/
-            if (!(request.Amount > 0))
+                ModelState.AddModelError("error", "number must be above 0");
+                return View("CreateDeposit");
+            }
+
+            if (request.Amount == 0)
             {
-               // transferResult.Status = TransferResultViewModelStatus.InvalidAmount;
-                return View("CreateDeposit", transferResult);
+                ModelState.AddModelError("error", "number must be a posotive number above 0");
+                return View("CreateDeposit");
             }
 
             var user = await _userManager.GetUserAsync(User);
             var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
-            if (!await _banker.VerifyBalance(sourceWallet.Id, request.Amount))
-            {
-                //transferResult.Status = TransferResultViewModelStatus.InsufficientFunds;
-                return View("TransferResult", transferResult);
-            }
-          
-          //  await _banker.DepositFunds
-            //await _banker.De(sourceWallet, destinationWallet, request.Amount, request.Description);
+           
+            await _banker.DepositFunds(sourceWallet, request.Amount, request.Description);
 
-            //transferResult.Status = TransferResultViewModelStatus.Approved;
-            return View("TransferResult", transferResult);
+            return View("Success");
         }
+
 
 
 

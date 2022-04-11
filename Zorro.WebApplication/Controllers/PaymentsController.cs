@@ -143,36 +143,38 @@ namespace Zorro.WebApplication.Controllers
                 Amount = request.Amount,
                 Description = "bpay to "+request.BillPayID,
                 Date = DateTime.UtcNow,
-                PayeeId = request.PayeeId,
+                BillPayID = request.BillPayID,
             };
             if (!(request.Amount >= 0))
             {
-                ModelState.AddModelError("error", "number must be above 0");
-                
-                return View("CreateBpay");
+                bpayResult.Status = BpayResultViewModelStatus.InvalidAmount;
+                return View("BpayResult", bpayResult);
             }
 
 
                 if (request.Amount == 0)
             {
-                ModelState.AddModelError("error", "number must be a posotive number above 0");
-                return View("CreateBpay");
+                bpayResult.Status = BpayResultViewModelStatus.InvalidAmount;
+                return View("BpayResult", bpayResult);
             }
 
-            /*
 
-        if (!await _banker.VerifyBalance(request.Id, request.Amount))
-        {
-            deResult.Status = DepResultViewModelStatus.InsufficientFunds;
-            return View("DepositResult", deResult);
-        }*/
+       
 
             var user = await _userManager.GetUserAsync(User);
             var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
 
-            await _banker.BpayTransfer(sourceWallet, request.Amount, request.PayeeId, "bpay");
+            if (!await _banker.VerifyBalance(sourceWallet.Id, request.Amount))
+            {
+                bpayResult.Status = BpayResultViewModelStatus.InsufficientFunds;
+                return View("BpayResult", bpayResult);
+            }
 
-            return View("SuccessBpay");
+
+            await _banker.BpayTransfer(sourceWallet, request.Amount, request.BillPayID, "bpay");
+
+            bpayResult.Status = BpayResultViewModelStatus.Approved;
+            return View("BpayResult", bpayResult);
         }
 
 

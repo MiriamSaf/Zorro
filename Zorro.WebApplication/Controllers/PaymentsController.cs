@@ -128,6 +128,37 @@ namespace Zorro.WebApplication.Controllers
             return View("Success");
         }
 
+        //bpay task post 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateBPay(BpayRequestDto request)
+        {
+            var bpayResult = new BpayRequestViewModel()
+            {
+                Amount = request.Amount,
+                Description = "bpay to "+request.BillPayID,
+                Date = DateTime.UtcNow,
+                PayeeId = request.PayeeId,
+            };
+            if (!(request.Amount >= 0))
+            {
+                ModelState.AddModelError("error", "number must be above 0");
+                return View("CreateDeposit");
+            }
+
+            if (request.Amount == 0)
+            {
+                ModelState.AddModelError("error", "number must be a posotive number above 0");
+                return View("CreateDeposit");
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
+
+            await _banker.BpayTransfer(sourceWallet, request.Amount, request.PayeeId, "bpay");
+
+            return View("Success");
+        }
 
 
 

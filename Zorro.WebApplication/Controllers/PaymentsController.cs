@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Zorro.WebApplication.ViewModels;
 
 namespace Zorro.WebApplication.Controllers
 {
+    [Authorize]
     public class PaymentsController : Controller
     {
         private readonly ILogger<PaymentsController> _logger;
@@ -143,13 +145,13 @@ namespace Zorro.WebApplication.Controllers
             if (!(request.Amount >= 0))
             {
                 ModelState.AddModelError("error", "number must be above 0");
-                return View("CreateDeposit");
+                return View("CreateBpay");
             }
 
             if (request.Amount == 0)
             {
                 ModelState.AddModelError("error", "number must be a posotive number above 0");
-                return View("CreateDeposit");
+                return View("CreateBpay");
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -157,7 +159,7 @@ namespace Zorro.WebApplication.Controllers
 
             await _banker.BpayTransfer(sourceWallet, request.Amount, request.PayeeId, "bpay");
 
-            return View("Success");
+            return View("SuccessBpay");
         }
 
 

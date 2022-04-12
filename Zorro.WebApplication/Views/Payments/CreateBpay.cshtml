@@ -3,34 +3,37 @@
 @{
     ViewData["Title"] = "BPAY";
 }
-<div class="spacer"></div>
-<div class="center-block" style="display:flex;justify-content:center;" >
-<div class="content-width">
-<h1>BPAY</h1>
-<form asp-action="CreateBPay" method="post">
+
+<div class="card">
+  <h5 class="card-header">BPAY</h5>
+  <div class="card-body">
+    <form asp-action="CreateBPay" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row mb-3">
-        <div class="col-sm-6">
-            <label asp-for="BillPayID" class="form-label">Biller Number</label>
-            <div class="input-group">
-                <input asp-for="BillPayID" type="text" class="form-control" id="billerInput">
-                <button class="btn btn-outline-secondary" type="button" id="billerInput">Search</button>
+        <label asp-for="BillPayID" class="form-label">Biller Number</label>
+        <div class="input-group">
+            <input asp-for="BillPayID" type="text" class="form-control" id="billerInput">
+            <button class="btn btn-outline-secondary" type="button" id="billerInput">Search</button>
             </div>
         </div>
-        <div class="col-sm-6">
+
+        <div class="mb-3">
             <label for="billerName" class="form-label">Biller name</label>
-            <input class="form-control" type="text" id="billerName" placeholder="Disabled input" aria-label="Disabled input example" disabled>
+            <input type="text" class="form-control" id="billerName" placeholder="Disabled input" aria-label="Disabled input example" disabled>
         </div>
-    </div>
 
-    <div class="mb-3 form-check">
-        <input asp-for="RememberBiller" type="checkbox" class="form-check-input">
-        <label asp-for="RememberBiller" class="form-check-label" >Remember biller</label>
-    </div>
+        <div class="mb-3 form-check">
+            <input asp-for="RememberBiller" type="checkbox" class="form-check-input">
+            <label asp-for="RememberBiller" class="form-check-label" >Remember biller</label>
+        </div>
 
-    <div class="mb-3">
-      <label for="crn" class="form-label">Customer reference number</label>
-      <input type="text" class="form-control" id="crn"/>
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <label for="crn" class="form-label">Customer reference number</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="crn"/>
+            </div>
+        </div>
     </div>
 
     <div class="row mb-3">
@@ -45,4 +48,5 @@
     
     <input type="submit" class="btn btn-dark" value="Pay"/>
 </form>
-</div></div>
+  </div>
+</div>

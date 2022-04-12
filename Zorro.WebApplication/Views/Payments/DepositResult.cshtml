@@ -7,16 +7,16 @@
 @if (Model.Status == DepResultViewModelStatus.Approved)
 {
     <div class="card">
-        <h5 class="card-header">Transfer approved</h5>
+        <h5 class="card-header">Deposit Successfull</h5>
         <div class="card-body">
             <div class="row">
-                <div class="col">Receipt No.</div><div class="col">1234567</div>
+                <div class="col">Receipt Number:</div><div class="col">1234567</div>
             </div>
             <div class="row">
-                <div class="col">Amount</div><div class="col">$@Model.Amount</div>
+                <div class="col">Amount:</div><div class="col">$@Model.Amount</div>
             </div>
             <div class="row">
-                <div class="col">Comment</div><div class="col">@Model.Description</div>
+                <div class="col">Comment:</div><div class="col">@Model.Description</div>
             </div>
         </div>
     </div>
@@ -37,9 +37,6 @@ else
 }
 
 <div>
-  <button type="button" class="p-2 btn btn-dark"
-  onclick="location.href='@Url.Action("Dashboard", "Home")'">
-  Dashboard
-</button>
+  <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("Dashboard", "Home")'">Return to Dashboard</button>
 </div>
 

@@ -4,31 +4,26 @@
     ViewData["Title"] = "CreateDeposit";
 }
 
-<h1>Create Deposit</h1>
-
-<h4>Deposit money in your wallet</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="View">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
+<div class="card">
+  <h5 class="card-header">Deposit Funds</h5>
+  <div class="card-body">
+      <form asp-action="View" method="post">
+       <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+       <div class="row mb-3">
+           <label asp-for="Amount" class="form-label">Amount</label>
+            <div class="input-group">
+                <input asp-for="Amount" type="text" class="form-control" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Description" class="control-label">Description</label>
+            <div class="input-group">
+                <input asp-for="Description" type="text" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Deposit Money" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+            <input type="submit" class="btn btn-dark" value="Deposit"/>
+</form>
+  </div>
 </div>
-
-<div>
-</div>
-

@@ -10,8 +10,9 @@
 
 <!-- Wallet details -->
 <ul class="list-group pb-3">
-  <li class="list-group-item">@Html.DisplayFor(model => model.WalletId)</li>
-  <li class="list-group-item">@Html.DisplayFor(model => model.Balance)</li>
+
+  <li class="list-group-item"><label class="form-label"><b>User ID:</b></label> @Html.DisplayFor(model => model.WalletId)</li>
+  <li class="list-group-item"><label class="form-label"><b>Balance: </b>$</label>@Html.DisplayFor(model => model.Balance)</li>
 </ul>
 
 <!-- Payment buttons-->

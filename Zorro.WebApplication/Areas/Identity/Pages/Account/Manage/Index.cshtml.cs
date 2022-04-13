@@ -78,7 +78,9 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                CreditCardNumber = user.CreditCardNumber,
+                CCExpiry = user.CCExpiry
             };
         }
 

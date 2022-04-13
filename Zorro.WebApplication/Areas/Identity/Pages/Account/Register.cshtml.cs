@@ -117,6 +117,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
             public string Mobile { get; set; }
 
             [Required]
+            [DataType(DataType.Date)]
             public DateTime? BirthDate { get; set; }
 
         }

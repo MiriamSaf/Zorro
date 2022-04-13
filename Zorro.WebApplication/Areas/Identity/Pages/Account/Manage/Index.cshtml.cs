@@ -60,7 +60,12 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
+
+            [Display(Name = "Credit Card Expiry")]
             public String CCExpiry { get; set; }
+
+
+            [Display(Name = "Credit Card Number")]
             public String CreditCardNumber { get; set; }
         }
 
@@ -106,6 +111,9 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             {
                 await LoadAsync(user);
 
+                user.CreditCardNumber = input.CreditCardNumber;
+                user.CCExpiry = Input.CCExpiry;
+                await _userManager.UpdateAsync(user);
                 return Page();
             }
 

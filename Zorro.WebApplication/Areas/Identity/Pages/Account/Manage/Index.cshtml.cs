@@ -59,6 +59,9 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            public String CCExpiry { get; set; }
+            public String CreditCardNumber { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -86,7 +89,12 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public InputModel GetInput()
+        {
+            return Input;
+        }
+
+        public async Task<IActionResult> OnPostAsync(InputModel input)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -97,6 +105,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             if (!ModelState.IsValid)
             {
                 await LoadAsync(user);
+
                 return Page();
             }
 
@@ -110,6 +119,11 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+           // var result = await _userManager.CreateAsync(user, Input.Password);
+            user.CreditCardNumber = input.CreditCardNumber;
+            user.CCExpiry = Input.CCExpiry;
+            await _userManager.UpdateAsync(user);
+            var result = await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

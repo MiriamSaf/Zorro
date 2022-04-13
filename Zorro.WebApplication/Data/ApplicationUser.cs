@@ -17,5 +17,11 @@ namespace Zorro.WebApplication.Data
 
         [RegularExpression(@"^(\d{10})$", ErrorMessage = "Error: Must be 10 Digits.")]
         public string Mobile { get; set; }
+
+        [RegularExpression(@"([0-9]{12}(?:[0-9]{3})?)", ErrorMessage = "Enter 12 digits consecutively (not separated by hyphen or comma)")]
+        public String CreditCardNumber { get; set; }
+
+        [RegularExpression(" ^ (0[1-9]|1[0-2])-?([0-9]{4}|[0-9]{2})$", ErrorMessage = "Error: Must be 4 Digits with a / in between numbers")]
+        public String CCExpiry { get; set; }
     }
 }

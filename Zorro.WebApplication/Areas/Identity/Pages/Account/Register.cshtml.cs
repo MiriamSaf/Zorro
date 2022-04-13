@@ -116,7 +116,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
             [RegularExpression(@"^(\d{10})$", ErrorMessage = "Error: Must be 10 Digits.")]
             public string Mobile { get; set; }
 
-           
+            [Required]
             public DateTime? BirthDate { get; set; }
 
         }
@@ -145,6 +145,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+
             returnUrl ??= Url.Content("~/");
            
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -154,8 +155,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
                 //ModelState.AddModelError(InputModel, "birthdate must be a time in the past");
                 return Page();
             }
-            // Save today's date.
-            //var eighteen = DateTime.
+
             var dateOBirth = Input.BirthDate;
             var ageReturn  = GetAge((DateTime)dateOBirth);
 

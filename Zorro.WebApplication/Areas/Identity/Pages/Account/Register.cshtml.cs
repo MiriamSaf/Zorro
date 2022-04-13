@@ -116,11 +116,22 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
             [RegularExpression(@"^(\d{10})$", ErrorMessage = "Error: Must be 10 Digits.")]
             public string Mobile { get; set; }
 
+           
             public DateTime? BirthDate { get; set; }
 
-            // should be once signed in - not by register
-            // public int CCExpiry { get; set; }
-            //public int CreditCardNumber { get; set; }
+        }
+
+        // code to get users age diff from today and birthdate adapted from
+        //https://stackoverflow.com/questions/9/how-do-i-calculate-someones-age-based-on-a-datetime-type-birthday
+        public static int GetAge(DateTime birthDate)
+        {
+            DateTime today = DateTime.Now; // To avoid a race condition around midnight
+            int age = today.Year - birthDate.Year;
+
+            if (today.Month < birthDate.Month || (today.Month == birthDate.Month && today.Day < birthDate.Day))
+                age--;
+
+            return age;
         }
 
 
@@ -135,7 +146,24 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
+           
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+           //if user tries for future
+            if (Input.BirthDate >= DateTime.Now)
+            {
+                //ModelState.AddModelError(InputModel, "birthdate must be a time in the past");
+                return Page();
+            }
+            // Save today's date.
+            //var eighteen = DateTime.
+            var dateOBirth = Input.BirthDate;
+            var ageReturn  = GetAge((DateTime)dateOBirth);
+
+            if(ageReturn <= 18)
+            {
+                return Page();
+            }
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();

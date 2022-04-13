@@ -135,10 +135,21 @@ max-width:1250px;
             transform-origin: bottom left;
         }
 
-
-.nav-item{
-    color: #FFFFFF !important;
+/**nav link profile page
+    ***********
+    ************/
+.nav-link-prof {
+    background-color: #FFFFFF;
+    font-size: 1.00rem;
+    color: #FF6A3D;
+    transition: all ease-in-out 0.3s;
 }
+
+    .nav-link-prof:hover {
+        color: #1A2238 !important;
+        text-decoration: none;
+        background-color: #FF6A3D;
+    }
 
 .left-aligned-nav{
     text-align: left;

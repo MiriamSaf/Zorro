@@ -2,7 +2,7 @@
 @using Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 @model IndexModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Credit Card Details";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
@@ -16,11 +16,11 @@
                 <input asp-for="Username" class="form-control" disabled />
                 <label asp-for="Username" class="form-label"></label>
             </div>
-            <div class="form-floating">
+            <!--<div class="form-floating">
                 <input asp-for="Input.PhoneNumber" class="form-control" />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
+            </div>-->
              <div class="form-floating" style="margin-bottom:15px;">
                 <input asp-for="Input.CreditCardNumber" class="form-control" autocomplete="off" aria-required="true" />
                 <label asp-for="Input.CreditCardNumber"></label>

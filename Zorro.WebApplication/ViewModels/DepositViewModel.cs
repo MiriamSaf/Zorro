@@ -14,6 +14,10 @@ namespace Zorro.WebApplication.ViewModels
         public decimal Amount { get; set; }
 
         public Guid Id { get; set; }
+
+
+        public String CreditCardNumber { get; set; }
+        public String CCExpiry { get; set; }
     }
 
     public enum DepResultViewModelStatus
@@ -21,6 +25,7 @@ namespace Zorro.WebApplication.ViewModels
         Approved,
         InvalidRecipient,
         InsufficientFunds,
-        InvalidAmount
+        InvalidAmount, 
+        InvalidCard
     }
 }

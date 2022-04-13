@@ -92,8 +92,9 @@ namespace Zorro.WebApplication.Controllers
         }
 
 
-        public ActionResult CreateDeposit()
+        public  ActionResult CreateDeposit()
         {
+            //var user = await _userManager.GetUserAsync(User);
             return View("CreateDeposit");
         }
 
@@ -119,12 +120,21 @@ namespace Zorro.WebApplication.Controllers
 
             if (request.Amount == 0)
             {
-                ModelState.AddModelError("error", "number must be a posotive number above 0");
+                ModelState.AddModelError("error", "Number must be a posotive number above 0");
                 deResult.Status = DepResultViewModelStatus.InvalidAmount;
                 return View("DepositResult", deResult);
             }
 
             var user = await _userManager.GetUserAsync(User);
+            var CCNum = user.CreditCardNumber;
+            var CCExpiry = user.CCExpiry;
+
+            if(CCNum == null || CCExpiry == null)
+            {
+                ModelState.AddModelError("error", "You must input a Credit card number");
+                deResult.Status = DepResultViewModelStatus.InvalidCard;
+                return View("DepositResult", deResult);
+            }
             var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
            
             await _banker.DepositFunds(sourceWallet, request.Amount, request.Description);

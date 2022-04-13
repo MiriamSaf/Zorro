@@ -129,7 +129,6 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
-           // var result = await _userManager.CreateAsync(user, Input.Password);
             user.CreditCardNumber = input.CreditCardNumber;
             user.CCExpiry = Input.CCExpiry;
             await _userManager.UpdateAsync(user);

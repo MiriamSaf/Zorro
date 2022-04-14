@@ -112,6 +112,10 @@ max-width:1250px;
     font-weight: 500;
 }
 
+.nav-link-marg {
+margin:10px 0px 0px 0px;
+}
+
 .pretty-underline-animation {
     display: inline-block;
     position: relative;

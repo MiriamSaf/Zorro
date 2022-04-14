@@ -21,7 +21,12 @@
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>-->
-             <div class="form-floating" style="margin-bottom:15px;">
+            <div class="form-floating" style="margin-bottom:15px;">
+                <input type="file" asp-for ="Input.AvatarUrl" class="form-control" autocomplete="off" aria-required="true" />
+                <label asp-for="Input.AvatarUrl"></label>
+                <span asp-validation-for="Input.AvatarUrl" class="text-danger"></span>
+            </div> 
+            <div class="form-floating" style="margin-bottom:15px;">
                 <input asp-for="Input.CreditCardNumber" class="form-control" autocomplete="off" aria-required="true" />
                 <label asp-for="Input.CreditCardNumber"></label>
                 <span asp-validation-for="Input.CreditCardNumber" class="text-danger"></span>

@@ -4,12 +4,14 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http.Headers;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Zorro.WebApplication.Data;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 {
@@ -17,13 +19,17 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private IHostingEnvironment _hostingEnv;
 
+        [Obsolete]
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IHostingEnvironment hostingEnv)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _hostingEnv = hostingEnv;
         }
 
         /// <summary>
@@ -52,6 +58,8 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public class InputModel
         {
+            [Display(Name = "Profile Image")]
+            public string AvatarUrl { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -60,13 +68,15 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-            [RegularExpression(@"^(\d{4})$", ErrorMessage = "Error: Invalid Exiry Date Entered")]
+            [RegularExpression(@"^(\d{6})$", ErrorMessage = "Error: Invalid Expiry Date Entered")]
             [Display(Name = "Credit Card Expiry")]
             public string CCExpiry { get; set; }
 
             [RegularExpression(@"^(\d{14,16})$", ErrorMessage = "Error: Invalid Credit Card Number")]
             [Display(Name = "Credit Card Number")]
             public string CreditCardNumber { get; set; }
+
+
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -78,6 +88,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                AvatarUrl = user.AvatarUrl,
                 PhoneNumber = phoneNumber,
                 CreditCardNumber = user.CreditCardNumber,
                 CCExpiry = user.CCExpiry
@@ -101,7 +112,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             return Input;
         }
 
-        public async Task<IActionResult> OnPostAsync(InputModel input)
+        public async Task<IActionResult> OnPostAsync(InputModel input, IFormFile formFile)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -115,8 +126,19 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 
                 user.CreditCardNumber = input.CreditCardNumber;
                 user.CCExpiry = Input.CCExpiry;
+                user.AvatarUrl = Input.AvatarUrl;
                 await _userManager.UpdateAsync(user);
-                return Page();
+
+                var filename = ContentDispositionHeaderValue.Parse(formFile.ContentDisposition).FileName.Trim('"');
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", formFile.FileName);
+                using (System.IO.Stream stream = new FileStream(path, FileMode.Create))
+                    await formFile.CopyToAsync(stream);
+            
+          // model.ImageFile = filename;
+            //_context.Add(model);
+            //_context.SaveChanges();
+
+            return Page();
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
@@ -131,6 +153,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             }
             user.CreditCardNumber = input.CreditCardNumber;
             user.CCExpiry = Input.CCExpiry;
+            user.AvatarUrl = Input.AvatarUrl;
             await _userManager.UpdateAsync(user);
             var result = await _userManager.UpdateAsync(user);
 

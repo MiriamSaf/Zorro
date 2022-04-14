@@ -150,10 +150,11 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
            
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
            //if user tries for future
             if (Input.BirthDate >= DateTime.Now)
             {
-                //ModelState.AddModelError(InputModel, "birthdate must be a time in the past");
+                ModelState.AddModelError(string.Empty, "You must be at least 18+ Years to Access this Service");
                 return Page();
             }
 
@@ -162,6 +163,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
 
             if(ageReturn <= 18)
             {
+                ModelState.AddModelError(string.Empty, "You must be at least 18+ Years to Access this Service");
                 return Page();
             }
 

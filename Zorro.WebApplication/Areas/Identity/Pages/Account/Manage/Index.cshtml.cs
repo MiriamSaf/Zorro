@@ -60,13 +60,13 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-
+            [RegularExpression(@"^(\d{4})$", ErrorMessage = "Error: Invalid Exiry Date Entered")]
             [Display(Name = "Credit Card Expiry")]
-            public String CCExpiry { get; set; }
+            public string CCExpiry { get; set; }
 
-
+            [RegularExpression(@"^(\d{14,16})$", ErrorMessage = "Error: Invalid Credit Card Number")]
             [Display(Name = "Credit Card Number")]
-            public String CreditCardNumber { get; set; }
+            public string CreditCardNumber { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)

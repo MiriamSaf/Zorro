@@ -4,8 +4,6 @@
 @{
     ViewData["Title"] = "Transfer Result";
 }
-@if (Model.Status == TransferResultViewModelStatus.Approved)
-{
     <div class="card">
         <h5 class="card-header">Transfer Successful</h5>
         <div class="card-body">
@@ -23,26 +21,7 @@
             </div>
         </div>
     </div>
-}
-else
-{
-    <div class="card text-white bg-danger">
-        <h5 class="card-header text-white">@Model.Status</h5>
-        <div class="card-body">
-            <div class="row">
-                <div class="col">Recipient</div><div class="col">@Model.RecipientDisplayName</div>
-            </div>
-            <div class="row">
-                <div class="col">Amount</div><div class="col">$@Model.Amount</div>
-            </div>
-            <div class="row">
-                <div class="col">Comment</div><div class="col">@Model.Comment</div>
-            </div>
-        </div>
-    </div>
-}
 
 <div>
   <button type="button" class="p-2 btn btn-dark"onclick="location.href='@Url.Action("Dashboard", "Home")'">Return to Dashboard</button>
 </div>
-

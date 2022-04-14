@@ -6,7 +6,7 @@
 <div class="center-block" style="display:flex;justify-content:center;" >
 <div class="content-width">
 <div class="card">
-  <h5 class="card-header">Deposit Funds</h5>
+  <h5 class="card-header">Deposit Money</h5>
   <div class="card-body">
       <div>
           <h5>Your credit card on file will be automatically charged when you deposit into your account</h5>
@@ -29,8 +29,9 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
         </div>
+            <button type="button" class="btn btn-dark" onclick="location.href='@Url.Action("Dashboard", "Home")'">Cancel</button>
             <input type="submit" class="btn btn-dark" value="Deposit"/>
-</form>
+      </form>
   </div>
   </div>
 </div>

@@ -6,7 +6,7 @@
 <div class="center-block" style="display:flex;justify-content:center;" >
 <div class="content-width">
 <div class="card">
-  <h5 class="card-header">BPAY</h5>
+  <h5 class="card-header">BPAY Bills</h5>
   <div class="card-body">
     <form asp-action="CreateBPay" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -39,16 +39,16 @@
 
     <div class="row mb-3">
         <div class="col-sm-6">
-            <label asp-for="Amount" class="form-label">Amount (maximum $10,000)</label>
+            <label asp-for="Amount" class="form-label">Amount</label>
             <div class="input-group">
                 <span class="input-group-text">$</span>
                 <input asp-for="Amount" type="number" class="form-control"/>
             </div>
         </div>
     </div>
-    
-    <input type="submit" class="btn btn-dark" value="Pay"/>
-</form>
+        <button type="button" class="btn btn-dark" onclick="location.href='@Url.Action("Dashboard", "Home")'">Cancel</button>
+        <input type="submit" class="btn btn-dark" value="Pay"/>
+    </form>
   </div>
 </div>
 </div>

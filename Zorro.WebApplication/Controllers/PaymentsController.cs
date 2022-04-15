@@ -126,8 +126,8 @@ namespace Zorro.WebApplication.Controllers
            
             await _banker.DepositFunds(sourceWallet, request.Amount, request.Description);
             deResult.Status = DepResultViewModelStatus.Approved;
-
-            return View("DepositResult");
+           
+            return View("DepositResult", deResult);
         }
 
         //bpay task post 

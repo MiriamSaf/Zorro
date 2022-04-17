@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Zorro.WebApplication.Models;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel;
 
 namespace Zorro.WebApplication.Data
 {
@@ -19,11 +20,23 @@ namespace Zorro.WebApplication.Data
         public string Mobile { get; set; }
 
         [RegularExpression(@"([0-9]{12}(?:[0-9]{3})?)", ErrorMessage = "Enter 12 digits consecutively (not separated by hyphen or comma)")]
-        public String CreditCardNumber { get; set; }
+        public string CreditCardNumber { get; set; }
 
         [RegularExpression(" ^ (0[1-9]|1[0-2])-?([0-9]{4}|[0-9]{2})$", ErrorMessage = "Error: Must be 4 Digits with a / in between numbers")]
-        public String CCExpiry { get; set; }
-       // public IFormFile ProfImage { set; get; }
-    
-}
+        public string CCExpiry { get; set; }
+
+        public int ImageId { get; set; }
+
+        [Column(TypeName = "nvarchar(50)")]
+        public string Title { get; set; }
+
+        [Column(TypeName = "nvarchar(100)")]
+        [DisplayName("Image Name")]
+        public string ImageName { get; set; }
+
+        [NotMapped]
+        [DisplayName("Upload File")]
+        public IFormFile ImageFile { get; set; }
+
+    }
 }

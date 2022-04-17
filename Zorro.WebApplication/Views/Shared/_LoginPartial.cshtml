@@ -8,6 +8,7 @@
 
     <li class="nav-item align-bottom">
         <a  class="nav-link text-dark h5" style="margin:15px;padding4px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserAsync(User).Result.FirstName - Profile</a>
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <img id = "nav-logo" src = "~/images/profile_test.jpg" width="50px" height="50px"></a>
     </li>
     <li class="nav-item">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

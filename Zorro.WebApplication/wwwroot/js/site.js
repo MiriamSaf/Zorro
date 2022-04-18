@@ -38,13 +38,9 @@ function resetValidation(input) {
 function enableOrDisableButton(status, buttonId) {
     let transferButton = document.getElementById(buttonId);
     if (status == 1) {
-        console.log("Enabling button");
-        console.log(transferButton);
         transferButton.classList.remove("disabled");
-        console.log(transferButton);
     }
     else {
-        console.log("Disabling button");
         transferButton.classList.add("disabled");
     }
 }

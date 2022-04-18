@@ -28,7 +28,7 @@
             <label asp-for="Amount" class="form-label">Amount</label>
             <div class="input-group">
                 <span class="input-group-text">$</span>
-                <input asp-for="Amount" type="number" class="form-control"/>
+                <input asp-for="Amount" asp-format="{0:#,###.00}" class="form-control"/>
             </div>
         </div>
     </div>
@@ -39,3 +39,19 @@
 </div>
 </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        const verifyWalletButton = document.getElementById("recipientWalletButton");
+        verifyWalletButton.addEventListener("load", function () { verify('recipientWalletInput', 'VerifyWalletId', 'transferButton') }, false);
+        verifyWalletButton.addEventListener("click", function () { verify('recipientWalletInput', 'VerifyWalletId', 'transferButton') }, false);
+
+        const walletInput = document.getElementById("recipientWalletInput");
+        walletInput.addEventListener("blur", function () { verify('recipientWalletInput', 'VerifyWalletId', 'transferButton') }, false);
+
+        console.log('Calling verify...')
+        verify('recipientWalletInput', 'VerifyWalletId', 'transferButton');
+        console.log('verified!')
+    </script>
+}

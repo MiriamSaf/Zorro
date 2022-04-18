@@ -44,9 +44,3 @@ function enableOrDisableButton(status, buttonId) {
         transferButton.classList.add("disabled");
     }
 }
-
-const verifyWalletButton = document.getElementById("recipientWalletButton");
-verifyWalletButton.addEventListener("click", function () { verify('recipientWalletInput', 'VerifyWalletId', 'transferButton') }, false);
-
-const walletInput = document.getElementById("recipientWalletInput");
-walletInput.addEventListener("blur", function () { verify('recipientWalletInput', 'VerifyWalletId', 'transferButton') }, false);

@@ -167,20 +167,20 @@ namespace Zorro.WebApplication.Controllers
         {
             if (string.IsNullOrEmpty(id))
                 return StatusCode(404);
-            var sourceWallet = await _banker.GetWalletByDisplayName(id.ToUpper());
-            if (sourceWallet is null)
+            var foundWallet = await _banker.GetWalletByDisplayName(id.ToUpper());
+            if (foundWallet is null)
                 return StatusCode(404);
             return StatusCode(204);
         }
 
-        public async Task<ActionResult> VerifyBillerCode(string id)
+        public async Task<BpayBillerVerificationResult> VerifyBillerCode(string id)
         {
             if (string.IsNullOrEmpty(id))
-                return StatusCode(404);
-            var sourceWallet = await _context.Payees.FindAsync(id);
-            if (sourceWallet is null)
-                return StatusCode(404);
-            return StatusCode(204);
+                throw new FileNotFoundException();
+            var foundBiller = await _context.Payees.FindAsync(int.Parse(id));
+            if (foundBiller is null)
+                throw new FileNotFoundException();
+            return new BpayBillerVerificationResult() { BillerName = foundBiller.BillerName };
         }
     }
 }

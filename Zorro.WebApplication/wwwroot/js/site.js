@@ -9,7 +9,6 @@ function verify(inputId, route, buttonId) {
         let uri = route + '?' + new URLSearchParams({
             id: document.getElementById(inputId).value,
         })
-        console.log(uri)
         fetch(uri).then(function (response) {
             let status = 0
             if (response.ok) {
@@ -25,6 +24,32 @@ function verify(inputId, route, buttonId) {
     }
 }
 
+async function verifyBillerCode(inputId, buttonId) {
+    let status = 1;
+    let billerInput = document.getElementById(inputId);
+    let billerCode = billerInput.value;
+
+    try {
+        let billerName = await getBpayBillerName(billerCode);
+        document.getElementById('billerName').value = billerName;
+    } catch (e) {
+        status = 0;
+    }
+    
+    showVerificationStatus(status, inputId);
+    //enableOrDisableButton(status, buttonId)
+}
+
+async function getBpayBillerName(billerCode) {
+    let uri = "VerifyBillerCode" + '?' + new URLSearchParams({
+        id: billerCode,
+    });
+
+    let resp = await fetch(uri);
+    let data = await resp.json();
+    return data['billerName'];
+}
+
 function showVerificationStatus(status, elementId) {
     const inputElement = document.getElementById(elementId);
     resetValidation(inputElement)
@@ -32,6 +57,8 @@ function showVerificationStatus(status, elementId) {
 }
 
 function resetValidation(input) {
+    if (input == null)
+        return;
     input.classList.remove(validationClasses[0], validationClasses[1])
 }
 

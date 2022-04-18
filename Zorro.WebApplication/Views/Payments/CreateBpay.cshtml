@@ -14,7 +14,7 @@
         <label asp-for="BillPayID" class="form-label">Biller Number</label>
         <div class="input-group">
             <input asp-for="BillPayID" type="text" class="form-control" id="billerInput">
-            <button class="btn btn-outline-secondary" type="button" id="billerInput">Search</button>
+            <button class="btn btn-outline-secondary" type="button" id="billerSearchButton">Search</button>
             </div>
         </div>
 
@@ -53,3 +53,17 @@
 </div>
 </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        const verifyBillerButton = document.getElementById("billerSearchButton");
+        verifyBillerButton.addEventListener("click", async () => {
+            await verifyBillerCode('billerInput', 'billerSearchButton');
+        }, false);
+
+        
+
+        
+    </script>
+}

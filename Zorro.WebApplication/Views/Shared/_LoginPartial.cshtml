@@ -8,13 +8,18 @@
 
     <li class="nav-item align-bottom">
         <a  class="nav-link text-dark h5" style="margin:15px;padding4px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserAsync(User).Result.FirstName - Profile</a>
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <img id = "nav-logo" src = "~/images/profile_test.jpg" width="50px" height="50px"></a>
     </li>
+    <li class="nav-item align-bottom" >
+     <a class="align-content-center" style="height:100%;" asp-area="" asp-controller="Home" asp-action="Index"> <img  src ="~/images/defaultProfileAvatar.png" style="position:relative;top:50%;transform:translateY(-50%);width:50px;"></a>
+     </li>
     <li class="nav-item">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button  type="submit" class="nav-link btn btn-link text-light btn-hover ff6a3d">Logout</button>
         </form>
     </li>
+    
+        
+
 }
 else
 {

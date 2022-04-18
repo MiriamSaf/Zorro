@@ -13,8 +13,8 @@
     <div class="row mb-3">
         <label asp-for="RecipientWallet" class="form-label">Recipient (User ID)</label>
         <div class="input-group">
-            <input asp-for="RecipientWallet" type="text" class="form-control" id="billerInput">
-            <button class="btn btn-outline-secondary" type="button" id="billerInput">Search</button>
+            <input asp-for="RecipientWallet" type="text" class="form-control" id="recipientWalletInput">
+            <button class="btn btn-outline-secondary" type="button" id="recipientWalletButton">Search</button>
         </div>
     </div>
 
@@ -33,7 +33,7 @@
         </div>
     </div>
     <button type="button" class="btn btn-dark" onclick="location.href='@Url.Action("Dashboard", "Home")'">Cancel</button>
-    <input type="submit" class="btn btn-dark" value="Transfer"/>
+    <input id="transferButton" type="submit" class="btn btn-dark disabled" value="Transfer"/>
     </form>
   </div>
 </div>

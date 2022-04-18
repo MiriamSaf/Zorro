@@ -162,5 +162,25 @@ namespace Zorro.WebApplication.Controllers
             bpayResult.Status = BpayResultViewModelStatus.Approved;
             return View("BpayResult", bpayResult);
         }
+
+        public async Task<ActionResult> VerifyWalletId(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return StatusCode(404);
+            var sourceWallet = await _banker.GetWalletByDisplayName(id.ToUpper());
+            if (sourceWallet is null)
+                return StatusCode(404);
+            return StatusCode(204);
+        }
+
+        public async Task<ActionResult> VerifyBillerCode(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return StatusCode(404);
+            var sourceWallet = await _context.Payees.FindAsync(id);
+            if (sourceWallet is null)
+                return StatusCode(404);
+            return StatusCode(204);
+        }
     }
 }

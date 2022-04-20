@@ -1,0 +1,44 @@
+﻿@model Zorro.WebApplication.ViewModels.DashboardViewModel
+
+<div class="spacer"></div>
+    <div class="center-block" style="display:flex;justify-content:center;" >
+        <div class="content-width">
+
+        <h1>Shop [INSERT SHOP NAME]</h1>
+
+        <h4>Your Cart:</h4>
+
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Total</th>
+          </tr>
+          <tr>
+            <td>Sample Item A</td>
+            <td>5</td>
+            <td>$45</td>
+          </tr>
+          <tr>
+            <td>Sample Item B</td>
+            <td>1</td>
+            <td>$250</td>
+          </tr>
+          <tr>
+            <td>Sample Item C</td>
+            <td>16</td>
+            <td>$66.65</td>
+          </tr>
+        </table>
+
+       <h4>Total Cost: $364.65</h4>
+
+       <h3>Payment Methods</h3>
+
+       <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("ShopLogin", "Shop")'">Zorro Wallet</button>
+       <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("ShopLogin", "Shop")'">Credit Card</button>
+       <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("ShopLogin", "Shop")'">Apple Pay</button>
+       <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("ShopLogin", "Shop")'">Google Pay</button>
+
+    </div>
+</div>

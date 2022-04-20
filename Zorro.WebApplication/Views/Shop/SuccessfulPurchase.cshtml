@@ -1,0 +1,16 @@
+﻿@model Zorro.WebApplication.ViewModels.DashboardViewModel
+
+<div class="spacer"></div>
+    <div class="center-block" style="display:flex;justify-content:center;" >
+        <div class="content-width">
+
+        <h1>Purchase Successful!</h1>
+
+        <img src="~/images/Shop/greentick.png" alt="Forest" style="width:50%">
+
+        <h3>You will now be automatically redirected back to our partners home page.</h3>
+
+        <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("ShopHome", "Shop")'">{Temporary Redirect Button}</button>
+
+    </div>
+</div>

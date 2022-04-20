@@ -1,0 +1,22 @@
+﻿@model Zorro.WebApplication.ViewModels.DashboardViewModel
+
+<div class="spacer"></div>
+    <div class="center-block" style="display:flex;justify-content:center;" >
+        <div class="content-width">
+
+        <h3>Log into your account to complete your purchase with Shop [INSERT SHOP NAME]</h3>
+
+        <div class="mb-3">
+            <label class="form-label">User ID:</label>
+            <input type="text" class="form-control" id="userid">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password:</label>
+            <input type="text" class="form-control" id="password">
+        </div>
+
+        <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("ConfirmPurchase", "Shop")'">Login</button>
+
+    </div>
+</div>

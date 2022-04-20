@@ -3,67 +3,64 @@
 @{
     ViewData["Title"] = "BPAY";
 }
-<div class="center-block" style="display:flex;justify-content:center;" >
-<div class="content-width">
-<div class="card">
-  <h5 class="card-header">BPAY Bills</h5>
-  <div class="card-body">
-    <form asp-action="CreateBPay" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="row mb-3">
-        <label asp-for="BillPayID" class="form-label">Biller Number</label>
-        <div class="input-group">
-            <input asp-for="BillPayID" type="text" class="form-control" id="billerInput">
-            <button class="btn btn-outline-secondary" type="button" id="billerSearchButton">Search</button>
-            </div>
-        </div>
+<div class="center-block" style="display:flex;justify-content:center;">
+    <div class="content-width">
+        <div class="card">
+            <h5 class="card-header">BPAY Bills</h5>
+            <div class="card-body">
+                <form asp-action="CreateBPay" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="BillPayID" class="form-label">Biller Number</label>
+                        <input asp-for="BillPayID" type="text" class="form-control" id="billerInput">
+                    </div>
 
-        <div class="mb-3">
-            <label for="billerName" class="form-label">Biller name</label>
-            <input type="text" class="form-control" id="billerName" placeholder="Disabled input" aria-label="Disabled input example" disabled>
-        </div>
+                    <div class="mb-3">
+                        <label for="billerName" class="form-label">Biller name</label>
+                        <input type="text" class="form-control" id="billerName" placeholder="Enter a valid code above" disabled>
+                    </div>
 
-        <div class="mb-3 form-check">
-            <input asp-for="RememberBiller" type="checkbox" class="form-check-input">
-            <label asp-for="RememberBiller" class="form-check-label" >Remember biller</label>
-        </div>
+                    <div class="mb-3 form-check">
+                        <input asp-for="RememberBiller" type="checkbox" class="form-check-input">
+                        <label asp-for="RememberBiller" class="form-check-label">Remember biller</label>
+                    </div>
 
-    <div class="row mb-3">
-        <div class="col-sm-6">
-            <label for="crn" class="form-label">Customer reference number</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="crn"/>
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <label for="crn" class="form-label">Customer reference number</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="crn" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <label asp-for="Amount" class="form-label">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="Amount" type="number" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-dark" onclick="location.href='@Url.Action("Dashboard", "Home")'">Cancel</button>
+                    <input type="submit" class="btn btn-dark disabled" value="Pay" id="bpayButton"/>
+                </form>
             </div>
         </div>
     </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-6">
-            <label asp-for="Amount" class="form-label">Amount</label>
-            <div class="input-group">
-                <span class="input-group-text">$</span>
-                <input asp-for="Amount" type="number" class="form-control"/>
-            </div>
-        </div>
-    </div>
-        <button type="button" class="btn btn-dark" onclick="location.href='@Url.Action("Dashboard", "Home")'">Cancel</button>
-        <input type="submit" class="btn btn-dark" value="Pay"/>
-    </form>
-  </div>
-</div>
-</div>
 </div>
 
 @section Scripts
 {
-    <script>
-        const verifyBillerButton = document.getElementById("billerSearchButton");
-        verifyBillerButton.addEventListener("click", async () => {
-            await verifyBillerCode('billerInput', 'billerSearchButton');
-        }, false);
+<script>
+    const billerInput = document.getElementById("billerInput");
+    billerInput.addEventListener("blur", async () => {
+        await verifyBillerCode('billerInput', 'billerName', 'bpayButton');
+    }, false);
 
-        
-
-        
-    </script>
+    if (billerInput.value) {
+        verifyBillerCode('billerInput', 'billerName', 'bpayButton');
+    }
+</script>
 }

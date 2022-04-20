@@ -231,3 +231,21 @@ margin:10px 0px 0px 0px;
     border: 2px solid rgba(0,0,0,.125);
     border-radius: 16px
 }
+
+/* Three image containers (use 25% for four, and 50% for two, etc) */
+.column {
+    float: left;
+    width: 25%;
+    padding: 5px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+table, th, td {
+    border: 1px solid black;
+}

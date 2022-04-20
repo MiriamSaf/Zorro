@@ -1,0 +1,32 @@
+﻿@model Zorro.WebApplication.ViewModels.DashboardViewModel
+
+<div class="spacer"></div>
+    <div class="center-block" style="display:flex;justify-content:center;" >
+        <div class="content-width">
+
+        <h1>Confirm your purchase with [INSERT SHOP NAME]</h1>
+
+        <div class="mb-3">
+            <label class="form-label">Wallet ID:</label>
+            <input type="text" class="form-control" id="walletid" value="damien@gmail.com">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Purchase Total:</label>
+            <input type="text" class="form-control" id="walletid" value="$364.65">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Zorro Fees:</label>
+            <input type="text" class="form-control" id="walletid" value="$$3.65">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Zorro Fees:</label>
+            <input type="text" class="form-control" id="walletid" value="$368.30">
+        </div>
+
+        <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("SuccessfulPurchase", "Shop")'">Confirm</button>
+
+    </div>
+</div>

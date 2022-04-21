@@ -15,7 +15,8 @@ namespace Zorro.WebApplication.Models
         }
         public IActionResult Index()
         {
-            return View();
+            //pass all users to view
+            return View(_userManager.Users);
         }
 
 

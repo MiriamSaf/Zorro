@@ -1,0 +1,64 @@
+﻿
+
+@model Zorro.WebApplication.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create User</h1>
+
+<div class="center-block" style="display:flex;justify-content:center;">
+    <div class="content-width">
+        <div class="card">
+            <h5 class="card-header">Create new User</h5>
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+               
+            <div class="form-floating" style="margin-bottom:15px;">
+                <input asp-for="UserName" class="form-control" autocomplete="off" aria-required="true" />
+                <label asp-for="UserName"></label>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+                     <div class="form-floating" style="margin-bottom:15px;">
+                <input asp-for="FirstName" class="form-control" autocomplete="off" aria-required="true" />
+                <label asp-for="FirstName"></label>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating" style="margin-bottom:15px;">
+                <input asp-for="Surname" class="form-control" autocomplete="off" aria-required="true" />
+                <label asp-for="Surname"></label>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+         
+             <div class="form-floating" style="margin-bottom:15px;">
+               <input asp-for = "Email" class="form-control" autocomplete="off" aria-required="true" />
+                <label asp-for="Email"></label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            <div class="form-floating" style="margin-bottom:15px;">
+               <input asp-for = "Mobile" class="form-control" autocomplete="off" aria-required="true" />
+                <label asp-for="Mobile"></label>
+                <span asp-validation-for="Mobile" class="text-danger"></span>
+            </div>
+              <div class="form-floating" style="margin-bottom:15px;">
+               <input asp-for = "BirthDate" class="form-control" autocomplete="off" aria-required="true" />
+                <label asp-for="BirthDate"></label>
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                </div>
+                    
+                  <div class="form-floating" style="margin-bottom:15px;">
+               <input asp-for = "PasswordHash" class="form-control" autocomplete="off" aria-required="true" />
+                <label asp-for="PasswordHash"></label>
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                </div>
+
+
+                    <button type="button" class="btn btn-dark" onclick="location.href='@Url.Action("Index", "User")'">Cancel</button>
+                    <input type="submit" class="btn btn-dark" value="Create" id="create"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

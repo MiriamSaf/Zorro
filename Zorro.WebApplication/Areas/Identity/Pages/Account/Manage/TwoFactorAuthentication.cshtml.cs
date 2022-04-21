@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Zorro.WebApplication.Models;
 using Zorro.WebApplication.Data;
 
 namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage

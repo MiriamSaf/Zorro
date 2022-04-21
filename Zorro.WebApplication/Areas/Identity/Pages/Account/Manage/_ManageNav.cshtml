@@ -1,4 +1,6 @@
-﻿@inject SignInManager<ApplicationUser> SignInManager
+﻿@using Zorro.WebApplication.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
@@ -11,5 +13,5 @@
         <li id="external-logins" type="button" class="btn btn-dark"><a id="external-login" class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
     }
     <button type="button" class="btn btn-dark"><a class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
-    <button type="button" class="btn btn-dark"><a class="@ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li>
+    <button type="button" class="btn btn-dark"><a class="@ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Admin Portal</a></li>
 </ul>

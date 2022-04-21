@@ -69,6 +69,10 @@ h2 {
     color: #FFFFFF;
 }
 
+#navbaractive {
+    color: #FF6A3D !important;
+}
+
 .navbar-light .navbar-nav .nav-link {
     color: #FFFFFF !important;
 }

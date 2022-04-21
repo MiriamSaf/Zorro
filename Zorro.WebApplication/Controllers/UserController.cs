@@ -29,6 +29,7 @@ namespace Zorro.WebApplication.Models
         [HttpPost]
         public async Task<IActionResult> Create(ApplicationUser user)
         {
+         addError(user);
             if (ModelState.IsValid)
             {
                 ApplicationUser appUser = new ApplicationUser
@@ -43,6 +44,8 @@ namespace Zorro.WebApplication.Models
                     Email = user.Email
 
                 };
+
+               
 
                 IdentityResult result = await _userManager.CreateAsync(appUser, user.PasswordHash);
                 if (result.Succeeded)
@@ -150,6 +153,36 @@ namespace Zorro.WebApplication.Models
         {
             foreach (IdentityError error in result.Errors)
                 ModelState.AddModelError("", error.Description);
+        }
+
+        private void addError(ApplicationUser user)
+        {
+            if (string.IsNullOrEmpty(user.PasswordHash))
+            {
+                ModelState.AddModelError("", "password field cannot be left empty");
+            }
+            if (string.IsNullOrEmpty(user.UserName))
+            {
+                ModelState.AddModelError("", "username field cannot be left empty");
+            }
+            if (string.IsNullOrEmpty(user.FirstName))
+            {
+                ModelState.AddModelError("", "firstname field cannot be left empty");
+            }
+            if (string.IsNullOrEmpty(user.Surname))
+            {
+                ModelState.AddModelError("", "surname field cannot be left empty");
+            }
+            if (string.IsNullOrEmpty(user.Mobile))
+            {
+                ModelState.AddModelError("", "mobile field cannot be left empty");
+            }
+            if (string.IsNullOrEmpty(user.Email))
+            {
+                ModelState.AddModelError("", "email field cannot be left empty");
+            }
+
+
         }
     }
 }

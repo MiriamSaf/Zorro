@@ -247,5 +247,7 @@ margin:10px 0px 0px 0px;
 }
 
 table, th, td {
-    border: 1px solid black;
+   /* MS : I removed it for now as lent a dizzying feel and also 
+       is not aligning with table
+       border: 1px solid;*/
 }

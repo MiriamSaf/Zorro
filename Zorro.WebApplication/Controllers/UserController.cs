@@ -67,28 +67,60 @@ namespace Zorro.WebApplication.Models
 
         //update user 
         [HttpPost]
-        public async Task<IActionResult> Update(string id, string email, string password)
+        public async Task<IActionResult> Update(string id, string firstname, string surname, string mobile, string email, string password)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
-                if (!string.IsNullOrEmpty(email))
-                    user.Email = email;
+                if (!string.IsNullOrEmpty(mobile))
+                {
+                    user.Mobile = mobile;
+                }
                 else
-                    ModelState.AddModelError("", "Email cannot be empty");
+                {
+                    ModelState.AddModelError("", "mobile field cannot be left empty");
+                }
+                if (!string.IsNullOrEmpty(firstname))
+                {
+                    user.FirstName = firstname;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Firstname field cannot be left empty");
+                }
+                if (!string.IsNullOrEmpty(surname))
+                {
+                    user.Surname = surname;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Surname field cannot be left empty");
+                }
+                if (!string.IsNullOrEmpty(email))
+                {
+                    user.Email = email;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Email field cannot be left empty");
+                }
 
                 if (!string.IsNullOrEmpty(password))
-                    user.PasswordHash = _passwordHashed.HashPassword(user, password);
-                else
-                    ModelState.AddModelError("", "Password cannot be empty");
-
-                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
                 {
-                    IdentityResult result = await _userManager.UpdateAsync(user);
-                    if (result.Succeeded)
+                    user.PasswordHash = _passwordHashed.HashPassword(user, password);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Password field cannot be empty");
+                }
+
+                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(firstname) && !string.IsNullOrEmpty(surname) && !string.IsNullOrEmpty(mobile))
+                {
+                    IdentityResult idResult = await _userManager.UpdateAsync(user);
+                    if (idResult.Succeeded)
                         return RedirectToAction("Index");
                     else
-                        Errors(result);
+                        Errors(idResult);
                 }
             }
             else

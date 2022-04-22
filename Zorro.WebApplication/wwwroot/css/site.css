@@ -69,6 +69,10 @@ h2 {
     color: #FFFFFF;
 }
 
+#navbaractive {
+    color: #FF6A3D !important;
+}
+
 .navbar-light .navbar-nav .nav-link {
     color: #FFFFFF !important;
 }
@@ -164,6 +168,7 @@ margin:10px 0px 0px 0px;
     ***************/
 .btn-dark{
     transition: all ease-in-out 0.5s;
+    margin-bottom: 10px;
 }
 .btn-dark :hover::after {
     background-color: #FF6A3D;
@@ -247,5 +252,20 @@ margin:10px 0px 0px 0px;
 }
 
 table, th, td {
-    border: 1px solid black;
+   /* MS : I removed it for now as lent a dizzying feel and also 
+       is not aligning with table
+       border: 1px solid;*/
+}
+
+/** nav identity buttons */
+.nav-page-identity{
+    text-decoration: none;
+    color: #FFFFFF;
+    transition: all ease-in-out 0.3s;
+    
+}
+
+.nav-page-identity:hover{
+    text-decoration: none;
+    color: #FFFFFF;
 }

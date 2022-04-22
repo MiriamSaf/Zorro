@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Zorro.WebApplication.Data;
 
+using Zorro.WebApplication.Models;
 
 
-    public class Program
+
+public class Program
     {
         public static void Main(string[] args)
         {

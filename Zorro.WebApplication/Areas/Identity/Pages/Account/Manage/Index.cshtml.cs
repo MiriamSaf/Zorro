@@ -12,8 +12,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Zorro.WebApplication.Models;
 using Microsoft.Extensions.Logging;
 using Zorro.WebApplication.Data;
+
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage

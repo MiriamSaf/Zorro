@@ -1,7 +1,7 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using Zorro.WebApplication.Data
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+﻿@using Microsoft.AspNetCore.Identity;
+@using Zorro.WebApplication.Data;
+@inject SignInManager<ApplicationUser> SignInManager;
+@inject UserManager<ApplicationUser> UserManager;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +17,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700&display=swap" rel="stylesheet">
+    
 </head>
 <body>
     <header>
@@ -33,7 +34,7 @@
                             @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark pretty-underline-animation h5" style="margin: 0px 10px 0px 10px;" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+                                <a id="" class="nav-link text-dark pretty-underline-animation h5" style="margin: 0px 10px 0px 10px;" href="/Home/Dashboard">Dashboard</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark pretty-underline-animation h5" style="margin: 0px 10px 0px 10px;"asp-area="" asp-controller="Payments" asp-action="Transfer">Transfer</a>
@@ -46,8 +47,8 @@
                             </li> 
                             <li class="nav-item">
                                 <a class="nav-link text-dark pretty-underline-animation h5" style="margin: 0px 10px 0px 10px;"asp-area="" asp-controller="Shop" asp-action="ShopHome">Shop</a>
-                            </li> 
-                        }
+                            </li>
+                             }
                     </ul>
                         <partial name="_LoginPartial" />
                     </div>
@@ -69,6 +70,11 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function(){
+        $('.nav-item').find('[href="'+window.location.pathname+'"]').attr('id', 'navbaractive')});
+
+        </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

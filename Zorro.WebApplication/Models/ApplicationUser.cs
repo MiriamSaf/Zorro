@@ -4,7 +4,7 @@ using Zorro.WebApplication.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel;
 
-namespace Zorro.WebApplication.Data
+namespace Zorro.WebApplication.Models
 {
     public class ApplicationUser : IdentityUser
     {        

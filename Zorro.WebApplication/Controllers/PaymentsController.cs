@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Zorro.WebApplication.Data;
+using Zorro.WebApplication.Models;
 using Zorro.WebApplication.Dtos;
 using Zorro.WebApplication.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Zorro.WebApplication.Controllers
 {
@@ -29,8 +31,16 @@ namespace Zorro.WebApplication.Controllers
             return View("CreateTransfer");
         }
 
-        public ActionResult Bpay()
+        public async Task <ActionResult> Bpay()
         {
+            // find remembered biller and pass to view
+            var user = await _userManager.GetUserAsync(User);
+            var rememberedBillers = await _context.RememberedBillers
+                .Where(x => x.ApplicationUser == user)
+                .Include(z => z.BpayBiller)
+                .ToListAsync();
+            ViewBag.RememberedBillers = rememberedBillers;
+
             return View("CreateBpay");
         }
 
@@ -157,9 +167,28 @@ namespace Zorro.WebApplication.Controllers
                 return View("CreateBpay");
             }
 
+
             await _banker.BpayTransfer(sourceWallet, request.Amount, request.BillPayID, "bpay");
 
             bpayResult.Status = BpayResultViewModelStatus.Approved;
+
+            // remember biller
+            if (request.RememberBiller)
+            {
+                var biller = await _context.Payees.FindAsync(request.BillPayID);
+                var rememberedBiller = await _context.FindAsync<RememberedBiller>(biller.BillerCode, user.Id);
+                if (rememberedBiller is null)
+                {
+                    rememberedBiller = new RememberedBiller()
+                    {
+                        ApplicationUser = user,
+                        BpayBiller = biller,
+                    };
+                    await _context.AddAsync(rememberedBiller);
+                    await _context.SaveChangesAsync();
+                }
+            }            
+
             return View("BpayResult", bpayResult);
         }
 

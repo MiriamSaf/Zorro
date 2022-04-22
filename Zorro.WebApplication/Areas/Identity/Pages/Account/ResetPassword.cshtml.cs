@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Zorro.WebApplication.Data;
+using Zorro.WebApplication.Models;
 
 namespace Zorro.WebApplication.Areas.Identity.Pages.Account
 {

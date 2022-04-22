@@ -12,7 +12,16 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="mb-3">
                         <label asp-for="BillPayID" class="form-label">Biller Number</label>
-                        <input asp-for="BillPayID" type="text" class="form-control" id="billerInput">
+                        <input asp-for="BillPayID" list="rememberedBillers" type="text" class="form-control" id="billerInput">
+                        @if (@ViewBag.RememberedBillers != null)
+                        {
+                            <datalist id="rememberedBillers">
+                                @foreach (var biller in ViewBag.RememberedBillers)
+                                {
+                                    <option value="@biller.BillerCode">@biller.BpayBiller.BillerName</option>
+                                }
+                            </datalist>
+                        }
                     </div>
 
                     <div class="mb-3">

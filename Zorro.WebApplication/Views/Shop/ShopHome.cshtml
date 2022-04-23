@@ -1,4 +1,4 @@
-﻿@model Zorro.WebApplication.ViewModels.DashboardViewModel
+﻿@model Zorro.WebApplication.ViewModels.ShopDashboardViewModel
 
 <div class="spacer"></div>
     <div class="center-block" style="display:flex;justify-content:center;" >
@@ -9,25 +9,20 @@
 
         <hr class="my-3"/>
 
-        <div class="input-group">
-          <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-          <button type="button" class="btn btn-outline-primary">search</button>
-        </div>
-
         <h4>Featured Stores</h4>
 
         <div class="row">
           <div class="column">
-            <a asp-controller="Shop" asp-action="Checkout"><img src="~/images/Shop/kmart_logo.png" alt="kmart_logo" style="width:100%"></a>
+            <a asp-controller="Shop" asp-action="Checkout" asp-route-id="@Model.Shops[0].ShopID"><img src="~/images/Shop/kmart_logo.png"  style="width:100%"></a>
           </div>
           <div class="column">
-            <a asp-controller="Shop" asp-action="Checkout"><img src="~/images/Shop/bigw_logo.jpg" alt="bigw_logo" style="width:100%"></a>
+            <a asp-controller="Shop" asp-action="Checkout" asp-route-id="@Model.Shops[1].ShopID"><img src="~/images/Shop/bigw_logo.png" style="width:100%"></a>
           </div>
           <div class="column">
-            <a asp-controller="Shop" asp-action="Checkout"><img src="~/images/Shop/woolworths_logo.png" alt="woolworths_logo" style="width:100%"></a>
+            <a asp-controller="Shop" asp-action="Checkout" asp-route-id="@Model.Shops[2].ShopID"><img src="~/images/Shop/woolworths_logo.png" style="width:100%"></a>
           </div>
           <div class="column">
-            <a asp-controller="Shop" asp-action="Checkout"><img src="~/images/Shop/coles_logo.png" alt="coles_logo" style="width:100%"></a>
+            <a asp-controller="Shop" asp-action="Checkout" asp-route-id="@Model.Shops[3].ShopID"><img src="~/images/Shop/coles_logo.png" style="width:100%"></a>
           </div>
         </div>
 
@@ -35,16 +30,16 @@
 
         <div class="row">
           <div class="column">
-            <a asp-controller="Shop" asp-action="Checkout"><img src="~/images/Shop/kmart_logo.png" alt="kmart_logo" style="width:100%"></a>
+            <a asp-controller="Shop" asp-action="Checkout" asp-route-id="@Model.Shops[4].ShopID"><img src="~/images/Shop/eb_logo.png" style="width:100%"></a>
           </div>
           <div class="column">
-            <a asp-controller="Shop" asp-action="Checkout"><img src="~/images/Shop/bigw_logo.jpg" alt="bigw_logo" style="width:100%"></a>
+            <a asp-controller="Shop" asp-action="Checkout" asp-route-id="@Model.Shops[5].ShopID"><img src="~/images/Shop/jb_logo.png" style="width:100%"></a>
           </div>
           <div class="column">
-            <a asp-controller="Shop" asp-action="Checkout"><img src="~/images/Shop/woolworths_logo.png" alt="woolworths_logo" style="width:100%"></a>
+            <a asp-controller="Shop" asp-action="Checkout" asp-route-id="@Model.Shops[6].ShopID"><img src="~/images/Shop/mcdonalds_logo.png" style="width:100%"></a>
           </div>
           <div class="column">
-            <a asp-controller="Shop" asp-action="Checkout"><img src="~/images/Shop/coles_logo.png" alt="coles_logo" style="width:100%"></a>
+            <a asp-controller="Shop" asp-action="Checkout" asp-route-id="@Model.Shops[7].ShopID"><img src="~/images/Shop/kfc_logo.png" style="width:100%"></a>
           </div>
         </div>
 

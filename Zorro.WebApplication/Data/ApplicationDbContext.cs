@@ -23,6 +23,7 @@ namespace Zorro.WebApplication.Data
         public DbSet<BpayBiller> Payees { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<RememberedBiller> RememberedBillers { get; set; }
+        public DbSet<Shops> Shops { get; set; }
 
     }
 }

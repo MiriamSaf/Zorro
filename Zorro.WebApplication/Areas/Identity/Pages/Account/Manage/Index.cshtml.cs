@@ -16,7 +16,7 @@ using Zorro.WebApplication.Models;
 using Microsoft.Extensions.Logging;
 using Zorro.WebApplication.Data;
 
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
 
 namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 {
@@ -63,8 +63,6 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public class InputModel
         {
-            [Display(Name = "Profile Image")]
-            public string AvatarUrl { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -80,10 +78,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             [RegularExpression(@"^(\d{14,16})$", ErrorMessage = "Error: Invalid Credit Card Number")]
             [Display(Name = "Credit Card Number")]
             public string CreditCardNumber { get; set; }
-
-            [DisplayName("Upload File")]
-            public IFormFile ImageFile { get; set; }
-
+            public IFormFile Avatar { get; set; }
 
         }
 
@@ -96,11 +91,9 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                AvatarUrl = user.AvatarUrl,
                 PhoneNumber = phoneNumber,
                 CreditCardNumber = user.CreditCardNumber,
-                CCExpiry = user.CCExpiry,
-                ImageFile = user.ImageFile
+                CCExpiry = user.CCExpiry
             };
         }
 
@@ -121,9 +114,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             return Input;
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OnPostAsync(InputModel input, IFormFile formFile)
+        public async Task<IActionResult> OnPostAsync(InputModel input, IFormFile avatar_file)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -131,13 +122,15 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            if (avatar_file.Length < 0)
+                return Page();
+
             if (!ModelState.IsValid)
             {
                 await LoadAsync(user);
 
                 user.CreditCardNumber = input.CreditCardNumber;
                 user.CCExpiry = input.CCExpiry;
-                user.AvatarUrl = input.AvatarUrl;
                 await _userManager.UpdateAsync(user);
 
                 return Page();
@@ -154,43 +147,15 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            // Damien Attempt
+            var ms = new MemoryStream();
 
-/*            Debug.WriteLine(input.ImageFile.FileName);
-            Debug.WriteLine(Input.ImageFile.FileName);
-            Debug.WriteLine(Input.ImageFile.Name);
-            Debug.WriteLine(input.ImageFile.Name);
+            await avatar_file.CopyToAsync(ms);
 
-            user.AvatarUrl = Input.ImageFile.FileName;
+            string base64String = Convert.ToBase64String(ms.ToArray());
 
-            Debug.WriteLine(user.AvatarUrl);
-
-            string wwwRootPath = _hostingEnv.WebRootPath;
-            string fileName = Path.GetFileNameWithoutExtension(input.ImageFile.FileName);
-            string extension = Path.GetExtension(input.ImageFile.FileName);
-            user.ImageName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-            string path = Path.Combine(wwwRootPath + "/images/", fileName);
-            using (var fileStream = new FileStream(path, FileMode.Create))
-            {
-                await input.ImageFile.CopyToAsync(fileStream);
-            }*/
-
-
-            // Miriam Attempt
-
-            /*            var filename = ContentDispositionHeaderValue.Parse(formFile.ContentDisposition).FileName.Trim('"');
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", formFile.FileName);
-                        using (System.IO.Stream stream = new FileStream(path, FileMode.Create))
-                            await formFile.CopyToAsync(stream);*/
-
-            // model.ImageFile = filename;
-            //_context.Add(model);
-            //_context.SaveChanges();
-
-
+            user.Avatar = base64String;
             user.CreditCardNumber = Input.CreditCardNumber;
             user.CCExpiry = Input.CCExpiry;
-            user.AvatarUrl = Input.AvatarUrl;
             await _userManager.UpdateAsync(user);
             var result = await _userManager.UpdateAsync(user);
 

@@ -118,26 +118,17 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    Debug.WriteLine(TempData);
-                    Debug.WriteLine("Hellooooooooooooooooooooooooooooooooo");
-
                     if (TempData.ContainsKey("ShopLogin"))
                     {
-                        Debug.WriteLine("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-
-                        returnUrl ??= Url.Content("~/Shop/ConfirmPurchase");
-                        return LocalRedirect(returnUrl);
-
-                        //return RedirectToPage("ConfirmPurchase", "Shop");
+                        TempData.Remove("ShopLogin");
+                        return RedirectToAction("ConfirmPurchase", "Shop");
                     }
                     else
                     {
-                        Debug.WriteLine("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                         _logger.LogInformation("User logged in.");
                         return LocalRedirect(returnUrl);
                     }
                 }
-                Debug.WriteLine("qweqweqweqweqweqweqweqwe");
 
                 if (result.RequiresTwoFactor)
                 {
@@ -154,8 +145,6 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
                     return Page();
                 }
             }
-
-
 
             // If we got this far, something failed, redisplay form
             return Page();

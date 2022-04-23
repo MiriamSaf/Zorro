@@ -46,7 +46,7 @@ namespace Zorro.WebApplication.Controllers
 
         public async Task<ActionResult> Checkout(int id)
         {
-            TempData["Shop"] = "ShopLogin";
+            TempData["ShopLogin"] = "ShopLogin";
             TempData.Keep();
             var shop = await _context.Shops.FindAsync(id);
 

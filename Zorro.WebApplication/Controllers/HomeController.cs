@@ -65,6 +65,11 @@ namespace Zorro.WebApplication.Controllers
             return View();
         }
 
+        public IActionResult Partner()
+        {
+            return View();
+        }
+
         public IActionResult HomeView()
         {
             return View();

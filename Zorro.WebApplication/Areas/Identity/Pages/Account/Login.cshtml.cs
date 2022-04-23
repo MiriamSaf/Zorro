@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Zorro.WebApplication.Data;
 
 using Zorro.WebApplication.Models;
+using System.Diagnostics;
 
 namespace Zorro.WebApplication.Areas.Identity.Pages.Account
 {
@@ -117,9 +118,18 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    if (TempData.ContainsKey("ShopLogin"))
+                    {
+                        TempData.Remove("ShopLogin");
+                        return RedirectToAction("ConfirmPurchase", "Shop");
+                    }
+                    else
+                    {
+                        _logger.LogInformation("User logged in.");
+                        return LocalRedirect(returnUrl);
+                    }
                 }
+
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });

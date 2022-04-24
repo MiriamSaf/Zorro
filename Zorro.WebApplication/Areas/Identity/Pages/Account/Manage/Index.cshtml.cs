@@ -80,6 +80,13 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             public string CreditCardNumber { get; set; }
             public IFormFile Avatar { get; set; }
 
+            public string FirstName { get; set; }
+
+            public string Surname { get; set; }
+            public DateTime? BirthDate { get; set; }
+
+            public string Mobile { get; set; }
+
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -93,7 +100,11 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             {
                 PhoneNumber = phoneNumber,
                 CreditCardNumber = user.CreditCardNumber,
-                CCExpiry = user.CCExpiry
+                CCExpiry = user.CCExpiry,
+                FirstName = user.FirstName,
+                Surname = user.Surname,
+                BirthDate = user.BirthDate,
+                Mobile = user.Mobile
             };
         }
 
@@ -122,15 +133,20 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            if (avatar_file.Length < 0)
-                return Page();
+
 
             if (!ModelState.IsValid)
             {
                 await LoadAsync(user);
 
+                user.FirstName = Input.FirstName;
+                user.Surname = Input.Surname;
+                user.BirthDate = Input.BirthDate;
+                user.Mobile = user.Mobile;
                 user.CreditCardNumber = input.CreditCardNumber;
                 user.CCExpiry = input.CCExpiry;
+
+
                 await _userManager.UpdateAsync(user);
 
                 return Page();
@@ -147,13 +163,20 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            var ms = new MemoryStream();
+            if (avatar_file != null)
+            {
+                var ms = new MemoryStream();
+                await avatar_file.CopyToAsync(ms);
+                string base64String = Convert.ToBase64String(ms.ToArray());
 
-            await avatar_file.CopyToAsync(ms);
+                user.Avatar = base64String;
+            }
 
-            string base64String = Convert.ToBase64String(ms.ToArray());
-
-            user.Avatar = base64String;
+            user.FirstName = Input.FirstName;
+            user.Surname = Input.Surname;
+            user.BirthDate = Input.BirthDate;
+            user.Mobile = user.Mobile;
+            
             user.CreditCardNumber = Input.CreditCardNumber;
             user.CCExpiry = Input.CCExpiry;
             await _userManager.UpdateAsync(user);

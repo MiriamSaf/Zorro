@@ -173,17 +173,29 @@ h2 {
     ***************/
 .btn-dark {
     transition: all ease-in-out 0.5s;
-    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+
+    height: 40px;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
 }
 
     .btn-dark :hover::after {
         background-color: #FF6A3D;
     }
 
+    .btn-dark:hover {
+        background-color: #1A2238;
+    }
+
 .btn-1 {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    margin: 5px;
     height: 40px;
     text-align: center;
     border: none;
@@ -194,10 +206,7 @@ h2 {
     -webkit-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
 }
-.btn-logout {
-    background-color: #FF6A3D !important;
-    border: 2px solid green;
-}
+
 
 .btn-hover {
     width: 100px;
@@ -230,12 +239,6 @@ h2 {
 
     .btn-hover.ff6a3d {
         background-image: linear-gradient(to right, #ff6a3d, #e43603, #fa7199, #e85a19);
-        //box-shadow: 0 2px 7px 0 rgba(229, 66, 10, 0.75);
-    }
-
-    .btn-hover.5ebec4 {
-        background-image: linear-gradient(to right, #5ebec4, #e43603, #fa7199, #e85a19);
-        //box-shadow: 0 2px 7px 0 rgba(229, 66, 10, 0.75);
     }
 
 .navbar-toggler {

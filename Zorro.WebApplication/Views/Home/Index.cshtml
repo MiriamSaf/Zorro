@@ -2,13 +2,44 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="jumbotron">
-  <h1 class="display-4">Welcome to Zorro!</h1>
-  <p class="lead">Transfer money and shop with ease</p>
-  <hr class="my-4">
-  <p>Quick. Secure. Hassle Free</p>
-  <p class="lead">
-    <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("HomeView", "Home")'">Learn more</button>
-    <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("Partner", "Home")'">Become an Ecommerce Partner</button>
-  </p>
+<div id="home-container">
+    <div class="inputbox">
+        <div class="spacer"></div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-2">
+                <section>
+                    <div class="jumbotron">
+                        <div class="spacer"></div>
+                        <h1 class="display-4">Welcome to Zorro&trade;</h1>
+                        <p class="lead">Transfer money and shop with ease</p>
+                        <hr class="my-4">
+                        <p class="bodytext" style="margin-left:10%;text-align:left;">Zorro is the latest way to spend and transfer money. <br /> Transfering betweens friends and family has never been easier.<br /> Zorro allows everyone to quickly send money on the fly, making it easy for everyone to pitch in and pay their share on those big nights out.<br /> </p>
+                        <p class="bodytext" style="margin-left:10%;text-align:left;">Zorro also makes online shopping easy, with our existing partner integrations, and an ever growing collection.
+                        <p class="lead">
+                            <div class="spacer"></div>
+                            <button type="button" class="p-2 btn btn-dark btn-hover 5ebec4" style="width:auto !important; padding-left:15px !important; padding-right:15px !important;" onclick="location.href='/Identity/Account/Register'">Become a Member</button>
+                            <button type="button" class="p-2 btn btn-dark btn-hover 5ebec4" style="width:auto !important; padding-left:15px !important; padding-right:15px !important;" onclick="location.href='@Url.Action("Partner", "Home")'">Become an Ecommerce Partner</button>
+                        </p>
+                    </div>
+
+                </section>
+
+            </div>
+
+            <div class="col-md-6 col-md-offset-4">
+
+
+                <div class="spacer"></div>
+                <div style="text-align:center;width:100%;height:100%;"><span style="display:inline-block;height:100%;vertical-align:middle;"></span><img style="vertical-align:middle !important;max-width:75% !important;" height="auto" id="homeview-img" alt="https://www.vecteezy.com/free-photos Free Stock photos by Vecteezy" src="~/images/StockImages/stockimage-cc-woman.jfif" /></div>
+
+            </div>
+        </div>
+        <div class="spacer"></div>
+    </div>
 </div>
+
+
+
+
+
+

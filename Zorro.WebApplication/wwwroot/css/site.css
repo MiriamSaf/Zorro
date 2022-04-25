@@ -21,19 +21,21 @@ html, body, nav {
     font-size: 14px;
     font-family: 'Darker Grotesque', sans-serif;
 }
+
 h1, h2, h3, h4, h5 {
     font-family: 'Saira Semi Condensed', sans-serif;
     color: #213440;
 }
+
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
@@ -43,12 +45,15 @@ body {
 
 h1 {
     font-family: 'Saira Semi Condensed', sans-serif;
-   
 }
 
 h2 {
     font-family: 'Saira Semi Condensed', sans-serif;
- 
+}
+
+.bodytext {
+    font-family: 'Saira Semi Condensed', sans-serif;
+    font-size: 18px;
 }
 
 
@@ -56,7 +61,7 @@ h2 {
 /* layout page css */
 
 /* image in nav bar */
-#nav-logo{
+#nav-logo {
     max-width: 40%;
 }
 
@@ -89,7 +94,7 @@ h2 {
     margin: auto;
 }
 
-#home-container{
+#home-container {
     text-align: center;
 }
 
@@ -100,7 +105,7 @@ h2 {
 .container-lg,
 .container-md,
 .container-sm {
-max-width:1250px;
+    max-width: 1250px;
 }
 
 /*** navbar styles
@@ -111,13 +116,12 @@ max-width:1250px;
 .navbar, .nav-link {
     background-color: #1A2238 !important;
     font-size: 2.4vh;
-
     /*font-family: 'Kanit', sans-serif;*/
     font-weight: 500;
 }
 
 .nav-link-marg {
-margin:10px 0px 0px 0px;
+    margin: 10px 0px 0px 0px;
 }
 
 .pretty-underline-animation {
@@ -138,10 +142,11 @@ margin:10px 0px 0px 0px;
         transform-origin: bottom right;
         transition: transform 0.25s ease-out;
     }
-        .pretty-underline-animation:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
-        }
+
+    .pretty-underline-animation:hover::after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
 
 /**nav link profile page
     ***********
@@ -159,24 +164,25 @@ margin:10px 0px 0px 0px;
         background-color: #FF6A3D;
     }
 
-.left-aligned-nav{
+.left-aligned-nav {
     text-align: left;
 }
 
 /** button styling 
     **************
     ***************/
-.btn-dark{
+.btn-dark {
     transition: all ease-in-out 0.5s;
     margin-bottom: 10px;
 }
-.btn-dark :hover::after {
-    background-color: #FF6A3D;
-}
+
+    .btn-dark :hover::after {
+        background-color: #FF6A3D;
+    }
 
 .btn-logout {
     background-color: #FF6A3D !important;
-    border: 2px solid green;  
+    border: 2px solid green;
 }
 
 .btn-hover {
@@ -194,20 +200,19 @@ margin:10px 0px 0px 0px;
     -o-transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
-   
 }
 
-.btn-hover:hover {
-    background-position: 100% 0;
-    moz-transition: all .4s ease-in-out;
-    -o-transition: all .4s ease-in-out;
-    -webkit-transition: all .4s ease-in-out;
-    transition: all .4s ease-in-out;
-}
+    .btn-hover:hover {
+        background-position: 100% 0;
+        moz-transition: all .4s ease-in-out;
+        -o-transition: all .4s ease-in-out;
+        -webkit-transition: all .4s ease-in-out;
+        transition: all .4s ease-in-out;
+    }
 
-.btn-hover:focus {
-    outline: none;
-}
+    .btn-hover:focus {
+        outline: none;
+    }
 
     .btn-hover.ff6a3d {
         background-image: linear-gradient(to right, #ff6a3d, #e43603, #fa7199, #e85a19);
@@ -224,7 +229,7 @@ margin:10px 0px 0px 0px;
 }
 
 .content-width {
-    width:85%;
+    width: 85%;
 }
 
 /** Form Styling 
@@ -252,20 +257,19 @@ margin:10px 0px 0px 0px;
 }
 
 table, th, td {
-   /* MS : I removed it for now as lent a dizzying feel and also 
+    /* MS : I removed it for now as lent a dizzying feel and also 
        is not aligning with table
        border: 1px solid;*/
 }
 
 /** nav identity buttons */
-.nav-page-identity{
+.nav-page-identity {
     text-decoration: none;
     color: #FFFFFF;
     transition: all ease-in-out 0.3s;
-    
 }
 
-.nav-page-identity:hover{
-    text-decoration: none;
-    color: #FFFFFF;
-}
+    .nav-page-identity:hover {
+        text-decoration: none;
+        color: #FFFFFF;
+    }

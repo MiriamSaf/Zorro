@@ -5,13 +5,13 @@
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
 <ul class="nav nav-pills flex-column">
-    <button type="button" class="btn btn-dark"><a class="@ManageNavPages.IndexNavClass(ViewContext) nav-page-identity" id="profile" asp-page="./Index">Profile</a></button>
-    <button type="button" class="btn btn-dark"><a class="@ManageNavPages.EmailNavClass(ViewContext) nav-page-identity" id="email" asp-page="./Email">Email</a></button>
-    <button type="button" class="btn btn-dark"><a class="@ManageNavPages.ChangePasswordNavClass(ViewContext) nav-page-identity" id="change-password" asp-page="./ChangePassword">Password</a></li>
+    <button type="button" class="btn btn-dark btn-1 5ebec4"><a class="@ManageNavPages.IndexNavClass(ViewContext) nav-page-identity" id="profile" asp-page="./Index">Profile</a></button>
+    <button type="button" class="btn btn-dark btn-1 5ebec4"><a class="@ManageNavPages.EmailNavClass(ViewContext) nav-page-identity" id="email" asp-page="./Email">Email</a></button>
+    <button type="button" class="btn btn-dark btn-1 5ebec4"><a class="@ManageNavPages.ChangePasswordNavClass(ViewContext) nav-page-identity" id="change-password" asp-page="./ChangePassword">Password</a></li>
     @if (hasExternalLogins)
     {
         <li id="external-logins" type="button" class="btn btn-dark"><a id="external-login" class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
     }
-    <button type="button" class="btn btn-dark"><a class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext) nav-page-identity" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
-    <button type="button" class="btn btn-dark"><a class="@ManageNavPages.PersonalDataNavClass(ViewContext) nav-page-identity" id="personal-data" asp-page="./PersonalData">Admin Portal</a></li>
+    <button type="button" class="btn btn-dark btn-1 5ebec4"><a class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext) nav-page-identity" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
+    <button type="button" class="btn btn-dark btn-1 5ebec4"><a class="@ManageNavPages.PersonalDataNavClass(ViewContext) nav-page-identity" id="personal-data" asp-page="./PersonalData">Admin Portal</a></li>
 </ul>

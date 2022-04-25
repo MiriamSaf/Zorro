@@ -180,6 +180,20 @@ h2 {
         background-color: #FF6A3D;
     }
 
+.btn-1 {
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    height: 40px;
+    text-align: center;
+    border: none;
+    background-size: 400% 100%;
+    border-radius: 10px;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
 .btn-logout {
     background-color: #FF6A3D !important;
     border: 2px solid green;
@@ -273,3 +287,7 @@ table, th, td {
         text-decoration: none;
         color: #FFFFFF;
     }
+
+.list-group-item {
+    background-color: #EFF3F8 !important;
+}

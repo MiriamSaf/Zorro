@@ -26,5 +26,10 @@ namespace Zorro.WebApplication.Models
 
         public string Avatar { get; set; }
 
+        public bool TwoFactorEnabled { get; set; }
+
+        [DataType(DataType.DateTime)]
+        public DateTime? LockoutEnd { get; set; }
+
     }
 }

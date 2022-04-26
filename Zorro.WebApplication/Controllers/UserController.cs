@@ -2,6 +2,7 @@
 using Zorro.WebApplication.Models;
 
 using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
 
 namespace Zorro.WebApplication.Models
 {
@@ -15,6 +16,7 @@ namespace Zorro.WebApplication.Models
         {
             _userManager = userManager;
             _passwordHashed = passwordHashed;
+
         }
         public IActionResult Index()
         {
@@ -29,7 +31,15 @@ namespace Zorro.WebApplication.Models
         [HttpPost]
         public async Task<IActionResult> Create(ApplicationUser user)
         {
-         addError(user);
+/*            DateTime baseTime;
+            DateTimeOffset sourceTime;
+            DateTime targetTime;
+
+            baseTime = new DateTimeOffset((DateTime)user.LockoutEnd, TimeSpan.Zero);*/
+
+
+
+            addError(user);
             if (ModelState.IsValid)
             {
                 ApplicationUser appUser = new ApplicationUser
@@ -41,7 +51,10 @@ namespace Zorro.WebApplication.Models
                     PhoneNumber = user.PhoneNumber,
                     Mobile = user.Mobile,
                     PasswordHash = user.PasswordHash,
-                    Email = user.Email
+                    Email = user.Email,
+                    TwoFactorEnabled = user.TwoFactorEnabled,
+                    LockoutEnd = (DateTime)user.LockoutEnd
+
 
                 };
 
@@ -70,7 +83,7 @@ namespace Zorro.WebApplication.Models
 
         //update user 
         [HttpPost]
-        public async Task<IActionResult> Update(string id, string firstname, string surname, string mobile, string email, string password)
+        public async Task<IActionResult> Update(string id, string firstname, string surname, string mobile, string email, string password, bool TwoFactorEnabled, DateTime LockoutEnd)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
@@ -116,6 +129,9 @@ namespace Zorro.WebApplication.Models
                 {
                     ModelState.AddModelError("", "Password field cannot be empty");
                 }
+
+                user.TwoFactorEnabled = TwoFactorEnabled;
+                user.LockoutEnd = LockoutEnd;
 
                 if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(firstname) && !string.IsNullOrEmpty(surname) && !string.IsNullOrEmpty(mobile))
                 {

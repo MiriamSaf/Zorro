@@ -31,5 +31,7 @@ namespace Zorro.WebApplication.Models
         [DataType(DataType.DateTime)]
         public DateTime? LockoutEnd { get; set; }
 
+        public string APIKey { get; set; }
+
     }
 }

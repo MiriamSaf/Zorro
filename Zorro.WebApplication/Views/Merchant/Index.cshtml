@@ -1,0 +1,58 @@
+﻿@model Zorro.WebApplication.Models.ApplicationUser
+
+<div class="spacer"></div>
+
+<div class="center-block" style="display:flex;justify-content:center;">
+    <div class="content-width">
+
+        <h1>Merchant Dashboard</h1>
+
+        <hr class="my-3" />
+
+        <!-- Wallet details -->
+        <ul class="list-group pb-3">
+            <li class="list-group-item">
+                <label class="form-label" style="margin-top: .5rem;"><b>User ID:</b></label><span id="walletId">@Html.DisplayFor(model => model.Email)</span> <i role="button" id="copyButton" class="bi bi-clipboard"></i>
+            </li>
+            <li class="list-group-item">
+                @*<label class="form-label" style="margin-top: .5rem;"><b>Balance: </b>$</label>@Html.DisplayFor(model => model.Balance)*@
+            </li>
+        </ul>
+
+
+    </div>
+</div>
+
+@section Scripts
+{
+<script>
+        const copyButton = document.getElementById("copyButton");
+
+        copyButton.addEventListener("mouseover", function () {
+            this.classList.add("bi-clipboard-check");
+            this.classList.remove("bi-clipboard");
+        }, false);
+
+        copyButton.addEventListener("mouseleave", function () {
+            this.classList.remove("bi-clipboard-check");
+            this.classList.add("bi-clipboard");
+        }, false);
+
+        copyButton.addEventListener("click", copyWallet, false);
+
+        function copyWallet() {
+            var copyText = document.getElementById("walletId");
+            var textArea = document.createElement("textarea");
+            textArea.value = copyText.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("Copy");
+            textArea.remove();
+            
+            this.classList.remove("bi-clipboard-check");
+            this.classList.remove("bi-clipboard");
+            this.classList.add("bi-clipboard-check-fill");
+        }
+
+</script>
+}

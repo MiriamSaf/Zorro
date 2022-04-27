@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Zorro.WebApplication.Models;
+using Zorro.Dal.Models;
+using Zorro.Dal;
 
 namespace Zorro.WebApplication.Data
 {

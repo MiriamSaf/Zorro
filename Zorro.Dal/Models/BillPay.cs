@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Zorro.WebApplication.Models
+namespace Zorro.Dal.Models
 {
     public class BillPay
     {

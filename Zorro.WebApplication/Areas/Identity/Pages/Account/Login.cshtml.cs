@@ -14,10 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Zorro.WebApplication.Data;
-
-using Zorro.WebApplication.Models;
-using System.Diagnostics;
+using Zorro.Dal.Models;
 
 namespace Zorro.WebApplication.Areas.Identity.Pages.Account
 {

@@ -5,7 +5,9 @@ VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zorro.WebApplication", "Zorro.WebApplication\Zorro.WebApplication.csproj", "{986B3BCE-AE07-4002-A24A-2AA41261D458}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zorro.Api", "Zorro.Api\Zorro.Api.csproj", "{F3BB0F52-5161-4E36-9263-19FEAE0294A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zorro.Api", "Zorro.Api\Zorro.Api.csproj", "{F3BB0F52-5161-4E36-9263-19FEAE0294A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zorro.Dal", "Zorro.Dal\Zorro.Dal.csproj", "{36CA7C45-EA11-446B-A50F-1E5AF90992E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F3BB0F52-5161-4E36-9263-19FEAE0294A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3BB0F52-5161-4E36-9263-19FEAE0294A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3BB0F52-5161-4E36-9263-19FEAE0294A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36CA7C45-EA11-446B-A50F-1E5AF90992E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36CA7C45-EA11-446B-A50F-1E5AF90992E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36CA7C45-EA11-446B-A50F-1E5AF90992E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36CA7C45-EA11-446B-A50F-1E5AF90992E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

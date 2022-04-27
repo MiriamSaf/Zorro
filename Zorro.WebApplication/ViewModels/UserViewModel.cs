@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using Zorro.WebApplication.Models;
+using Zorro.Dal.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel;
 

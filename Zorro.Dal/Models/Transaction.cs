@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Zorro.WebApplication.Data;
 
-namespace Zorro.WebApplication.Models
+namespace Zorro.Dal.Models
 {
     public class Transaction
     {

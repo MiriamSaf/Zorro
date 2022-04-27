@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Zorro.WebApplication.Data;
-using Zorro.WebApplication.Models;
+using Zorro.Dal.Models;
+using Zorro.Dal;
 using Zorro.WebApplication.ViewModels;
 
 namespace Zorro.WebApplication.Controllers

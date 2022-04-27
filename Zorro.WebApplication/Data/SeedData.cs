@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
-using Zorro.WebApplication.Models;
+using Zorro.Dal;
 
 namespace Zorro.WebApplication.Data
 {

@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Zorro.WebApplication.Models;
-using Zorro.WebApplication.Dtos;
+using Zorro.Dal.Models;
 
-namespace Zorro.WebApplication.Data
+namespace Zorro.Dal
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

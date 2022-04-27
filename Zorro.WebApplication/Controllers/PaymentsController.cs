@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Zorro.WebApplication.Data;
-using Zorro.WebApplication.Models;
+using Zorro.Dal.Models;
 using Zorro.WebApplication.Dtos;
 using Zorro.WebApplication.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Zorro.Dal;
 
 namespace Zorro.WebApplication.Controllers
 {

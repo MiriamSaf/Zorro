@@ -3,23 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Zorro.WebApplication.Data;
+using Zorro.Dal;
 
 #nullable disable
 
-namespace Zorro.WebApplication.Migrations
+namespace Zorro.Dal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220422230440_ShopModel")]
-    partial class ShopModel
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -161,21 +159,27 @@ namespace Zorro.WebApplication.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.ApplicationUser", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("APIKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("AvatarUrl")
+                    b.Property<string>("Avatar")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CCExpiry")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -183,6 +187,7 @@ namespace Zorro.WebApplication.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreditCardNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -193,22 +198,18 @@ namespace Zorro.WebApplication.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImageName")
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("LockoutEnd")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Mobile")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
@@ -232,11 +233,9 @@ namespace Zorro.WebApplication.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
+                        .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -258,7 +257,7 @@ namespace Zorro.WebApplication.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.BillPay", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.BillPay", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -284,7 +283,7 @@ namespace Zorro.WebApplication.Migrations
                     b.ToTable("BillPays");
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.BpayBiller", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.BpayBiller", b =>
                 {
                     b.Property<int>("BillerCode")
                         .ValueGeneratedOnAdd()
@@ -293,6 +292,7 @@ namespace Zorro.WebApplication.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillerCode"), 1L, 1);
 
                     b.Property<string>("BillerName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BillerCode");
@@ -300,7 +300,7 @@ namespace Zorro.WebApplication.Migrations
                     b.ToTable("Payees");
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.RememberedBiller", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.RememberedBiller", b =>
                 {
                     b.Property<int>("BillerCode")
                         .HasColumnType("int");
@@ -315,7 +315,7 @@ namespace Zorro.WebApplication.Migrations
                     b.ToTable("RememberedBillers");
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.Shops", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.Shops", b =>
                 {
                     b.Property<int>("ShopID")
                         .ValueGeneratedOnAdd()
@@ -327,6 +327,7 @@ namespace Zorro.WebApplication.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ShopName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ShopID");
@@ -334,7 +335,7 @@ namespace Zorro.WebApplication.Migrations
                     b.ToTable("Shops");
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.Transaction", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.Transaction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -344,6 +345,7 @@ namespace Zorro.WebApplication.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Comment")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CurrencyType")
@@ -365,7 +367,7 @@ namespace Zorro.WebApplication.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.Wallet", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.Wallet", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -396,7 +398,7 @@ namespace Zorro.WebApplication.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Zorro.WebApplication.Models.ApplicationUser", null)
+                    b.HasOne("Zorro.Dal.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -405,7 +407,7 @@ namespace Zorro.WebApplication.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Zorro.WebApplication.Models.ApplicationUser", null)
+                    b.HasOne("Zorro.Dal.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -420,7 +422,7 @@ namespace Zorro.WebApplication.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Zorro.WebApplication.Models.ApplicationUser", null)
+                    b.HasOne("Zorro.Dal.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -429,22 +431,22 @@ namespace Zorro.WebApplication.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Zorro.WebApplication.Models.ApplicationUser", null)
+                    b.HasOne("Zorro.Dal.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.BillPay", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.BillPay", b =>
                 {
-                    b.HasOne("Zorro.WebApplication.Models.BpayBiller", "BpayBiller")
+                    b.HasOne("Zorro.Dal.Models.BpayBiller", "BpayBiller")
                         .WithMany()
                         .HasForeignKey("BpayBillerCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Zorro.WebApplication.Models.Transaction", "Transaction")
+                    b.HasOne("Zorro.Dal.Models.Transaction", "Transaction")
                         .WithMany()
                         .HasForeignKey("TransactionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -455,15 +457,15 @@ namespace Zorro.WebApplication.Migrations
                     b.Navigation("Transaction");
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.RememberedBiller", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.RememberedBiller", b =>
                 {
-                    b.HasOne("Zorro.WebApplication.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Zorro.Dal.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Zorro.WebApplication.Models.BpayBiller", "BpayBiller")
+                    b.HasOne("Zorro.Dal.Models.BpayBiller", "BpayBiller")
                         .WithMany()
                         .HasForeignKey("BillerCode")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -474,9 +476,9 @@ namespace Zorro.WebApplication.Migrations
                     b.Navigation("BpayBiller");
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.Transaction", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.Transaction", b =>
                 {
-                    b.HasOne("Zorro.WebApplication.Models.Wallet", "Wallet")
+                    b.HasOne("Zorro.Dal.Models.Wallet", "Wallet")
                         .WithMany("Transactions")
                         .HasForeignKey("WalletId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -485,9 +487,9 @@ namespace Zorro.WebApplication.Migrations
                     b.Navigation("Wallet");
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.Wallet", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.Wallet", b =>
                 {
-                    b.HasOne("Zorro.WebApplication.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Zorro.Dal.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -496,7 +498,7 @@ namespace Zorro.WebApplication.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("Zorro.WebApplication.Models.Wallet", b =>
+            modelBuilder.Entity("Zorro.Dal.Models.Wallet", b =>
                 {
                     b.Navigation("Transactions");
                 });

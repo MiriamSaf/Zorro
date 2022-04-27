@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Zorro.WebApplication.Migrations
+namespace Zorro.Dal.Migrations
 {
-    public partial class Initialmigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,11 +28,16 @@ namespace Zorro.WebApplication.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
-                    AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Mobile = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mobile = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreditCardNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CCExpiry = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    APIKey = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -43,8 +48,6 @@ namespace Zorro.WebApplication.Migrations
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
@@ -59,11 +62,25 @@ namespace Zorro.WebApplication.Migrations
                 {
                     BillerCode = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BillerName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    BillerName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Payees", x => x.BillerCode);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Shops",
+                columns: table => new
+                {
+                    ShopID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ShopName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Ordering = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shops", x => x.ShopID);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,6 +209,30 @@ namespace Zorro.WebApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RememberedBillers",
+                columns: table => new
+                {
+                    BillerCode = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RememberedBillers", x => new { x.BillerCode, x.ApplicationUserId });
+                    table.ForeignKey(
+                        name: "FK_RememberedBillers_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RememberedBillers_Payees_BillerCode",
+                        column: x => x.BillerCode,
+                        principalTable: "Payees",
+                        principalColumn: "BillerCode",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Transactions",
                 columns: table => new
                 {
@@ -201,7 +242,7 @@ namespace Zorro.WebApplication.Migrations
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TransactionTimeUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CurrencyType = table.Column<int>(type: "int", nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -291,6 +332,11 @@ namespace Zorro.WebApplication.Migrations
                 column: "TransactionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RememberedBillers_ApplicationUserId",
+                table: "RememberedBillers",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_WalletId",
                 table: "Transactions",
                 column: "WalletId");
@@ -322,13 +368,19 @@ namespace Zorro.WebApplication.Migrations
                 name: "BillPays");
 
             migrationBuilder.DropTable(
+                name: "RememberedBillers");
+
+            migrationBuilder.DropTable(
+                name: "Shops");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Payees");
+                name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "Transactions");
+                name: "Payees");
 
             migrationBuilder.DropTable(
                 name: "Wallets");

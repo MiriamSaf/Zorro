@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using Zorro.WebApplication.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel;
 
-namespace Zorro.WebApplication.Models
+namespace Zorro.Dal.Models
 {
     public class ApplicationUser : IdentityUser
     {        

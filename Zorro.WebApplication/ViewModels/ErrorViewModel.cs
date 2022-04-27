@@ -1,4 +1,4 @@
-namespace Zorro.WebApplication.Models
+namespace Zorro.WebApplication.ViewModels
 {
     public class ErrorViewModel
     {

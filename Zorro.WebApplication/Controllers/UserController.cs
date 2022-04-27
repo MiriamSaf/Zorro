@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Zorro.WebApplication.Models;
+using Zorro.Dal.Models;
 
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;

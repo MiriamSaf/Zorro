@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Zorro.WebApplication.Data;
-using Zorro.WebApplication.Models;
-using Zorro.WebApplication.Dtos;
+using Zorro.Dal.Models;
+using Zorro.Dal;
 using Zorro.WebApplication.ViewModels;
 using System.Diagnostics;
 

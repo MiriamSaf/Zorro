@@ -1,4 +1,4 @@
-﻿ @model IEnumerable<Zorro.WebApplication.Models.ApplicationUser>
+﻿@model IEnumerable<Zorro.Dal.Models.ApplicationUser>
 @{
     ViewData["Title"] = "Index";
 }
@@ -82,7 +82,7 @@
         <th>Update</th>
         <th>Delete</th>
     </tr>
-    @foreach (Zorro.WebApplication.Models.ApplicationUser user in Model)
+    @foreach (Zorro.Dal.Models.ApplicationUser user in Model)
     {
     <tr>
         <td>@user.Id</td>

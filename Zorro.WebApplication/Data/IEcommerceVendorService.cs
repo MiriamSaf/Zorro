@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-using Zorro.WebApplication.Models;
+using Zorro.Dal.Models;
 
 namespace Zorro.WebApplication.Data
 {

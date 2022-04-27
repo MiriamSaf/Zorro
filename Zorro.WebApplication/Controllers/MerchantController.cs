@@ -2,6 +2,7 @@
 using Zorro.WebApplication.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace Zorro.WebApplication.Models
 {
@@ -17,10 +18,29 @@ namespace Zorro.WebApplication.Models
             _passwordHashed = passwordHashed;
 
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //pass all users to view
-            return View(_userManager.FindByEmailAsync("Kmart@Kmart.com.au"));
+            var user = await _userManager.FindByIdAsync("b96663a7-f772-4f84-802e-c63f8e8878b0");
+
+            return View(user);
+        }
+
+        public async Task<IActionResult> UpdateAPIKey()
+        {
+            //pass all users to view
+            var user = await _userManager.FindByIdAsync("b96663a7-f772-4f84-802e-c63f8e8878b0");
+
+            var key = new byte[32];
+            using (var generator = RandomNumberGenerator.Create())
+                generator.GetBytes(key);
+            string apiKey = Convert.ToBase64String(key);
+
+            user.APIKey = apiKey;
+
+            await _userManager.UpdateAsync(user);
+
+            return View("Index",user);
         }
 
 

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -171,12 +172,18 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+                var key = new byte[32];
+                using (var generator = RandomNumberGenerator.Create())
+                    generator.GetBytes(key);
+                string apiKey = Convert.ToBase64String(key);
+
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.FirstName = Input.FirstName;
                 user.Surname = Input.Surname;
                 user.BirthDate = Input.BirthDate;
                 user.Mobile = Input.Mobile;
+                user.APIKey = apiKey;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

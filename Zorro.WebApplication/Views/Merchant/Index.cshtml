@@ -9,15 +9,45 @@
 
         <hr class="my-3" />
 
-        <!-- Wallet details -->
+        <!-- Merchant details -->
         <ul class="list-group pb-3">
             <li class="list-group-item">
                 <label class="form-label" style="margin-top: .5rem;"><b>User ID:</b></label><span id="walletId">@Html.DisplayFor(model => model.Email)</span> <i role="button" id="copyButton" class="bi bi-clipboard"></i>
             </li>
             <li class="list-group-item">
-                @*<label class="form-label" style="margin-top: .5rem;"><b>Balance: </b>$</label>@Html.DisplayFor(model => model.Balance)*@
+                <label class="form-label" style="margin-top: .5rem;"><b>API Key:</b></label><span id="APIKey">@Html.DisplayFor(model => model.APIKey)</span> <i role="button" id="copyButton" class="bi bi-clipboard"></i>
+                <a class="p-2 btn btn-dark" asp-controller="Merchant" asp-action="UpdateAPIKey">Generate New Key</a>
+            </li>
+            <li class="list-group-item">
+                <label class="form-label" style="margin-top: .5rem;"><b>Zorro Commission: </b></label><span id="Commission">$18.80 (1% Commission Rate)</span>
             </li>
         </ul>
+
+        <h2>Transactions</h2>
+
+        <hr class="my-3" />
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        USER ID
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>25/04/2022 9:43:53 PM</td><td>damien@gmail.com</td><td>$541.50</td></tr>
+                <tr><td>19/04/2022 8:08:21 AM</td><td>cbanville@rmit.com.au</td><td>$60.35</td></tr>
+                <tr><td>14/04/2022 1:08:45 PM</td><td>luis.dabruzzo@gmail.com</td><td>$104.5</td></tr>
+                <tr><td>12/04/2022 10:41:59 AM</td><td>john.smith@gmail.com</td><td>$1200.95</td></tr>
+            </tbody>
+        </table>
 
 
     </div>

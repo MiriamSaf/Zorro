@@ -23,11 +23,6 @@ namespace Zorro.Dal.Models
 
         public string Avatar { get; set; }
 
-        public bool TwoFactorEnabled { get; set; }
-
-        [DataType(DataType.DateTime)]
-        public DateTime? LockoutEnd { get; set; }
-
         public string APIKey { get; set; }
 
     }

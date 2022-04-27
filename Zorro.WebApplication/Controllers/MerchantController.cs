@@ -64,7 +64,7 @@ namespace Zorro.WebApplication.Models
                     PasswordHash = user.PasswordHash,
                     Email = user.Email,
                     TwoFactorEnabled = user.TwoFactorEnabled,
-                    LockoutEnd = (DateTime)user.LockoutEnd
+                    //LockoutEnd = (DateTime)user.LockoutEnd
                 };
 
                

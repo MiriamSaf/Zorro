@@ -9,17 +9,30 @@ namespace Zorro.WebApplication.Models
    
     public class UserController : Controller
     {
-        private UserManager<ApplicationUser> _userManager;
 
-        private IPasswordHasher<ApplicationUser> _passwordHashed;
-        public UserController(UserManager<ApplicationUser> userManager, IPasswordHasher<ApplicationUser> passwordHashed)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IPasswordHasher<ApplicationUser> _passwordHashed;
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public UserController(UserManager<ApplicationUser> userManager, IPasswordHasher<ApplicationUser> passwordHashed, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _passwordHashed = passwordHashed;
-
+            _roleManager = roleManager;
         }
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
+            ViewBag.UserRoles = new Dictionary<string, string>();
+            var users = _userManager.Users.ToList();
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Count > 0)
+                    ViewBag.UserRoles.Add(user.Id, string.Join(", ", roles));
+                else
+                    ViewBag.UserRoles.Add(user.Id, "None");
+            }
             //pass all users to view
             return View(_userManager.Users);
         }
@@ -75,6 +88,7 @@ namespace Zorro.WebApplication.Models
         public async Task<IActionResult> Update(string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
+            ViewBag.Roles = _roleManager.Roles;
             if (user != null)
                 return View(user);
             else
@@ -83,11 +97,22 @@ namespace Zorro.WebApplication.Models
 
         //update user 
         [HttpPost]
-        public async Task<IActionResult> Update(string id, string firstname, string surname, string mobile, string email, string password, bool TwoFactorEnabled, DateTime LockoutEnd)
+        public async Task<IActionResult> Update(string[] roles, string id, string firstname, string surname, string mobile, string email, string password, bool TwoFactorEnabled, DateTime LockoutEnd)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
+                // Add and remove roles
+                await _userManager.AddToRolesAsync(user, roles);
+                var rolesToRemove = new List<string>();
+                foreach (var role in _roleManager.Roles)
+                {
+                    if (!roles.Contains(role.Name))
+                        rolesToRemove.Add(role.Name);
+                }
+                if (rolesToRemove.Count > 0)
+                    await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+
                 if (!string.IsNullOrEmpty(mobile))
                 {
                     user.Mobile = mobile;
@@ -125,13 +150,9 @@ namespace Zorro.WebApplication.Models
                 {
                     user.PasswordHash = _passwordHashed.HashPassword(user, password);
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Password field cannot be empty");
-                }
 
                 user.TwoFactorEnabled = TwoFactorEnabled;
-                user.LockoutEnd = LockoutEnd;
+                //user.LockoutEnd = LockoutEnd;
 
                 if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(firstname) && !string.IsNullOrEmpty(surname) && !string.IsNullOrEmpty(mobile))
                 {

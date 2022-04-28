@@ -97,18 +97,21 @@ namespace Zorro.WebApplication.Models
 
         //update user 
         [HttpPost]
-        public async Task<IActionResult> Update(string[] roles, string id, string firstname, string surname, string mobile, string email, string password, bool TwoFactorEnabled, DateTime LockoutEnd)
+        public async Task<IActionResult> Update(string[] roles, string id, string firstname, string surname, string mobile, string email, string password, bool TwoFactorEnabled, DateTimeOffset? LockoutEnd)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
                 // Add and remove roles
-                await _userManager.AddToRolesAsync(user, roles);
-                var rolesToRemove = new List<string>();
-                foreach (var role in _roleManager.Roles)
+                foreach(var roleName in roles)
                 {
-                    if (!roles.Contains(role.Name))
-                        rolesToRemove.Add(role.Name);
+                    await _userManager.AddToRoleAsync(user, roleName);
+                }
+                var rolesToRemove = new List<string>();
+                foreach (var roleName in _roleManager.Roles.Select(r => r.Name).ToList())
+                {
+                    if (!roles.Contains(roleName))
+                        rolesToRemove.Add(roleName);
                 }
                 if (rolesToRemove.Count > 0)
                     await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
@@ -154,14 +157,11 @@ namespace Zorro.WebApplication.Models
                 user.TwoFactorEnabled = TwoFactorEnabled;
                 //user.LockoutEnd = LockoutEnd;
 
-                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(firstname) && !string.IsNullOrEmpty(surname) && !string.IsNullOrEmpty(mobile))
-                {
-                    IdentityResult idResult = await _userManager.UpdateAsync(user);
-                    if (idResult.Succeeded)
-                        return RedirectToAction("Index");
-                    else
-                        Errors(idResult);
-                }
+                IdentityResult idResult = await _userManager.UpdateAsync(user);
+                if (idResult.Succeeded)
+                    return RedirectToAction("Index");
+                else
+                    Errors(idResult);
             }
             else
                 ModelState.AddModelError("", "User Not Found");

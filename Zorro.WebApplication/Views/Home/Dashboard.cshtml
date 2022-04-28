@@ -4,68 +4,68 @@
 
 <div class="center-block" style="display:flex;justify-content:center;">
     <div class="content-width">
-         <div class="inputbox">
+        <div class="inputbox">
 
-        <h1>Dashboard</h1>
+            <h1>Dashboard</h1>
 
-        <hr class="my-3" />
+            <hr class="my-3" />
 
-        <h2>Wallet</h2>
+            <h2>Wallet</h2>
 
-        <!-- Wallet details -->
-        <ul class="list-group pb-3">
+            <!-- Wallet details -->
+            <ul class="list-group pb-3">
 
-            <li class="list-group-item">
-                <label class="form-label" style="margin-top: .5rem;"><b>User ID:</b></label><span id="walletId">@Html.DisplayFor(model => model.WalletId)</span> <i role="button" id="copyButton" class="bi bi-clipboard"></i>
-            </li>
-            <li class="list-group-item">
-                <label class="form-label" style="margin-top: .5rem;"><b>Balance: </b>$</label>@Html.DisplayFor(model => model.Balance)
-            </li>
-        </ul>
+                <li class="list-group-item">
+                    <label class="form-label" style="margin-top: .5rem;"><b>User ID:</b></label><span id="walletId">@Html.DisplayFor(model => model.WalletId)</span> <i role="button" id="copyButton" class="bi bi-clipboard"></i>
+                </li>
+                <li class="list-group-item">
+                    <label class="form-label" style="margin-top: .5rem;"><b>Balance: </b>$</label>@Html.DisplayFor(model => model.Balance)
+                </li>
+            </ul>
 
-        <!-- Payment buttons-->
-        <div>
-            <button type="button" class="p-2 btn btn-dark" style="margin-right: 5px;" onclick="location.href='@Url.Action("Transfer", "Payments")'">Transfer Funds</button>
-            <button type="button" class="p-2 btn btn-dark" style="margin-right: 5px;" onclick="location.href='@Url.Action("Bpay", "Payments")'">BPAY</button>
-            <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("CreateDeposit", "Payments")'">Deposit Funds</button>
+            <!-- Payment buttons-->
+            <div>
+                <button type="button" class="p-2 btn btn-dark" style="margin-right: 5px;" onclick="location.href='@Url.Action("Transfer", "Payments")'">Transfer Funds</button>
+                <button type="button" class="p-2 btn btn-dark" style="margin-right: 5px;" onclick="location.href='@Url.Action("Bpay", "Payments")'">BPAY</button>
+                <button type="button" class="p-2 btn btn-dark" onclick="location.href='@Url.Action("CreateDeposit", "Payments")'">Deposit Funds</button>
 
-        </div>
+            </div>
 
-        <hr class="my-3" />
+            <hr class="my-3" />
 
-        <h2>Recent Transactions</h2>
+            <h2>Recent Transactions</h2>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RecentTransactions[0].Date)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RecentTransactions[0].Description)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RecentTransactions[0].Amount)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.RecentTransactions)
-                {
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Amount)
-                        </td>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RecentTransactions[0].Date)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RecentTransactions[0].Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RecentTransactions[0].Amount)
+                        </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.RecentTransactions)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Amount)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -73,33 +73,33 @@
 @section Scripts
 {
 <script>
-        const copyButton = document.getElementById("copyButton");
+    const copyButton = document.getElementById("copyButton");
 
-        copyButton.addEventListener("mouseover", function () {
-            this.classList.add("bi-clipboard-check");
-            this.classList.remove("bi-clipboard");
-        }, false);
+    copyButton.addEventListener("mouseover", function () {
+        this.classList.add("bi-clipboard-check");
+        this.classList.remove("bi-clipboard");
+    }, false);
 
-        copyButton.addEventListener("mouseleave", function () {
-            this.classList.remove("bi-clipboard-check");
-            this.classList.add("bi-clipboard");
-        }, false);
+    copyButton.addEventListener("mouseleave", function () {
+        this.classList.remove("bi-clipboard-check");
+        this.classList.add("bi-clipboard");
+    }, false);
 
-        copyButton.addEventListener("click", copyWallet, false);
+    copyButton.addEventListener("click", copyWallet, false);
 
-        function copyWallet() {
-            var copyText = document.getElementById("walletId");
-            var textArea = document.createElement("textarea");
-            textArea.value = copyText.textContent;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand("Copy");
-            textArea.remove();
-            
-            this.classList.remove("bi-clipboard-check");
-            this.classList.remove("bi-clipboard");
-            this.classList.add("bi-clipboard-check-fill");
-        }
+    function copyWallet() {
+        var copyText = document.getElementById("walletId");
+        var textArea = document.createElement("textarea");
+        textArea.value = copyText.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("Copy");
+        textArea.remove();
+
+        this.classList.remove("bi-clipboard-check");
+        this.classList.remove("bi-clipboard");
+        this.classList.add("bi-clipboard-check-fill");
+    }
 
 </script>
 }

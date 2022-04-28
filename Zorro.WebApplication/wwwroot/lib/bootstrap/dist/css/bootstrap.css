@@ -11220,6 +11220,17 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important;
   }
+    .center {
+        border: 5px solid #FFFF00;
+        line-height: 150px;
+        height: 150px;
+    }
+
+        .center p {
+            display: inline-block;
+            line-height: normal;
+            vertical-align: middle;
+        }
 }
 
 /*# sourceMappingURL=bootstrap.css.map */

@@ -1,23 +1,25 @@
 ﻿@model Zorro.WebApplication.ViewModels.DashboardViewModel
-
 <script>
 
 window.setTimeout(function()
 {
     window.location.href='@Url.Action("ShopHome","Shop")';
-}, 4000);
+}, 4000000);
     
 </script>
 
-<div class="spacer"></div>
-    <div class="center-block" style="display:flex;justify-content:center;" >
-        <div class="content-width">
+<div class="center-block" style="display:flex;justify-content:center;">
+    <div class="content-width">
+        <div class="card">
+            <div class="card-body" style="align-items:center">
+     
+        <h1 class="center-block" style="display:flex;justify-content:center;">Purchase Successful!</h1>
 
-        <h1>Purchase Successful!</h1>
+        <img class="center-block" style="display:flex;justify-content:center;width:50%" src="~/images/Shop/greentick.png" alt="Forest">
 
-        <img src="~/images/Shop/greentick.png" alt="Forest" style="width:50%">
-
-        <h3>You will now be automatically redirected back to our partners home page.</h3>
-
+        <h3 class="center-block" style="display:flex;justify-content:center;">You will now be automatically redirected back to our partners home page.</h3>
+         
     </div>
+</div>
+</div>
 </div>

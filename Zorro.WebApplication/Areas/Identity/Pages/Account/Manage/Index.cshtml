@@ -1,16 +1,20 @@
 ﻿@page
 @using Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
+@using Zorro.Dal.Models
+@inject UserManager<ApplicationUser> UserManager
 @model IndexModel
 @{
     ViewData["Title"] = "Personal Details";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h3>@ViewData["Title"]</h3>
+
 <partial name="_StatusMessage" for="StatusMessage" />
+<form id="profile-form" enctype="multipart/form-data" method="post">
 <div class="row">
     <div class="col-md-6">
-        <form id="profile-form" enctype="multipart/form-data" method="post">
+        <h3>@ViewData["Title"]</h3>
+        
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating" style="margin-bottom:15px;">
                 <input asp-for="Username" class="form-control" disabled />
@@ -27,42 +31,52 @@
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
             <div class="form-floating" style="margin-bottom:15px;">
-               <input asp-for = "Input.Mobile" class="form-control" autocomplete="off" aria-required="true" />
+                <input asp-for = "Input.Mobile" class="form-control" autocomplete="off" aria-required="true" />
                 <label asp-for="Input.Mobile"></label>
                 <span asp-validation-for="Input.Mobile" class="text-danger"></span>
             </div>
             <div class="form-floating" style="margin-bottom:15px;">
-               <input asp-for = "Input.BirthDate" class="form-control" autocomplete="off" aria-required="true" />
+                <input asp-for = "Input.BirthDate" class="form-control" autocomplete="off" aria-required="true" />
                 <label asp-for="Input.BirthDate"></label>
                 <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
+            </div>             
+    </div>
+    <div class="col-md-6">
+        <h3>Avatar</h3>  
+            <div style="text-align:center;">
+                <img src ="data:image/png;base64,@UserManager.GetUserAsync(User).Result.Avatar" style="background-color:#1a2138;position:center;margin:auto;width:auto;max-height:277px;">
             </div>
-
-            <h3>Credit Card Details</h3>
-
-            <div class="form-floating" style="margin-bottom:15px;">
-                <input asp-for="Input.CreditCardNumber" placeholder="Enter 16 digit number" class="form-control" autocomplete="off" aria-required="true" />
-                <label asp-for="Input.CreditCardNumber"></label>
-                <span asp-validation-for="Input.CreditCardNumber" class="text-danger"></span>
-            </div>
-                 <div class="form-floating" style="margin-bottom:15px;">
-                <input asp-for="Input.CCExpiry" placeholder="MM/YY" class="form-control" autocomplete="off" aria-required="true" />
-                <label asp-for="Input.CCExpiry"></label>
-                <span asp-validation-for="Input.CCExpiry" class="text-danger"></span>
-            </div>
-
-            <h3>Upload Avatar</h3>
-
-            <div class="form-floating" style="margin-bottom:15px;">
+            <div class="form-floating" style="margin-top:15px;">
                 <input type="file" name="avatar_file" class="form-control" autocomplete="off" aria-required="true" accept="image/*" />
                 <label for="avatar_file"></label>
                 <span asp-validation-for="Input.Avatar" class="text-danger"></span>
-            </div> 
-             
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-        </form>
+            </div>    
     </div>
 </div>
-
+<div class="row">
+     <div class="spacer"></div>
+     <h3>Credit Card Details</h3>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-floating" style="margin-bottom:15px;">
+            <input asp-for="Input.CreditCardNumber" placeholder="Enter 16 digit number" class="form-control" autocomplete="off" aria-required="true" />
+            <label asp-for="Input.CreditCardNumber"></label>
+            <span asp-validation-for="Input.CreditCardNumber" class="text-danger"></span>
+        </div>
+        </div>
+    <div class="col-md-6">
+        <div class="form-floating" style="margin-bottom:15px;">
+             <input asp-for="Input.CCExpiry" placeholder="MM/YY" class="form-control" autocomplete="off" aria-required="true" />
+             <label asp-for="Input.CCExpiry"></label>
+             <span asp-validation-for="Input.CCExpiry" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save Account Details</button>
+</div>
+   </form>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

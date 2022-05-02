@@ -40,12 +40,12 @@
             <h3>Credit Card Details</h3>
 
             <div class="form-floating" style="margin-bottom:15px;">
-                <input asp-for="Input.CreditCardNumber" placeholder="0000 0000 0000 0000" class="form-control" autocomplete="off" aria-required="true" />
+                <input asp-for="Input.CreditCardNumber" placeholder="Enter 16 digit number" class="form-control" autocomplete="off" aria-required="true" />
                 <label asp-for="Input.CreditCardNumber"></label>
                 <span asp-validation-for="Input.CreditCardNumber" class="text-danger"></span>
             </div>
                  <div class="form-floating" style="margin-bottom:15px;">
-                <input asp-for="Input.CCExpiry" placeholder="MM YY" class="form-control" autocomplete="off" aria-required="true" />
+                <input asp-for="Input.CCExpiry" placeholder="MM/YY" class="form-control" autocomplete="off" aria-required="true" />
                 <label asp-for="Input.CCExpiry"></label>
                 <span asp-validation-for="Input.CCExpiry" class="text-danger"></span>
             </div>

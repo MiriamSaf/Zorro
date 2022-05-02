@@ -69,11 +69,11 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-            [RegularExpression(@"^(\d{6})$", ErrorMessage = "Error: Invalid Expiry Date Entered")]
+            [RegularExpression(@"^(([1-9][0-2]?)|([0-0][1-9]))/([2-9][0-9]{1})$", ErrorMessage = "Error: Invalid Expiry Date Entered.Number must be 4 Digits with a / in between numbers - as in MM/YY")]
             [Display(Name = "Credit Card Expiry")]
             public string CCExpiry { get; set; }
 
-            [RegularExpression(@"^(\d{14,16})$", ErrorMessage = "Error: Invalid Credit Card Number")]
+            [RegularExpression(@"^(\d{14,16})$", ErrorMessage = "Error: Invalid Credit Card Number. Enter digits that are not separated by hyphen or comma") ]
             [Display(Name = "Credit Card Number")]
             public string CreditCardNumber { get; set; }
             public IFormFile Avatar { get; set; }

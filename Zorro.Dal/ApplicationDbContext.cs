@@ -23,6 +23,8 @@ namespace Zorro.Dal
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<RememberedBiller> RememberedBillers { get; set; }
         public DbSet<Shops> Shops { get; set; }
+        public DbSet<Merchant> Merchants { get; set; }
+        public DbSet<MerchantApiKey> ApiKeys { get; set; }
 
     }
 }

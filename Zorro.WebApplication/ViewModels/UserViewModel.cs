@@ -9,15 +9,14 @@ namespace Zorro.WebApplication.ViewModels
 {
     public class UserViewModel
     {
-        [StringLength(50, ErrorMessage = "Error: First Name has a maximum of 50 Characters.")]
+        public string Id { get; set; }
+        public string UserName { get; set; }
         public string FirstName { get; set; }
-
-        [StringLength(60, ErrorMessage = "Error: Surname has a maximum of 60 Characters.")]
         public string Surname { get; set; }
-        public DateTime? BirthDate { get; set; }
-
-        [RegularExpression(@"^(\d{10})$", ErrorMessage = "Error: Must be 10 Digits.")]
+        public string Email { get; set; }
         public string Mobile { get; set; }
-
+        public string Role { get; set; }
+        public bool LockedOut { get; set; }
+        public bool AdminAccessGranted { get; set; }
     }
 }

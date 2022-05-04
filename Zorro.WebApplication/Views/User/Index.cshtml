@@ -1,4 +1,8 @@
-﻿@model IEnumerable<Zorro.Dal.Models.ApplicationUser>
+﻿@using Microsoft.AspNetCore.Identity
+@using Zorro.Dal.Models
+@using Zorro.WebApplication.ViewModels
+@model UserAdminViewModel
+
 @{
     ViewData["Title"] = "Index";
 }
@@ -7,118 +11,107 @@
 
 <button type="button" class="btn btn-dark" onclick="location.href='@Url.Action("Create", "User")'">Create New User</button>
 
-<h2 class="text-black">List of Customers</h2>
-
 <hr class="my-3" />
 
-<table class="table table-sm table-bordered">
-    <tr>
-        <th>ID</th>
-        <th>User Role</th>
-        <th>Username</th>
-        <th>Firstname</th>
-        <th>Surname</th>
-        <th>Email</th>
-        <th>2FA Enabled</th>
-        <th>User Locked Out</th>
-        <th>Update</th>
-        <th>Delete</th>
-    </tr>
-    @foreach (Zorro.Dal.Models.ApplicationUser user in Model)
-    {
-        <tr>
-            <td>@user.Id</td>
-            <td>To be Added</td>
-            <td>@user.UserName</td>
-            <td>@user.FirstName</td>
-            <td>@user.Surname</td>
-            <td>@user.Email</td>
-            @if (user.TwoFactorEnabled == false)
-            {
-                <td>No</td>
-            }
-            else
-            {
-                <td>Yes</td>
-            }
-            @if (user.LockoutEnd == null || user.LockoutEnd < DateTime.UtcNow)
-            {
-                <td>No</td>
-            }
-            else
-            {
-                <td>Yes</td>
-            }
-            <td>
-                <a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@user.Id">
-                    Update
-                </a>
-            </td>
-            <td>
-                <form asp-action="Delete" asp-route-id="@user.Id" method="post">
-                    <button type="submit" class="btn btn-sm btn-danger">
-                        Delete
-                    </button>
-                </form>
-            </td>
-        </tr>
-    }
-</table>
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="consumers-tab" data-bs-toggle="tab" data-bs-target="#admins-list" type="button" role="tab">Users</button>
+        <button class="nav-link" id="merchants-tab" data-bs-toggle="tab" data-bs-target="#merchants-list" type="button" role="tab">Merchants</button>
+    </div>
+</nav>
 
-<h2 class="text-black">List of Merchants</h2>
-
-<hr class="my-3" />
-
-<table class="table table-sm table-bordered">
-    <tr>
-        <th>ID</th>
-        <th>User Role</th>
-        <th>Username</th>
-        <th>Firstname</th>
-        <th>Surname</th>
-        <th>Email</th>
-        <th>2FA Enabled</th>
-        <th>User Locked Out</th>
-        <th>Update</th>
-        <th>Delete</th>
-    </tr>
-    @foreach (Zorro.Dal.Models.ApplicationUser user in Model)
-    {
-        <tr>
-            <td>@user.Id</td>
-            <td>@ViewBag.UserRoles[@user.Id]</td>
-            <td>@user.UserName</td>
-            <td>@user.FirstName</td>
-            <td>@user.Surname</td>
-            <td>@user.Email</td>
-            @if (user.TwoFactorEnabled == false)
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="admins-list" role="tabpanel">
+        <table class="table table-sm table-bordered">
+            <tr>
+                <th>Id</th>
+                <th>Role</th>
+                <th>Username</th>
+                <th>Firstname</th>
+                <th>Surname</th>
+                <th>Email</th>
+                <th>User Locked Out</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            @foreach (var user in Model.Users)
             {
-                <td>No</td>
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Role</td>
+                    <td>@user.UserName</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.Surname</td>
+                    <td>@user.Email</td>
+                    <td class="text-center">
+                        @if (!user.LockedOut)
+                        {
+                            <i class="bi bi-check-circle-fill"></i>
+                        }
+                        else
+                        {
+                            <i class="bi bi-x-circle-fill"></i>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@user.Id">
+                            Update
+                        </a>
+                    </td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
             }
-            else
+        </table>
+    </div>
+    <div class="tab-pane fade" id="merchants-list" role="tabpanel">
+        <table class="table table-sm table-bordered">
+            <tr>
+                <th>Id</th>
+                <th>Business Name</th>
+                <th>ABN</th>
+                <th>Username</th>
+                <th>Blocked</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            @foreach (var merchant in Model.Merchants)
             {
-                <td>Yes</td>
+                var blocked = false;
+                <tr>
+                    <td>@merchant.Id</td>
+                    <td>@merchant.BusinessName</td>
+                    <td>@merchant.Abn</td>
+                    <td>@merchant.ApplicationUser.UserName</td>
+                    <td class="text-center">
+                        @if (!blocked)
+                        {
+                            <i class="bi bi-check-circle-fill"></i>
+                        }
+                        else
+                        {
+                            <i class="bi bi-x-circle-fill"></i>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@merchant.Id">
+                            Update
+                        </a>
+                    </td>
+                    <td>
+                        <form asp-action="DeleteMerchant" asp-route-id="@merchant.Id" method="post">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
             }
-            @if (user.LockoutEnd == null || user.LockoutEnd < DateTime.UtcNow)
-            {
-                <td>No</td>
-            }
-            else
-            {
-                <td>Yes</td>
-            }
-            <td>
-                <a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@user.Id">
-                    Update
-                </a>
-            </td>
-            <td>
-                <form asp-action="Delete" asp-route-id="@user.Id" method="post">
-                    <button type="submit" class="btn btn-sm btn-danger">
-                        Delete
-                    </button>
-                </form>
-            </td>
-        </tr>
-    }
-</table>
+        </table>
+    </div>
+</div>

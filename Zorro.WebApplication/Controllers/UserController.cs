@@ -3,6 +3,8 @@ using Zorro.Dal.Models;
 
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
+using Zorro.WebApplication.ViewModels;
+using Zorro.Dal;
 
 namespace Zorro.WebApplication.Models
 {
@@ -13,28 +15,58 @@ namespace Zorro.WebApplication.Models
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IPasswordHasher<ApplicationUser> _passwordHashed;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _applicationDbContext;
 
-        public UserController(UserManager<ApplicationUser> userManager, IPasswordHasher<ApplicationUser> passwordHashed, RoleManager<IdentityRole> roleManager)
+        public UserController(UserManager<ApplicationUser> userManager,
+            IPasswordHasher<ApplicationUser> passwordHashed,
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext applicationDbContext)
         {
             _userManager = userManager;
             _passwordHashed = passwordHashed;
             _roleManager = roleManager;
+            _applicationDbContext = applicationDbContext;
         }
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.UserRoles = new Dictionary<string, string>();
-            var users = _userManager.Users.ToList();
-            foreach (var user in users)
+            // build view items
+            var viewModel = new UserAdminViewModel();
+
+            // load users
+            foreach (var user in _userManager.Users.ToList())
             {
-                var roles = await _userManager.GetRolesAsync(user);
-                if (roles.Count > 0)
-                    ViewBag.UserRoles.Add(user.Id, string.Join(", ", roles));
-                else
-                    ViewBag.UserRoles.Add(user.Id, "None");
+                var userViewModel = await MapUserToViewModel(user);
+                viewModel.Users.Add(userViewModel);
             }
-            //pass all users to view
-            return View(_userManager.Users);
+
+            // load merchants
+            viewModel.Merchants = _applicationDbContext.Merchants.ToList();
+
+            return View(viewModel);
+        }
+
+        private async Task<UserViewModel> MapUserToViewModel(ApplicationUser user)
+        {
+            var userViewItem = new UserViewModel()
+            {
+                FirstName = user.FirstName,
+                Surname = user.Surname,
+                LockedOut = false,
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email
+            };
+            if (await _userManager.IsInRoleAsync(user, "Administrator"))
+                userViewItem.AdminAccessGranted = true;
+
+            // show as merchant or consumer
+            if (await _userManager.IsInRoleAsync(user, "Merchant"))
+                userViewItem.Role = "Merchant";
+            else
+                userViewItem.Role = "Consumer";
+
+            return userViewItem;
         }
 
 
@@ -87,84 +119,86 @@ namespace Zorro.WebApplication.Models
 
         public async Task<IActionResult> Update(string id)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(id);
-            ViewBag.Roles = _roleManager.Roles;
-            if (user != null)
-                return View(user);
-            else
+            var user = await _userManager.FindByIdAsync(id);
+            if (user is null )
                 return RedirectToAction("Index");
+
+            var userViewModel = await MapUserToViewModel(user);
+            ViewBag.Roles = new string[] { "Merchant", "Consumer" };
+            return View(userViewModel);
         }
 
         //update user 
         [HttpPost]
-        public async Task<IActionResult> Update(string[] roles, string id, string firstname, string surname, string mobile, string email, string password, bool TwoFactorEnabled, DateTimeOffset? LockoutEnd)
+        public async Task<IActionResult> Update(UserViewModel userViewModel)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(userViewModel.Id);
             if (user != null)
+
+            ModelState.AddModelError("", "User Not Found");
+            // Add and remove roles
+
+            if (userViewModel.Role == "Merchant")
             {
-                // Add and remove roles
-                foreach(var roleName in roles)
-                {
-                    await _userManager.AddToRoleAsync(user, roleName);
-                }
-                var rolesToRemove = new List<string>();
-                foreach (var roleName in _roleManager.Roles.Select(r => r.Name).ToList())
-                {
-                    if (!roles.Contains(roleName))
-                        rolesToRemove.Add(roleName);
-                }
-                if (rolesToRemove.Count > 0)
-                    await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+                await _userManager.AddToRoleAsync(user, "Merchant");
+                await _userManager.RemoveFromRoleAsync(user, "Consumer");
+            }
 
-                if (!string.IsNullOrEmpty(mobile))
-                {
-                    user.Mobile = mobile;
-                }
-                else
-                {
-                    ModelState.AddModelError("", "mobile field cannot be left empty");
-                }
-                if (!string.IsNullOrEmpty(firstname))
-                {
-                    user.FirstName = firstname;
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Firstname field cannot be left empty");
-                }
-                if (!string.IsNullOrEmpty(surname))
-                {
-                    user.Surname = surname;
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Surname field cannot be left empty");
-                }
-                if (!string.IsNullOrEmpty(email))
-                {
-                    user.Email = email;
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Email field cannot be left empty");
-                }
+            if (userViewModel.Role == "Consumer")
+            {
+                await _userManager.AddToRoleAsync(user, "Consumer");
+                await _userManager.RemoveFromRoleAsync(user, "Merchant");
+            }
 
-                if (!string.IsNullOrEmpty(password))
-                {
-                    user.PasswordHash = _passwordHashed.HashPassword(user, password);
-                }
+            if (userViewModel.AdminAccessGranted)
+                await _userManager.AddToRoleAsync(user, "Administrator");
+            else
+                await _userManager.RemoveFromRoleAsync(user, "Administrator");
 
-                user.TwoFactorEnabled = TwoFactorEnabled;
-                //user.LockoutEnd = LockoutEnd;
-
-                IdentityResult idResult = await _userManager.UpdateAsync(user);
-                if (idResult.Succeeded)
-                    return RedirectToAction("Index");
-                else
-                    Errors(idResult);
+            if (!string.IsNullOrEmpty(userViewModel.Mobile))
+            {
+                user.Mobile = userViewModel.Mobile;
             }
             else
-                ModelState.AddModelError("", "User Not Found");
+            {
+                ModelState.AddModelError("", "mobile field cannot be left empty");
+            }
+            if (!string.IsNullOrEmpty(userViewModel.FirstName))
+            {
+                user.FirstName = userViewModel.FirstName;
+            }
+            else
+            {
+                ModelState.AddModelError("", "Firstname field cannot be left empty");
+            }
+            if (!string.IsNullOrEmpty(userViewModel.Surname))
+            {
+                user.Surname = userViewModel.Surname;
+            }
+            else
+            {
+                ModelState.AddModelError("", "Surname field cannot be left empty");
+            }
+            if (!string.IsNullOrEmpty(userViewModel.Email))
+            {
+                user.Email = userViewModel.Email;
+            }
+            else
+            {
+                ModelState.AddModelError("", "Email field cannot be left empty");
+            }
+
+            if (!string.IsNullOrEmpty(null))
+            {
+                user.PasswordHash = _passwordHashed.HashPassword(user, null);
+            }
+
+            IdentityResult idResult = await _userManager.UpdateAsync(user);
+            if (idResult.Succeeded)
+                return RedirectToAction("Index");
+            else
+                Errors(idResult);
+
             return View(user);
         }
 

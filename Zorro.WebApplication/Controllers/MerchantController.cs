@@ -16,8 +16,8 @@ namespace Zorro.WebApplication.Models
         {
             _userManager = userManager;
             _passwordHashed = passwordHashed;
-
         }
+
         public async Task<IActionResult> Index()
         {
             //pass all users to view

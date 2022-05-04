@@ -29,6 +29,10 @@ namespace Zorro.WebApplication.Data
             TransactionType transactionType = TransactionType.Transfer)
         {
             // verify that payment can proceed
+            if (transactionType == TransactionType.Transfer && amount == 0)
+            {
+                throw new InvalidTransferAmountException("Transfer amount must not be zero");
+            }
             if (transactionType == TransactionType.Transfer && amount < 0)
             {
                 throw new InvalidTransferAmountException("Transfer amount must be a positive number");

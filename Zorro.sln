@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zorro.WebApplication", "Zor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zorro.Api", "Zorro.Api\Zorro.Api.csproj", "{F3BB0F52-5161-4E36-9263-19FEAE0294A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zorro.Dal", "Zorro.Dal\Zorro.Dal.csproj", "{36CA7C45-EA11-446B-A50F-1E5AF90992E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zorro.Dal", "Zorro.Dal\Zorro.Dal.csproj", "{36CA7C45-EA11-446B-A50F-1E5AF90992E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZorroTest", "ZorroTest\ZorroTest.csproj", "{B0B1042C-DB48-4793-B583-24EA508F3C00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{36CA7C45-EA11-446B-A50F-1E5AF90992E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36CA7C45-EA11-446B-A50F-1E5AF90992E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36CA7C45-EA11-446B-A50F-1E5AF90992E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0B1042C-DB48-4793-B583-24EA508F3C00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0B1042C-DB48-4793-B583-24EA508F3C00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0B1042C-DB48-4793-B583-24EA508F3C00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0B1042C-DB48-4793-B583-24EA508F3C00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

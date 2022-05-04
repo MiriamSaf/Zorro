@@ -171,23 +171,40 @@ h2 {
 /** button styling 
     **************
     ***************/
-.btn-dark {
-    transition: all ease-in-out 0.5s;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
 
-    height: 40px;
-    text-align: center;
+#update-profile-button,
+#change-email-button,
+#submit-newpwd,
+#submit-newpwd-btn {
+    background-color: #1A2238 !important;
     border: none;
-    border-radius: 10px;
+    transition: ease-in-out 0.3s all;
 }
 
-    .btn-dark :hover::after {
+    #update-profile-button:hover,
+    #change-email-button :hover,
+    #submit-newpwd :hover,
+    #submit-newpwd-btn :hover{
+        background-color: #e43603 !important;
+    }
+    .btn-dark, #update-profile-button {
+        transition: all ease-in-out 0.5s;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        height: 40px;
+        text-align: center;
+        border: none;
+        border-radius: 10px;
+    }
+
+    .btn-dark :hover::after,
+    #update-profile-button  :hover::after{
         background-color: #FF6A3D;
     }
 
-    .btn-dark:hover {
+    .btn-dark:hover,
+    #update-profile-button :hover {
         background-color: #1A2238;
     }
 

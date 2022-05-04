@@ -3,19 +3,23 @@ using Zorro.Dal.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using Zorro.Dal;
 
 namespace Zorro.WebApplication.Models
 {
    
     public class MerchantController : Controller
     {
-        private UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IPasswordHasher<ApplicationUser> _passwordHashed;
+        private readonly ApplicationDbContext _applicationDbContext;
 
-        private IPasswordHasher<ApplicationUser> _passwordHashed;
-        public MerchantController(UserManager<ApplicationUser> userManager, IPasswordHasher<ApplicationUser> passwordHashed)
+        public MerchantController(UserManager<ApplicationUser> userManager,
+            IPasswordHasher<ApplicationUser> passwordHashed, ApplicationDbContext applicationDbContext)
         {
             _userManager = userManager;
             _passwordHashed = passwordHashed;
+            _applicationDbContext = applicationDbContext;
         }
 
         public async Task<IActionResult> Index()
@@ -43,6 +47,31 @@ namespace Zorro.WebApplication.Models
             return View("Index",user);
         }
 
+        public ViewResult Register() => View();
+        
+        [HttpPost]
+        public async Task<IActionResult> Register(Merchant merchant)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var foundMerchant = _applicationDbContext.Merchants.Where(m => m.ApplicationUser == user && m.Status == MerchantStatus.Approved);
+            if (foundMerchant.Any())
+                throw new Exception("User is already related to a active merchant");
+            merchant.ApplicationUser = user;
+            merchant.Status = MerchantStatus.Pending;
+            await _applicationDbContext.Merchants.AddAsync(merchant);
+            await _applicationDbContext.SaveChangesAsync();
+            return View("Index");
+        }
+
+        public async Task<IActionResult> Approve(int id)
+        {
+            var merchant = await _applicationDbContext.Merchants.FindAsync(id);
+            if (merchant is null)
+                throw new Exception($"Unable to find merchant with id {id}");
+            merchant.Status = MerchantStatus.Approved;
+            await _applicationDbContext.SaveChangesAsync();
+            return RedirectToAction("Index", "User");
+        }
 
         public ViewResult Create() => View();
 

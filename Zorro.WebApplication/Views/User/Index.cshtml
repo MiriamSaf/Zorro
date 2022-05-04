@@ -76,39 +76,34 @@
                 <th>Business Name</th>
                 <th>ABN</th>
                 <th>Username</th>
-                <th>Blocked</th>
-                <th>Update</th>
-                <th>Delete</th>
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
             @foreach (var merchant in Model.Merchants)
             {
-                var blocked = false;
                 <tr>
                     <td>@merchant.Id</td>
                     <td>@merchant.BusinessName</td>
                     <td>@merchant.Abn</td>
                     <td>@merchant.ApplicationUser.UserName</td>
+                    <td class="text-center">@merchant.Status</td>
                     <td class="text-center">
-                        @if (!blocked)
-                        {
-                            <i class="bi bi-check-circle-fill"></i>
-                        }
-                        else
-                        {
-                            <i class="bi bi-x-circle-fill"></i>
-                        }
-                    </td>
-                    <td>
-                        <a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@merchant.Id">
+                        <button class="d-inline btn btn-sm btn-primary" asp-controller="Merchant" asp-action="Update" asp-route-id="@merchant.Id">
                             Update
-                        </a>
-                    </td>
-                    <td>
-                        <form asp-action="DeleteMerchant" asp-route-id="@merchant.Id" method="post">
+                        </button>
+                        <form asp-action="Delete" asp-controller="Merchant" asp-route-id="@merchant.Id" method="post" class="d-inline">
                             <button type="submit" class="btn btn-sm btn-danger">
                                 Delete
                             </button>
                         </form>
+                        @if (@merchant.Status == MerchantStatus.Pending)
+                        {
+                            @using (Html.BeginForm("Approve", "Merchant", FormMethod.Post, new { @class = "d-inline" }))
+                            {
+                                <input type="hidden" name="Id" value="@merchant.Id">
+                                <button class="d-inline btn btn-sm btn-success">Approve</button>
+                            }
+                        }
                     </td>
                 </tr>
             }

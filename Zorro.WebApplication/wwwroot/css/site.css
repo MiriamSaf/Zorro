@@ -174,7 +174,8 @@ h2 {
 
 #update-profile-button,
 #change-email-button,
-#submit-newpwd {
+#submit-newpwd,
+#submit-newpwd-btn {
     background-color: #1A2238 !important;
     border: none;
     transition: ease-in-out 0.3s all;
@@ -182,7 +183,8 @@ h2 {
 
     #update-profile-button:hover,
     #change-email-button :hover,
-    #submit-newpwd :hover{
+    #submit-newpwd :hover,
+    #submit-newpwd-btn :hover{
         background-color: #e43603 !important;
     }
     .btn-dark, #update-profile-button {

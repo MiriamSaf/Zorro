@@ -135,6 +135,16 @@ namespace Zorro.WebApplication.Data
 
         public async Task<bool> BpayTransfer(Wallet sourceWallet, decimal amount, int BpayBillerCode, string comment, Currency currency, TransactionType transaction)
         {
+            // verify that billpay can proceed
+            if (transaction == TransactionType.BPay && amount < 0)
+            {
+                throw new InvalidBillPayAmountException("BillPay amount must not be negative");
+            }
+            // verify that deposit can proceed
+            if (transaction == TransactionType.BPay && amount == 0)
+            {
+                throw new InvalidBillPayAmountException("BillPay amount must not be zero");
+            }
             var now = DateTime.Now;
             var bpayTransaction = new Transaction()
             {
@@ -150,7 +160,9 @@ namespace Zorro.WebApplication.Data
             //cannot transfer more than have in balance
             if (amount >= sourceWallet.Balance)
             {
-                return false;
+
+                throw new InvalidBillPayAmountException("BillPay amount must not be more than in wallet");
+                //return false;
             }
 
             if (amount > 0)
@@ -170,6 +182,19 @@ namespace Zorro.WebApplication.Data
 
 
         }
+    }
+
+    public class InvalidBillPayAmountException : Exception
+    {
+        public InvalidBillPayAmountException()
+        {
+        }
+
+        public InvalidBillPayAmountException(string message)
+            : base(message)
+        {
+        }
+
     }
 
     public class InvalidDepositAmountException : Exception

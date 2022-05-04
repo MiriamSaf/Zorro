@@ -6,39 +6,87 @@ using Zorro.WebApplication.ViewModels;
 using Zorro.WebApplication.Data;
 using Zorro.Dal.Models;
 using System;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Zorro.Dal;
 
 namespace ZorroTest
 {
 
-
+    //test deposit scenarios
     [TestClass]
     public class DepositTest
     {
 
-        public String email1 = "adam@tester.com";
+        //test deposit with zero as amount
+        [ExpectedException(typeof(InvalidDepositAmountException))]
         [TestMethod]
-        public void SignInUser()
+        public async Task TestDepositWithZero()
         {
-            ApplicationUser user1 = new ApplicationUser();
-            user1.UserName = "Tester";
-            user1.FirstName = "Adam";
-            user1.Surname = "Test";
-            user1.Email = "adam@tester.com";
-            user1.PhoneNumber = "0411222333";
-            user1.PasswordHash = "Tester123#";
-            user1.Id = "123456";
-            user1.CreditCardNumber = "1111222233334444";
-            user1.CCExpiry = "11/23";
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+           .UseInMemoryDatabase(databaseName: "FakeDB")
+           .Options;
 
-            Wallet walletTest = new Wallet();
-            walletTest.ApplicationUserId = "123456";
-            walletTest.ApplicationUser = user1;
-            walletTest.Balance = 1000;
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Test", CreditCardNumber = "1111222233334444", CCExpiry = "11/23"};
 
+            // Insert seed data into the database using one instance of the context
+            using var context = new ApplicationDbContext(options);
+            var wallet1 = new Wallet() { Balance = 20.00M, ApplicationUser = user1 };
+            var wallets = new Wallet[] { wallet1 };
 
+            await context.Wallets.AddRangeAsync(wallets);
+            context.SaveChanges();
 
+            var bankerService = new BankerService(context);
+            //try to depsoit 0 
+            await bankerService.DepositFunds(wallet1, 0, "deposit zero");
+        }
 
+        //test deposit with negative number as amount
+        [ExpectedException(typeof(InvalidDepositAmountException))]
+        [TestMethod]
+        public async Task TestDepositWithNegative()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+           .UseInMemoryDatabase(databaseName: "FakeDB")
+           .Options;
 
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Test", CreditCardNumber = "1111222233334444", CCExpiry = "11/23" };
+
+            // Insert seed data into the database using one instance of the context
+            using var context = new ApplicationDbContext(options);
+            var wallet1 = new Wallet() { Balance = 20.00M, ApplicationUser = user1 };
+            var wallets = new Wallet[] { wallet1 };
+
+            await context.Wallets.AddRangeAsync(wallets);
+            context.SaveChanges();
+
+            var bankerService = new BankerService(context);
+            //try to depsoit 0 
+            await bankerService.DepositFunds(wallet1, -19, "deposit negative");
+        }
+
+        //test deposit with valid posotive number as amount
+        [TestMethod]
+        public async Task TestDepositWithPosotive()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+           .UseInMemoryDatabase(databaseName: "FakeDB")
+           .Options;
+
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Test", CreditCardNumber = "1111222233334444", CCExpiry = "11/23" };
+
+            // Insert seed data into the database using one instance of the context
+            using var context = new ApplicationDbContext(options);
+            var wallet1 = new Wallet() { Balance = 20.00M, ApplicationUser = user1 };
+            var wallets = new Wallet[] { wallet1 };
+
+            await context.Wallets.AddRangeAsync(wallets);
+            context.SaveChanges();
+
+            var bankerService = new BankerService(context);
+            //try to depsoit 0 
+            await bankerService.DepositFunds(wallet1, 19, "deposit allowed");
         }
     }
 }

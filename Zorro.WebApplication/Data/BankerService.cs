@@ -76,9 +76,23 @@ namespace Zorro.WebApplication.Data
             await _applicationDbContext.SaveChangesAsync();
         }
 
+        //depsit funds method
         public async Task DepositFunds(Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud,
           TransactionType transactionType = TransactionType.Payment)
         {
+
+            // verify that deposit can proceed
+            if (transactionType == TransactionType.Payment && amount < 0)
+            {
+                throw new InvalidDepositAmountException("Deposit amount must not be negative");
+            }
+            // verify that payment can proceed
+            if (transactionType == TransactionType.Payment && amount == 0)
+            {
+                throw new InvalidDepositAmountException("Deposit amount must not be zero");
+            }
+            
+
             var now = DateTime.Now;
             var depositTransaction = new Transaction()
             {
@@ -156,6 +170,19 @@ namespace Zorro.WebApplication.Data
 
 
         }
+    }
+
+    public class InvalidDepositAmountException : Exception
+    {
+        public InvalidDepositAmountException()
+        {
+        }
+
+        public InvalidDepositAmountException(string message)
+            : base(message)
+        {
+        }
+
     }
 
     public class InvalidTransferAmountException : Exception

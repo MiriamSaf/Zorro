@@ -25,6 +25,7 @@ namespace Zorro.Dal
         public DbSet<Shops> Shops { get; set; }
         public DbSet<Merchant> Merchants { get; set; }
         public DbSet<MerchantApiKey> ApiKeys { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
 
     }
 }

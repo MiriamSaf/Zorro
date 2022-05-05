@@ -28,7 +28,7 @@ app.MapPost("/ProcessPayment", async (TransactionRequest transactionRequest) =>
 {
     await Task.Delay(100);
 
-    Console.WriteLine($"Processed eCommerce payment request of {transactionRequest.Amount:c} for UserID {transactionRequest.UserID}");
+    //Console.WriteLine($"Processed eCommerce payment request of {transactionRequest.Amount:c} for UserID {transactionRequest.UserID}");
     
     return new TransactionResponse();
 });

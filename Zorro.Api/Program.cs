@@ -1,9 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using Zorro.Dal;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Add entity framework
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
@@ -28,9 +36,10 @@ app.MapPost("/ProcessPayment", async (TransactionRequest transactionRequest) =>
 app.Run();
 
 class TransactionRequest
-{ 
-    public Guid UserID { get; set; }
+{
+    public string CustomerWalletId { get; set; } = "";
     public decimal Amount { get; set; }
+    public string PaymentDescription { get; set; } = "";
 }
 
 class TransactionResponse

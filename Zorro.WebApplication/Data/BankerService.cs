@@ -29,6 +29,10 @@ namespace Zorro.WebApplication.Data
             TransactionType transactionType = TransactionType.Transfer)
         {
             // verify that payment can proceed
+            if (transactionType == TransactionType.Transfer && amount == 0)
+            {
+                throw new InvalidTransferAmountException("Transfer amount must not be zero");
+            }
             if (transactionType == TransactionType.Transfer && amount < 0)
             {
                 throw new InvalidTransferAmountException("Transfer amount must be a positive number");
@@ -72,9 +76,23 @@ namespace Zorro.WebApplication.Data
             await _applicationDbContext.SaveChangesAsync();
         }
 
+        //depsit funds method
         public async Task DepositFunds(Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud,
           TransactionType transactionType = TransactionType.Payment)
         {
+
+            // verify that deposit can proceed
+            if (transactionType == TransactionType.Payment && amount < 0)
+            {
+                throw new InvalidDepositAmountException("Deposit amount must not be negative");
+            }
+            // verify that payment can proceed
+            if (transactionType == TransactionType.Payment && amount == 0)
+            {
+                throw new InvalidDepositAmountException("Deposit amount must not be zero");
+            }
+            
+
             var now = DateTime.Now;
             var depositTransaction = new Transaction()
             {
@@ -117,6 +135,16 @@ namespace Zorro.WebApplication.Data
 
         public async Task<bool> BpayTransfer(Wallet sourceWallet, decimal amount, int BpayBillerCode, string comment, Currency currency, TransactionType transaction)
         {
+            // verify that billpay can proceed
+            if (transaction == TransactionType.BPay && amount < 0)
+            {
+                throw new InvalidBillPayAmountException("BillPay amount must not be negative");
+            }
+            // verify that deposit can proceed
+            if (transaction == TransactionType.BPay && amount == 0)
+            {
+                throw new InvalidBillPayAmountException("BillPay amount must not be zero");
+            }
             var now = DateTime.Now;
             var bpayTransaction = new Transaction()
             {
@@ -132,7 +160,9 @@ namespace Zorro.WebApplication.Data
             //cannot transfer more than have in balance
             if (amount >= sourceWallet.Balance)
             {
-                return false;
+
+                throw new InvalidBillPayAmountException("BillPay amount must not be more than in wallet");
+                //return false;
             }
 
             if (amount > 0)
@@ -152,6 +182,32 @@ namespace Zorro.WebApplication.Data
 
 
         }
+    }
+
+    public class InvalidBillPayAmountException : Exception
+    {
+        public InvalidBillPayAmountException()
+        {
+        }
+
+        public InvalidBillPayAmountException(string message)
+            : base(message)
+        {
+        }
+
+    }
+
+    public class InvalidDepositAmountException : Exception
+    {
+        public InvalidDepositAmountException()
+        {
+        }
+
+        public InvalidDepositAmountException(string message)
+            : base(message)
+        {
+        }
+
     }
 
     public class InvalidTransferAmountException : Exception

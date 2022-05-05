@@ -1,10 +1,22 @@
-﻿@model Zorro.WebApplication.ViewModels.DashboardViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@using Zorro.Dal.Models
+@model Zorro.WebApplication.ViewModels.DashboardViewModel
+@inject UserManager<ApplicationUser> UserManager
 
 <div class="spacer"></div>
 
 <div class="center-block" style="display:flex;justify-content:center;">
     <div class="content-width">
+        @*show ecommerce vendor sign up link*@
+        @if (!await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Merchant"))
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                Are you an <strong>eCommerce merchant</strong>? Click <a asp-controller="Merchant" asp-action="Register" class="alert-link">here</a> to find out out Zorro can help you.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
         <div class="inputbox">
+
 
             <h1>Dashboard</h1>
 

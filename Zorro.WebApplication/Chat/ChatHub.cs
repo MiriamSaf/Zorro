@@ -19,6 +19,20 @@ namespace Zorro.WebApplication.Chat
 
         public async Task SendMessage(string sender, string recipient, string message)
         {
+            bool check = String.IsNullOrWhiteSpace(message);
+            if (check)
+            {
+                return;
+            }
+            if(sender == null)
+            {
+                return;
+            }
+            bool recipReal = String.IsNullOrWhiteSpace(recipient);
+            if (recipReal)
+            {
+                return;
+            }
             await Clients.User(recipient).SendAsync("ReceiveMessage", sender, message);
             await Clients.Caller.SendAsync("ReceiveMessage", sender, message);
             await SaveChatMessage(sender, recipient, message, DateTime.Now);
@@ -26,6 +40,21 @@ namespace Zorro.WebApplication.Chat
 
         private async Task SaveChatMessage(string sender, string recipient, string message, DateTime timestamp)
         {
+            if(message == null)
+            {
+                return;
+            }
+            bool check = String.IsNullOrWhiteSpace(message);
+            if (check)
+            {
+                return;
+            }
+            bool recipReal = String.IsNullOrWhiteSpace(recipient);
+            if (recipReal)
+            {
+                return;
+            }
+
             var chatMessage = new ChatMessage()
             {
                 Sender = await _userManager.FindByEmailAsync(sender),

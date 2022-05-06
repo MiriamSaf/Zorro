@@ -2,16 +2,16 @@
 
 <h1>Chat</h1>
 
-<div class="container">
+<div class="container card">
     <div class="row">&nbsp;</div>
     <div class="row">
         <input type="hidden" value="@ViewBag.UserName" id="myUser" />
         <div class="col-2">User</div>
-        <div class="col-4"><input type="text" id="userInput" /></div>
+        <div class="col-4"><input type="email" id="userInput" placeholder="input email address"/></div>
     </div>
     <div class="row">
         <div class="col-2">Message</div>
-        <div class="col-4"><input type="text" id="messageInput" /></div>
+        <div class="col-4"><input type="text" id="messageInput" placeholder = "input message" /></div>
     </div>
     <div class="row">&nbsp;</div>
     <div class="row">
@@ -46,7 +46,24 @@
         padding: 2vh;
         background-color: white;
         border: 0.5px solid white;
-        border-radius: 2px;
+        border-radius: 10px;
       
+    }
+
+    .col-6{
+        margin-bottom: 10px;
+    }
+
+    #sendButton{
+        background-color:#5EBEC4;
+        border: none;
+        padding: 1vh;
+        color: white;
+        border-radius: 5px;
+        transition: 0.5s all ease-in-out;
+    }
+
+    #sendButton:hover{
+        background-color: #1A2238
     }
 </style>

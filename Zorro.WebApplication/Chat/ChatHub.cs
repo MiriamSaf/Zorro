@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using System.Diagnostics;
 using System.Security.Claims;
 using Zorro.Dal;
 using Zorro.Dal.Models;
@@ -22,20 +23,39 @@ namespace Zorro.WebApplication.Chat
             bool check = String.IsNullOrWhiteSpace(message);
             if (check)
             {
-                return;
+                
+                return ;
             }
+
             if(sender == null)
             {
                 return;
             }
+
             bool recipReal = String.IsNullOrWhiteSpace(recipient);
             if (recipReal)
             {
                 return;
             }
+
             await Clients.User(recipient).SendAsync("ReceiveMessage", sender, message);
-            await Clients.Caller.SendAsync("ReceiveMessage", sender, message);
-            await SaveChatMessage(sender, recipient, message, DateTime.Now);
+            // Not Sure if this is required? It was causing double messages to be sent after
+            // putting in checking if another user exists?
+            //await Clients.Caller.SendAsync("ReceiveMessage", sender, message);
+
+            bool messagevalid = false;
+            foreach (var recipients in _context.Users)
+            {
+                if (recipients.Email.Equals(recipient))
+                {
+                    messagevalid = true;
+                }
+            }
+
+            if (messagevalid == true)
+            {
+                await SaveChatMessage(sender, recipient, message, DateTime.Now);
+            }
         }
 
         private async Task SaveChatMessage(string sender, string recipient, string message, DateTime timestamp)
@@ -44,26 +64,41 @@ namespace Zorro.WebApplication.Chat
             {
                 return;
             }
+
             bool check = String.IsNullOrWhiteSpace(message);
             if (check)
             {
                 return;
             }
+
             bool recipReal = String.IsNullOrWhiteSpace(recipient);
             if (recipReal)
             {
                 return;
             }
 
-            var chatMessage = new ChatMessage()
+            bool messagevalid = false;
+
+            foreach (var recipients in _context.Users)
             {
-                Sender = await _userManager.FindByEmailAsync(sender),
-                Recipient = await _userManager.FindByEmailAsync(recipient),
-                Timestamp = timestamp,
-                Message = message
-            };
-            await _context.ChatMessages.AddAsync(chatMessage);
-            await _context.SaveChangesAsync();
+                if (recipients.Email.Equals(recipient))
+                {
+                    messagevalid = true;
+                }
+            }
+
+            if (messagevalid == true)
+            {
+                var chatMessage = new ChatMessage()
+                {
+                    Sender = await _userManager.FindByEmailAsync(sender),
+                    Recipient = await _userManager.FindByEmailAsync(recipient),
+                    Timestamp = timestamp,
+                    Message = message
+                };
+                await _context.ChatMessages.AddAsync(chatMessage);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 

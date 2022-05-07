@@ -30,7 +30,7 @@
         <ul id="messagesList">
             @foreach (var message in Model)
             {
-                <li>@message.Sender.NormalizedEmail.ToLower() sent @message.Message</li>
+                <li>From: @message.Sender.NormalizedEmail.ToLower() Message: @message.Message To: @message.Recipient.NormalizedEmail.ToLower()</li>
             }
         </ul>
     </div>

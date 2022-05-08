@@ -153,11 +153,24 @@ namespace Zorro.WebApplication.Controllers
                 Date = DateTime.UtcNow,
                 BillPayID = request.BillPayID,
             };
-            if (!(request.Amount > 0))
+            if(request.Amount == 0)
+            {
+                ModelState.AddModelError(string.Empty, "The amount entered cannot by zero. Please try again");
+                return View("CreateBPAY");
+            }
+
+            if(request.Amount > 10000)
+            {
+                ModelState.AddModelError(string.Empty, "The amount to pay must not be greater than $10 000. Please try again");
+                return View("CreateBpay");
+            }
+            
+            if (!(request.Amount >= 0))
             {
                 ModelState.AddModelError(string.Empty, "The amount entered is not a valid amount. Please try again.");
                 return View("CreateBPAY");
             }
+
 
             var user = await _userManager.GetUserAsync(User);
             var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);

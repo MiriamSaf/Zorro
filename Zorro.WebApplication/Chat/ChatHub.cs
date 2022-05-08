@@ -5,8 +5,12 @@ using System.Security.Claims;
 using Zorro.Dal;
 using Zorro.Dal.Models;
 
+using Microsoft.AspNetCore.Authorization;
+using System.Web.Mvc;
+
 namespace Zorro.WebApplication.Chat
 {
+    [System.Web.Mvc.Authorize]
     public class ChatHub : Hub
     {
         private readonly ApplicationDbContext _context;
@@ -23,8 +27,9 @@ namespace Zorro.WebApplication.Chat
             bool check = String.IsNullOrWhiteSpace(message);
             if (check)
             {
-                
+              
                 return ;
+                
             }
 
             if(sender == null)

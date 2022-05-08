@@ -4,12 +4,13 @@
 
 <div class="container card">
     <div class="row">&nbsp;</div>
-    <div class="row">
+    <div class="row top-row">
+       <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" value="@ViewBag.UserName" id="myUser" />
         <div class="col-2">User</div>
         <div class="col-4"><input type="email" id="userInput" placeholder="input email address"/></div>
     </div>
-    <div class="row">
+    <div class="row top-row">
         <div class="col-2">Message</div>
         <div class="col-4"><input type="text" id="messageInput" placeholder = "input message" /></div>
     </div>
@@ -52,6 +53,10 @@
 
     .col-6{
         margin-bottom: 10px;
+    }
+
+    .top-row{
+        margin-bottom: 1vh;
     }
 
     #sendButton{

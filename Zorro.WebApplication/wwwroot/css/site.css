@@ -86,6 +86,13 @@ h2 {
     height: 30px;
 }
 
+.spacer_hardline {
+    margin-top:5px;
+    margin-bottom:5px;
+    height:2px;
+    border-bottom: 2px solid grey;
+}
+
 /*Home view styles*/
 
 #homeview-img {

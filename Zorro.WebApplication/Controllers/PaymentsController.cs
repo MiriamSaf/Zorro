@@ -50,7 +50,7 @@ namespace Zorro.WebApplication.Controllers
             return View("CreateDeposit");
         }
 
-        // POST: PaymentsController/Create
+/*        // POST: PaymentsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -63,7 +63,7 @@ namespace Zorro.WebApplication.Controllers
             {
                 return View();
             }
-        }
+        }*/
 
         [HttpPost]
         [ValidateAntiForgeryToken]

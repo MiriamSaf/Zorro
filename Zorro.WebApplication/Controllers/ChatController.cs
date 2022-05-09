@@ -26,6 +26,7 @@ namespace Zorro.WebApplication.Controllers
                 .Include(m => m.Sender)
                 .Include(m => m.Recipient)
                 .Where(m => m.Recipient == user || m.Sender == user)
+                .OrderByDescending(m => m.Timestamp)
                 .ToList();
             ViewBag.UserName = User.Identity.Name;
 

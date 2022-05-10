@@ -18,86 +18,37 @@ namespace Zorro.WebApplication.Chat
 
         public async Task SendMessage(string sender, string recipient, string message)
         {
-            bool check = String.IsNullOrWhiteSpace(message);
-            if (check)
-            {
-              
-                return ;
-                
-            }
-
-            if(sender == null)
-            {
+            if (string.IsNullOrWhiteSpace(sender) || string.IsNullOrWhiteSpace(recipient) || string.IsNullOrWhiteSpace(message))
                 return;
-            }
 
-            bool recipReal = String.IsNullOrWhiteSpace(recipient);
-            if (recipReal)
-            {
-                return;
-            }
-
+            // send message to recipient
             await Clients.User(recipient).SendAsync("ReceiveMessage", sender, message);
-            // Not Sure if this is required? It was causing double messages to be sent after
-            // putting in checking if another user exists?
-            //await Clients.Caller.SendAsync("ReceiveMessage", sender, message);
+            // send message back to sender so they see it in their chat window as well
+            await Clients.Caller.SendAsync("ReceiveMessage", sender, message);
 
-            bool messagevalid = false;
-            foreach (var recipients in _context.Users)
-            {
-                if (recipients.Email.Equals(recipient))
-                {
-                    messagevalid = true;
-                }
-            }
-
-            if (messagevalid == true)
-            {
-                await SaveChatMessage(sender, recipient, message, DateTime.Now);
-            }
+            await SaveChatMessage(sender, recipient, message, DateTime.Now);
         }
 
         private async Task SaveChatMessage(string sender, string recipient, string message, DateTime timestamp)
         {
-            if(message == null)
-            {
+            if (string.IsNullOrWhiteSpace(message))
                 return;
-            }
-
-            bool check = String.IsNullOrWhiteSpace(message);
-            if (check)
-            {
+            var senderUser = await _userManager.FindByEmailAsync(sender);
+            if (senderUser is null)
                 return;
-            }
-
-            bool recipReal = String.IsNullOrWhiteSpace(recipient);
-            if (recipReal)
-            {
+            var recipientuser = await _userManager.FindByEmailAsync(recipient);
+            if (recipientuser is null)
                 return;
-            }
 
-            bool messagevalid = false;
-
-            foreach (var recipients in _context.Users)
+            var chatMessage = new ChatMessage()
             {
-                if (recipients.Email.Equals(recipient))
-                {
-                    messagevalid = true;
-                }
-            }
-
-            if (messagevalid == true)
-            {
-                var chatMessage = new ChatMessage()
-                {
-                    Sender = await _userManager.FindByEmailAsync(sender),
-                    Recipient = await _userManager.FindByEmailAsync(recipient),
-                    Timestamp = timestamp,
-                    Message = message
-                };
-                await _context.ChatMessages.AddAsync(chatMessage);
-                await _context.SaveChangesAsync();
-            }
+                Sender = senderUser,
+                Recipient = recipientuser,
+                Timestamp = timestamp,
+                Message = message
+            };
+            await _context.ChatMessages.AddAsync(chatMessage);
+            await _context.SaveChangesAsync();
         }
     }
 

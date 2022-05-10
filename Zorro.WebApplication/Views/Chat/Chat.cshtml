@@ -1,71 +1,81 @@
-﻿@model List<Zorro.Dal.Models.ChatMessage>
+﻿@using Zorro.Dal.Models
+@model List<ChatMessage>
 <div class="center-block" style="display:flex;justify-content:center;">
     <div class="content-width">
         <div class="card">
-             <h5 class="card-header">Chat</h5>
-              <div class="card-body">
-    <div class="row">&nbsp;</div>
-    <div class="row top-row">
-       <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" value="@ViewBag.UserName" id="myUser" />
-        <div class="col-2">User</div>
-        <div class="col-4"><input type="email" id="userInput" placeholder="input email address"/></div>
-    </div>
-    <div class="row top-row">
-        <div class="col-2">Message</div>
-        <div class="col-4"><input type="text" id="messageInput" placeholder = "input message" /></div>
-    </div>
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <div class="col-6">
-            <input type="button" class="btn btn-dark"  id="sendButton" value="Send Message" />
+            <h5 class="card-header">Chat</h5>
+            <div class="card-body">
+                <div class="row">&nbsp;</div>
+                <div class="col">
+                    <div class="list-group">
+                        @foreach (var friend in @ViewBag.Friends)
+                        {
+                            <a asp-route-id="@friend" class="list-group-item list-group-item-action">@friend</a>
+                        }
+                    </div>
+                </div>
+                <dic class="col">
+                    <div class="row top-row">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" value="@ViewBag.UserName" id="myUser" />
+                        <input type="hidden" value="@ViewBag.Recipient" id="userInput" />
+                    </div>
+                    <div class="row top-row">
+                        <div class="col-2">Message</div>
+                        <div class="col-4"><input type="text" id="messageInput" placeholder="input message" /></div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="button" class="btn btn-dark" id="sendButton" value="Send Message" />
+                        </div>
+                    </div>
+                </dic>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <ul id="messagesList">
+                    @foreach (var message in Model)
+                    {
+                        <li>From: @message.Sender.NormalizedEmail.ToLower() Message: @message.Message To: @message.Recipient.NormalizedEmail.ToLower()</li>
+                    }
+                </ul>
+            </div>
+
         </div>
     </div>
-</div>
- </div>
-<div class="row">
-    <div class="col-12">
-        <hr />
-    </div>
-</div>
-<div class="row">
-    <div class="col-6">
-        <ul id="messagesList">
-            @foreach (var message in Model)
-            {
-                <li>From: @message.Sender.NormalizedEmail.ToLower() Message: @message.Message To: @message.Recipient.NormalizedEmail.ToLower()</li>
-            }
-        </ul>
-    </div>
-   
-</div>
-</div>
 </div>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
 
 
 <style>
-    .col-6 ul li{
+    .col-6 ul li {
         margin: 2vh;
-        list-style:none;
+        list-style: none;
         padding: 2vh;
         background-color: white;
         border: 0.5px solid white;
         border-radius: 10px;
-      
     }
 
-    .col-6{
+    .col-6 {
         margin-bottom: 10px;
     }
 
-    .top-row{
+    .top-row {
         margin-bottom: 1vh;
     }
 
-    #sendButton{
-        background-color:#FF6A3D;
+    #sendButton {
+        background-color: #FF6A3D;
         border: none;
         padding: 1vh;
         color: #FFFFFF;
@@ -79,7 +89,7 @@
         border-radius: 10px;
     }
 
-    #sendButton:hover{
-        background-color: #1A2238
-    }
+        #sendButton:hover {
+            background-color: #1A2238
+        }
 </style>

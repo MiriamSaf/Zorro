@@ -161,14 +161,19 @@ h2 {
 .nav-link-prof {
     background-color: #FFFFFF;
     font-size: 1.00rem;
+    padding-bottom: 0.5vh;
+    padding-top: 0.7vh;
+    margin: 0.7vh;
     color: #FF6A3D;
-    transition: all ease-in-out 0.3s;
+    text-decoration: none;
+    transition: all ease-in-out 0.5s;
 }
 
     .nav-link-prof:hover {
-        color: #1A2238 !important;
+        color: #FFFFFF !important;
+        border-radius: 3px;
         text-decoration: none;
-        background-color: #FF6A3D;
+        background-color: #1A2238;
     }
 
 .left-aligned-nav {

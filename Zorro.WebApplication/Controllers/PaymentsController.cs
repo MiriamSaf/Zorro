@@ -176,6 +176,7 @@ namespace Zorro.WebApplication.Controllers
                 return View("CreateBPAY");
             }
 
+
             var user = await _userManager.GetUserAsync(User);
             var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
 

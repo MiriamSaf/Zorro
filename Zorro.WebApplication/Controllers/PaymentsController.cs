@@ -50,7 +50,7 @@ namespace Zorro.WebApplication.Controllers
             return View("CreateDeposit");
         }
 
-        // POST: PaymentsController/Create
+/*        // POST: PaymentsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -63,7 +63,7 @@ namespace Zorro.WebApplication.Controllers
             {
                 return View();
             }
-        }
+        }*/
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -166,6 +166,11 @@ namespace Zorro.WebApplication.Controllers
             }
             
             if (!(request.Amount >= 0))
+            {
+                ModelState.AddModelError(string.Empty, "The amount entered is not a valid amount. Please try again.");
+                return View("CreateBPAY");
+            }
+            if (!(request.Amount > 0))
             {
                 ModelState.AddModelError(string.Empty, "The amount entered is not a valid amount. Please try again.");
                 return View("CreateBPAY");

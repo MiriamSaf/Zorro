@@ -25,7 +25,7 @@ namespace Zorro.WebApplication.Models
         public async Task<IActionResult> Index()
         {
             //pass all users to view
-            var user = await _userManager.FindByIdAsync("b96663a7-f772-4f84-802e-c63f8e8878b0");
+            var user = await _userManager.FindByIdAsync("3ce584ac-7ecc-4b7b-90aa-65ce33d60bc9");
 
             return View(user);
         }
@@ -33,7 +33,7 @@ namespace Zorro.WebApplication.Models
         public async Task<IActionResult> UpdateAPIKey()
         {
             //pass all users to view
-            var user = await _userManager.FindByIdAsync("b96663a7-f772-4f84-802e-c63f8e8878b0");
+            var user = await _userManager.FindByIdAsync("3ce584ac-7ecc-4b7b-90aa-65ce33d60bc9");
 
             var key = new byte[32];
             using (var generator = RandomNumberGenerator.Create())

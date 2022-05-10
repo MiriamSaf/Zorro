@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
-using System.Diagnostics;
-using System.Security.Claims;
 using Zorro.Dal;
 using Zorro.Dal.Models;
 
-using Microsoft.AspNetCore.Authorization;
-using System.Web.Mvc;
-
 namespace Zorro.WebApplication.Chat
 {
-    [System.Web.Mvc.Authorize]
     public class ChatHub : Hub
     {
         private readonly ApplicationDbContext _context;

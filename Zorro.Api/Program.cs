@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Zorro.Api.Services;
 using Zorro.Dal;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ApiKeyMiddleware>();
 app.UseHttpsRedirection();
 
 app.MapPost("/ProcessPayment", async (TransactionRequest transactionRequest) =>

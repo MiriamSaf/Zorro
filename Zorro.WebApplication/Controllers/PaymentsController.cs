@@ -75,6 +75,18 @@ namespace Zorro.WebApplication.Controllers
                 RecipientDisplayName = request.RecipientWallet,
                 Comment = request.Description
             };
+            //check for decimals greater than 3 places 
+            String checkDec = request.Amount.ToString();
+            if (checkDec.Contains("."))
+            {
+                string[] a = checkDec.Split(new char[] { '.' });
+                int decimals = a[1].Length;
+                if (decimals >= 3)
+                {
+                    ModelState.AddModelError(string.Empty, "The amount entered cannot have more than 2 decimal places"); ;
+                    return View("CreateTransfer");
+                }
+            }
             if (request.RecipientWallet is null)
             {
                 ModelState.AddModelError(string.Empty, "The Recipient ID doesn't exist, please check your details again.");
@@ -118,10 +130,27 @@ namespace Zorro.WebApplication.Controllers
                 Date = DateTime.UtcNow,
                 Id = request.Id,
             };
+
+
+           
+
             if (!(request.Amount > 0))
             {
                 ModelState.AddModelError(string.Empty, "The amount entered is not a valid amount. Please try again.");
                 return View("CreateDeposit");
+            }
+
+            //check for decimals greater than 3 places 
+            String checkDec = request.Amount.ToString();
+                if (checkDec.Contains("."))
+            {
+                string[] a = checkDec.Split(new char[] { '.' });
+                int decimals = a[1].Length;
+                if (decimals >= 3)
+                {
+                    ModelState.AddModelError(string.Empty, "The amount entered cannot have more than 2 decimal places"); ;
+                    return View("CreateDeposit");
+                }
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -153,7 +182,23 @@ namespace Zorro.WebApplication.Controllers
                 Date = DateTime.UtcNow,
                 BillPayID = request.BillPayID,
             };
-            if(request.Amount == 0)
+
+            //check for decimals greater than 3 places 
+            String checkDec = request.Amount.ToString();
+            if (checkDec.Contains("."))
+            {
+                string[] a = checkDec.Split(new char[] { '.' });
+
+                int decimals = a[1].Length;
+
+                if (decimals >= 3)
+                {
+                    ModelState.AddModelError(string.Empty, "The amount entered cannot have more than 2 decimal places"); ;
+                    return View("CreateBPAY");
+                }
+            }
+
+            if (request.Amount == 0)
             {
                 ModelState.AddModelError(string.Empty, "The amount entered cannot by zero. Please try again");
                 return View("CreateBPAY");

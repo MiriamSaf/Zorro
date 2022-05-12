@@ -62,8 +62,32 @@ namespace ZorroTest
             context.SaveChanges();
 
             var bankerService = new BankerService(context);
-            //try to depsoit 0 
+            //try to deposit negative
             await bankerService.DepositFunds(wallet1, -19, "deposit negative");
+        }
+
+        //test deposit with number with >=3 decimal in amount
+        [ExpectedException(typeof(InvalidDepositAmountException))]
+        [TestMethod]
+        public async Task TestDepositWithGreaterDecimal()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+           .UseInMemoryDatabase(databaseName: "FakeDB")
+           .Options;
+
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Test", CreditCardNumber = "1111222233334444", CCExpiry = "11/23" };
+
+            // Insert seed data into the database using one instance of the context
+            using var context = new ApplicationDbContext(options);
+            var wallet1 = new Wallet() { Balance = 20.00M, ApplicationUser = user1 };
+            var wallets = new Wallet[] { wallet1 };
+
+            await context.Wallets.AddRangeAsync(wallets);
+            context.SaveChanges();
+
+            var bankerService = new BankerService(context);
+            //try to deposit negative
+            await bankerService.DepositFunds(wallet1, 19.2345M, "deposit great decimal amount");
         }
 
         //test deposit with valid posotive number as amount

@@ -139,7 +139,33 @@ namespace ZorroTest
             await bankerService.TransferFunds(wallet1, wallet2, 5.00M, "refund positive", Currency.Aud, TransactionType.Refund);
         }
 
-       
+
+        //test transfer with greater than 2 decimal places amount
+        [ExpectedException(typeof(InvalidTransferAmountException))]
+        [TestMethod]
+        public async Task TransferWithMoreThan2Dec()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseInMemoryDatabase(databaseName: "FakeDB")
+            .Options;
+
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith" };
+            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza" };
+
+            // Insert seed data into the database using one instance of the context
+            using var context = new ApplicationDbContext(options);
+            var wallet1 = new Wallet() { Balance = 10.00M, ApplicationUser = user1 };
+            var wallet2 = new Wallet() { Balance = 10.00M, ApplicationUser = user2 };
+            var wallets = new Wallet[] { wallet1, wallet2 };
+
+            await context.Wallets.AddRangeAsync(wallets);
+            context.SaveChanges();
+
+            var bankerService = new BankerService(context);
+            await bankerService.TransferFunds(wallet1, wallet2, 5.123M, "decimal 3", Currency.Aud, TransactionType.Transfer);
+        }
+
+
         //tranfer negative refund amount - following rules so should pass
         [TestMethod]
         public async Task TransferWithRefundNegative()

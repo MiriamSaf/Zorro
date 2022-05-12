@@ -28,6 +28,17 @@ namespace Zorro.WebApplication.Data
             decimal amount, string comment, Currency currency = Currency.Aud,
             TransactionType transactionType = TransactionType.Transfer)
         {
+            //check for decimals greater than 3 places 
+            String checkDec = amount.ToString();
+            if (checkDec.Contains(".") && transactionType == TransactionType.Transfer)
+            {
+                string[] a = checkDec.Split(new char[] { '.' });
+                int decimals = a[1].Length;
+                if (decimals >= 3)
+                {
+                    throw new InvalidTransferAmountException("Transfer amount cannot have more than 2 decimal places"); 
+                }
+            }
             // verify that payment can proceed
             if (transactionType == TransactionType.Transfer && amount == 0)
             {
@@ -80,6 +91,17 @@ namespace Zorro.WebApplication.Data
         public async Task DepositFunds(Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud,
           TransactionType transactionType = TransactionType.Payment)
         {
+            //check for decimals greater than 3 places 
+            String checkDec = amount.ToString();
+            if (checkDec.Contains(".") && transactionType == TransactionType.Payment)
+            {
+                string[] a = checkDec.Split(new char[] { '.' });
+                int decimals = a[1].Length;
+                if (decimals >= 3)
+                {
+                    throw new InvalidDepositAmountException("Deposit amount cannot have more than 2 decimal places");
+                }
+            }
 
             // verify that deposit can proceed
             if (transactionType == TransactionType.Payment && amount < 0)
@@ -135,6 +157,19 @@ namespace Zorro.WebApplication.Data
 
         public async Task<bool> BpayTransfer(Wallet sourceWallet, decimal amount, int BpayBillerCode, string comment, Currency currency, TransactionType transaction)
         {
+            //check for decimals greater than 3 places 
+            String checkDec = amount.ToString();
+            if (checkDec.Contains(".") && transaction == TransactionType.BPay)
+            {
+                string[] a = checkDec.Split(new char[] { '.' });
+                int decimals = a[1].Length;
+                if (decimals >= 3)
+                {
+                    throw new InvalidBillPayAmountException("BillPay amount cannot have more than 2 decimal places");
+                }
+            }
+
+
             // verify that billpay can proceed
             if (transaction == TransactionType.BPay && amount < 0)
             {

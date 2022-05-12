@@ -2,18 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Net.Http.Headers;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 using Zorro.Dal.Models;
-
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
 
 namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
@@ -73,7 +66,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Credit Card Expiry")]
             public string CCExpiry { get; set; }
 
-            [RegularExpression(@"^(\d{14,16})$", ErrorMessage = "Error: Invalid Credit Card Number. Enter digits that are not separated by hyphen or comma") ]
+            [RegularExpression(@"^(\d{14,16})$", ErrorMessage = "Error: Invalid Credit Card Number. Enter digits that are not separated by hyphen or comma")]
             [Display(Name = "Credit Card Number")]
             public string CreditCardNumber { get; set; }
             public IFormFile Avatar { get; set; }
@@ -81,6 +74,9 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             public string FirstName { get; set; }
 
             public string Surname { get; set; }
+
+            [Required]
+            [DataType(DataType.Date)]
             public DateTime? BirthDate { get; set; }
 
             public string Mobile { get; set; }
@@ -174,7 +170,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             user.Surname = Input.Surname;
             user.BirthDate = Input.BirthDate;
             user.Mobile = user.Mobile;
-            
+
             user.CreditCardNumber = Input.CreditCardNumber;
             user.CCExpiry = Input.CCExpiry;
             await _userManager.UpdateAsync(user);

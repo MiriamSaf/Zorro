@@ -41,6 +41,7 @@ namespace Zorro.WebApplication.Data
             decimal amount, string comment, Currency currency = Currency.Aud,
             TransactionType transactionType = TransactionType.Transfer)
         {
+
             var now = DateTime.Now;
             var sourceTransaction = new Transaction()
             {

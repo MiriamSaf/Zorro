@@ -169,6 +169,11 @@ namespace Zorro.WebApplication.Data
                 }
             }
 
+            if(comment.Length > 50)
+            {
+                throw new Exception("Cannot have comment longer than 50 characters");
+            }
+
 
             // verify that billpay can proceed
             if (transaction == TransactionType.BPay && amount < 0)

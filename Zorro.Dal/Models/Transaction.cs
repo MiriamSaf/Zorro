@@ -14,6 +14,8 @@ namespace Zorro.Dal.Models
         public decimal Amount { get; set; }
         public DateTime TransactionTimeUtc { get; set; }
         public Currency CurrencyType { get; set; } = Currency.Aud;
+
+        [StringLength(50, ErrorMessage = "The comment cannot exceed 50 characters. ")]
         public string Comment { get; set; }
         public virtual Wallet Wallet { get; set; }
     }

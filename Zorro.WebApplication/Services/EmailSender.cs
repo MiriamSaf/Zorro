@@ -20,11 +20,12 @@ public class EmailSender : IEmailSender
 
     public async Task SendEmailAsync(string toEmail, string subject, string message)
     {
-        if (string.IsNullOrEmpty(Options.SendGridKey))
+        var SendGridKey = "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";
+        if (string.IsNullOrEmpty(SendGridKey))
         {
             throw new Exception("Null SendGridKey");
         }
-        await Execute(Options.SendGridKey, subject, message, toEmail);
+        await Execute(SendGridKey, subject, message, toEmail);
     }
 
     public async Task Execute(string apiKey, string subject, string message, string toEmail)

@@ -2,7 +2,7 @@
 
 RMIT University - Programming Project
 
-Claire, Damien, Luis, Michael, Miriam, Nicholas 
+Claire, Damien, Luis, Miriam, Nicholas 
 
 This application, Zorro is an online application that helps users to manage their personal 
 finances. The Zorro app lets users transfer, pay bills and buy online through their account.

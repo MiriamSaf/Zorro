@@ -1,10 +1,14 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using WebPWrecover.Services;
 using Zorro.Dal;
 using Zorro.Dal.Models;
-using Zorro.WebApplication.Data;
 using Zorro.WebApplication.Chat;
-using Microsoft.AspNetCore.SignalR;
+using Zorro.WebApplication.Data;
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +21,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddTransient<IBanker, Banker>();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
@@ -25,7 +29,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
+IServiceCollection serviceCollection = builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
+
 var app = builder.Build();
+
 
 using (var scope = app.Services.CreateScope())
 {

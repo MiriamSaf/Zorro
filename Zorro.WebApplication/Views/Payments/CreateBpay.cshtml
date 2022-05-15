@@ -38,8 +38,10 @@
                         <div class="col-sm-6">
                             <label for="crn" class="form-label">Customer reference number</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="crn" />
+                                <input type="text" oninput="checkCrn(this)"
+                                maxlength="20" class="form-control" id="crn" aria-describedby="crnHelp">
                             </div>
+                            <div id="crnHelp" class="form-text">Customer reference number must be between 2-20 digits</div>
                         </div>
                     </div>
 
@@ -48,7 +50,8 @@
                             <label asp-for="Amount" class="form-label">Amount</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input asp-for="Amount" type="number" class="form-control" />
+                                <input asp-for="Amount" max="555" type="number" oninput="formatAmount(event, this)"
+                                class="form-control" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189"/>
                             </div>
                         </div>
                     </div>
@@ -63,6 +66,7 @@
 @section Scripts
 {
 <script>
+
     const billerInput = document.getElementById("billerInput");
     billerInput.addEventListener("blur", async () => {
         await verifyBillerCode('billerInput', 'billerName', 'bpayButton');
@@ -72,6 +76,34 @@
         verifyBillerCode('billerInput', 'billerName', 'bpayButton');
     }
 
-   
+    function checkCrn(element) {
+        element.value = element.value.replace(/[^\d]/,'')
+        if (element.value.length > 1) {
+            element.classList.add("is-valid");
+            element.classList.remove("is-invalid");
+        }
+        else {
+            element.classList.add("is-invalid");
+            element.classList.remove("is-valid");
+        }
+    }
+
+    var previousAmount = 0;
+
+    function formatAmount(e, input) {
+        let blergh = parseFloat(input.value).toFixed(2)
+        if (blergh > 10000) {
+            input.value = previousAmount;
+        }
+        previousAmount = input.value
+        let decimalIndex = input.value.indexOf('.');
+        if (decimalIndex == -1) {
+            return;
+        }
+        if (input.value.length > decimalIndex + 2) {
+            input.value = parseFloat(input.value).toFixed(2);
+        }
+    }
+
 </script>
 }

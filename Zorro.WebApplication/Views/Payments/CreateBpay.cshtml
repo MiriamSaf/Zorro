@@ -50,9 +50,10 @@
                             <label asp-for="Amount" class="form-label">Amount</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input asp-for="Amount" max="555" type="number" oninput="formatAmount(event, this)"
-                                class="form-control" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189"/>
+                                <input asp-for="Amount" max="555" step="0.01" type="number" oninput="formatAmount(this)"
+                                class="form-control" onkeydown="ingoreHyphenAndEKeys(event)" aria-describedby="amountHelp"/>
                             </div>
+                            <div id="amountHelp" class="form-text">Maximum amount $10,000</div>
                         </div>
                     </div>
                     <button type="button" class="btn btn-dark" onclick="location.href='@Url.Action("Dashboard", "Home")'">Cancel</button>
@@ -86,24 +87,7 @@
             element.classList.add("is-invalid");
             element.classList.remove("is-valid");
         }
-    }
-
-    var previousAmount = 0;
-
-    function formatAmount(e, input) {
-        let blergh = parseFloat(input.value).toFixed(2)
-        if (blergh > 10000) {
-            input.value = previousAmount;
-        }
-        previousAmount = input.value
-        let decimalIndex = input.value.indexOf('.');
-        if (decimalIndex == -1) {
-            return;
-        }
-        if (input.value.length > decimalIndex + 2) {
-            input.value = parseFloat(input.value).toFixed(2);
-        }
-    }
+    }  
 
 </script>
 }

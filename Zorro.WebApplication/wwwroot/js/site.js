@@ -3,6 +3,7 @@
 
 // Write your JavaScript code.
 const validationClasses = ['is-invalid', 'is-valid']
+const transferLimit = 10000;
 
 async function verifyWallet(inputId, buttonId = null) {
     let walletId = document.getElementById(inputId).value;
@@ -86,4 +87,26 @@ function enableOrDisableButton(status, buttonId) {
     else {
         transferButton.classList.add("disabled");
     }
+}
+
+function formatAmount(input) {
+    if (!input.hasAttribute('data-previous-amount')) {
+        input.dataset.previousAmount = 0;
+    }
+    let newValue = parseFloat(input.value).toFixed(2);
+    if (newValue > 10000) {
+        input.value = input.dataset.previousAmount;
+    }
+    input.dataset.previousAmount = input.value;
+    let decimalIndex = input.value.indexOf('.');
+    if (decimalIndex == -1) {
+        return;
+    }
+    if (input.value.length > decimalIndex + 2) {
+        input.value = newValue;
+    }
+}
+
+function ingoreHyphenAndEKeys(event) {
+    return event.keyCode !== 69 && event.keyCode !== 189
 }

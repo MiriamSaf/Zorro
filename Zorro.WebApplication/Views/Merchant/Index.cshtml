@@ -1,12 +1,19 @@
-﻿@model Zorro.Dal.Models.ApplicationUser
 
-<div class="spacer"></div>
+@using Microsoft.AspNetCore.Identity
+@using Zorro.Dal.Models
+@model Zorro.Dal.Models.ApplicationUser
+@inject UserManager<ApplicationUser> UserManager
+
+    <div class="spacer"></div>
 
 <div class="center-block" style="display:flex;justify-content:center;">
     <div class="content-width">
 
-        <h1>Merchant Dashboard</h1>
+        <div class="inputbox">
 
+             <h1>Merchant Dashboard</h1>
+
+            
         <hr class="my-3" />
 
         <!-- Merchant details -->
@@ -23,9 +30,9 @@
             </li>
         </ul>
 
-        <h2>Transactions</h2>
+            <hr class="my-3" />
 
-        <hr class="my-3" />
+            <h2>Recent Transactions</h2>
 
         <table class="table">
             <thead>
@@ -51,7 +58,11 @@
 
 
     </div>
-</div>
+        </div>
+
+            </div>
+
+
 
 @section Scripts
 {

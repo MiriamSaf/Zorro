@@ -222,7 +222,28 @@ namespace Zorro.WebApplication.Data
 
 
         }
+
+        public async Task ShopPurchase(Wallet destinationWallet, int amount)
+        {
+            var now = DateTime.Now;
+            var shopTransaction = new Transaction()
+            {
+                Amount = amount,
+                TransactionTimeUtc = now,
+                TransactionType = TransactionType.Shop,
+                Wallet = destinationWallet
+            };
+
+            await _applicationDbContext.SaveChangesAsync();
+        }
+
+        public Task ShopPurchase(Wallet sourceWallet, decimal amount)
+        {
+            throw new NotImplementedException();
+        }
     }
+
+
 
     public class InvalidBillPayAmountException : Exception
     {

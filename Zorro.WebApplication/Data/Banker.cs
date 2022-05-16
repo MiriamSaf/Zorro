@@ -14,6 +14,7 @@ namespace Zorro.WebApplication.Data
         Task TransferFunds(Wallet sourceWallet, Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud, TransactionType transactionType = TransactionType.Transfer);
         Task<List<Transaction>> GetTransactionsByWallet(Guid walletId);
         Task<bool> VerifyBalance(Guid walletId, decimal amount);
+        Task ShopPurchase(Wallet sourceWallet, decimal amount);
     }
 
     public class Banker : IBanker
@@ -151,8 +152,23 @@ namespace Zorro.WebApplication.Data
             }
 
             return false;
+        }
 
-           
+        public async Task ShopPurchase(Wallet sourceWallet, decimal amount)
+        {
+            var now = DateTime.Now;
+            var shopTransaction = new Transaction()
+            {
+                Amount = amount,
+                Comment = "Shop Purchase",
+                TransactionTimeUtc = now,
+                TransactionType = TransactionType.Shop,
+                Wallet = sourceWallet
+            };
+
+            await _applicationDbContext.AddAsync(shopTransaction);
+
+            await _applicationDbContext.SaveChangesAsync();
         }
     }
 }

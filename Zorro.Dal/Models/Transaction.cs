@@ -25,7 +25,8 @@ namespace Zorro.Dal.Models
         Transfer,
         Payment,
         Refund,
-        BPay
+        BPay,
+        Shop
     }
 
     public enum Currency

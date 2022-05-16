@@ -64,8 +64,15 @@ namespace Zorro.WebApplication.Controllers
             return View("ConfirmPurchase");
         }
 
-        public ActionResult SuccessfulPurchase()
+        public async Task<ActionResult> SuccessfulPurchaseAsync()
         {
+            var user = await _userManager.GetUserAsync(User);
+
+            var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
+
+            await _banker.ShopPurchase(sourceWallet, (decimal)40.40);
+
+
             return View("SuccessfulPurchase");
         }
 

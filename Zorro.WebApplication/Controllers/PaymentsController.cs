@@ -45,25 +45,11 @@ namespace Zorro.WebApplication.Controllers
             return View("CreateBpay");
         }
 
-        public ActionResult CreateDeposit()
+        public async ActionResult CreateDeposit()
         {
             return View("CreateDeposit");
         }
 
-/*        // POST: PaymentsController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }*/
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -75,6 +61,11 @@ namespace Zorro.WebApplication.Controllers
                 RecipientDisplayName = request.RecipientWallet,
                 Comment = request.Description
             };
+            if(request.Description.Length > 50)
+            {
+                ModelState.AddModelError(string.Empty, "Error: the comment cannot be longer than 50 characters"); 
+                return View("CreateTransfer");
+            }
             //check for decimals greater than 3 places 
             String checkDec = request.Amount.ToString();
             if (checkDec.Contains("."))
@@ -83,7 +74,7 @@ namespace Zorro.WebApplication.Controllers
                 int decimals = a[1].Length;
                 if (decimals >= 3)
                 {
-                    ModelState.AddModelError(string.Empty, "The amount entered cannot have more than 2 decimal places"); ;
+                    ModelState.AddModelError(string.Empty, "The amount entered cannot have more than 2 decimal places"); 
                     return View("CreateTransfer");
                 }
             }
@@ -121,7 +112,7 @@ namespace Zorro.WebApplication.Controllers
         //deposit task post 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> View(DepositRequestDto request)
+        public async Task<ActionResult> CreateDeposit(DepositRequestDto request)
         {
             var deResult = new DepositViewModel()
             {
@@ -132,7 +123,12 @@ namespace Zorro.WebApplication.Controllers
             };
 
 
-           
+            if (request.Description.Length > 50)
+            {
+                ModelState.AddModelError(string.Empty, "Error: the comment cannot be longer than 50 characters");
+                return View("CreateDeposit");
+            }
+
 
             if (!(request.Amount > 0))
             {

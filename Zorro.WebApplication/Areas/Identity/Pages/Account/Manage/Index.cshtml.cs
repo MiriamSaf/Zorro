@@ -119,6 +119,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             return Input;
         }
 
+
         public async Task<IActionResult> OnPostAsync(InputModel input, IFormFile avatar_file)
         {
             var user = await _userManager.GetUserAsync(User);

@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Zorro.Dal.Models;
-
 using Microsoft.AspNetCore.Identity;
-using System.Diagnostics;
 using Zorro.WebApplication.ViewModels;
 using Zorro.Dal;
 
@@ -76,14 +74,6 @@ namespace Zorro.WebApplication.Models
         [HttpPost]
         public async Task<IActionResult> Create(ApplicationUser user)
         {
-/*            DateTime baseTime;
-            DateTimeOffset sourceTime;
-            DateTime targetTime;
-
-            baseTime = new DateTimeOffset((DateTime)user.LockoutEnd, TimeSpan.Zero);*/
-
-
-
             addError(user);
             if (ModelState.IsValid)
             {
@@ -99,8 +89,6 @@ namespace Zorro.WebApplication.Models
                     Email = user.Email,
                     TwoFactorEnabled = user.TwoFactorEnabled,
                     //LockoutEnd = (DateTime)user.LockoutEnd
-
-
                 };
 
                

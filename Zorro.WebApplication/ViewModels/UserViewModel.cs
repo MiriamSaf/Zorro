@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-using Zorro.Dal.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel;
-
-namespace Zorro.WebApplication.ViewModels
+﻿namespace Zorro.WebApplication.ViewModels
 
 {
     public class UserViewModel

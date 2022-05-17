@@ -20,7 +20,6 @@ namespace Zorro.Dal.Models
         public string ApplicationUserId { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
-        public List<MerchantApiKey> ApiKeys { get; set; }
 
         [Required]
         [Display(Name = "Trading Name")]
@@ -54,7 +53,6 @@ namespace Zorro.Dal.Models
         [Display(Name = "Drivers License Number")]
         public string DriversLicense { get; set; }
     }
-
     public enum MerchantStatus
     {
         Pending,

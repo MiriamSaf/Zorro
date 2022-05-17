@@ -1,27 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Zorro.WebApplication.Data;
-using Zorro.Dal.Models;
-using Zorro.Dal;
 using Zorro.WebApplication.ViewModels;
 
 namespace Zorro.WebApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _applicationDBContext;
         private readonly IBanker _banker;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext applicationDBContext, IBanker banker, UserManager<ApplicationUser> userManager)
+        public HomeController(IBanker banker)
         {
-            _logger = logger;
-            _applicationDBContext = applicationDBContext;
             _banker = banker;
-            _userManager = userManager;
         }
 
         public IActionResult Index()

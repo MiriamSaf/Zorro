@@ -45,7 +45,7 @@ namespace Zorro.WebApplication.Controllers
             return View("CreateBpay");
         }
 
-        public async ActionResult CreateDeposit()
+        public ActionResult CreateDeposit()
         {
             return View("CreateDeposit");
         }

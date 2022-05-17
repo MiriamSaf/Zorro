@@ -1,12 +1,10 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Zorro.WebApplication.ViewModels
 {
     public class DepositViewModel
 
     {
-
         public DepResultViewModelStatus Status { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; } = "";

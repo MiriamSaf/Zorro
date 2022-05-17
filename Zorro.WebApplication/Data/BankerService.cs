@@ -6,7 +6,6 @@ namespace Zorro.WebApplication.Data
 {
     public class BankerService : IBanker
     {
-        private readonly ILogger<Banker> _logger;
         private readonly ApplicationDbContext _applicationDbContext;
 
         public BankerService(ApplicationDbContext applicationDbContext)

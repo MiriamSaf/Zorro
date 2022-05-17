@@ -11,7 +11,7 @@ namespace Zorro.Api.Services
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+/*        public async Task InvokeAsync(HttpContext context)
         {
             if (!context.Request.Headers.TryGetValue(ApiKeyHeader, out
                     var extractedApiKey))
@@ -28,15 +28,15 @@ namespace Zorro.Api.Services
                 return;
             }
             await _next(context);
-        }
+        }*/
 
-        private async Task<bool> VerifyApiKey(HttpContext context, string apiKey)
+/*        private async Task<bool> VerifyApiKey(HttpContext context, string apiKey)
         {
             var _context = context.RequestServices.GetRequiredService<ApplicationDbContext>();
             var result = await _context.ApiKeys.FindAsync(apiKey);
             if (result is null || result.Expiry >= DateTime.Now)
                 return false;
             return true;
-        }
+        }*/
     }
 }

@@ -11,6 +11,8 @@ namespace Zorro.Dal.Models
         public TransactionType TransactionType { get; set; }
         [ForeignKey("Wallet")]
         public Guid WalletId { get; set; }
+
+        [Column(TypeName = "decimal(18,4)")]
         public decimal Amount { get; set; }
         public DateTime TransactionTimeUtc { get; set; }
         public Currency CurrencyType { get; set; } = Currency.Aud;

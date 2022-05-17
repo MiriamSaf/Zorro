@@ -12,8 +12,9 @@ namespace Zorro.Dal.Models
         public Guid TransactionId { get; set; }
         [Required, ForeignKey("BpayBiller")]
         public int BpayBillerCode { get; set; }
-        public decimal Amount { get; set; }
 
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Amount { get; set; }
         public BpayBiller BpayBiller { get; set; }
         public Transaction Transaction { get; set; }
         

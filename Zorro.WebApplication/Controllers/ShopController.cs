@@ -5,22 +5,19 @@ using Zorro.WebApplication.Data;
 using Zorro.Dal.Models;
 using Zorro.Dal;
 using Zorro.WebApplication.ViewModels;
-using System.Diagnostics;
 
 namespace Zorro.WebApplication.Controllers
 {
     [Authorize]
     public class ShopController : Controller
     {
-        private readonly ILogger<ShopController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IBanker _banker;
         private readonly UserManager<ApplicationUser> _userManager;
 
 
-        public ShopController(ILogger<ShopController> logger, ApplicationDbContext applicationDbContext, UserManager<ApplicationUser> userManager, IBanker banker)
+        public ShopController(ApplicationDbContext applicationDbContext, UserManager<ApplicationUser> userManager, IBanker banker)
         {
-            _logger = logger;
             _context = applicationDbContext;
             _userManager = userManager;
             _banker = banker;
@@ -56,7 +53,6 @@ namespace Zorro.WebApplication.Controllers
         public ActionResult ShopLogin()
         {
             return RedirectToPage("/Account/Login", new { area = "Identity" });
-            /*return View("Login");*/
         }
 
         public ActionResult ConfirmPurchase()

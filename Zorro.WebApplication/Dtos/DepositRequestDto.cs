@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Zorro.WebApplication.Data;
+﻿using System.Security.Claims;
 
 namespace Zorro.WebApplication.Dtos
 {
     public class DepositRequestDto
     {
-
-
         public static ClaimsPrincipal User { get; private set; }
         public Guid Id { get; set; }
         public decimal Amount { get; set; }

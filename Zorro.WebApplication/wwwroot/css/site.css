@@ -9,7 +9,7 @@
 */
 
 /* heading font*/
-<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque&family=Saira+Semi+Condensed:wght@300;400&display=swap" rel="stylesheet" >
+<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque&family=Saira+Semi+Condensed:wght@300;400&display=swap" rel="stylesheet">
 /*writing font */
 :root {
     --headings-font-family: 'Saira Semi Condensed', sans-serif;
@@ -230,7 +230,6 @@ h2 {
     border: none;
     background-size: 400% 100%;
     border-radius: 10px;
-    moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
@@ -248,7 +247,6 @@ h2 {
     border: none;
     background-size: 400% 100%;
     border-radius: 10px;
-    moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
@@ -256,7 +254,6 @@ h2 {
 
     .btn-hover:hover {
         background-position: 100% 0;
-        moz-transition: all .4s ease-in-out;
         -o-transition: all .4s ease-in-out;
         -webkit-transition: all .4s ease-in-out;
         transition: all .4s ease-in-out;
@@ -322,4 +319,71 @@ table, th, td {
 
 .list-group-item {
     background-color: #EFF3F8 !important;
+}
+
+.containerCC {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.containerCC input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmarkCC {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: darkgray;
+}
+
+/* On mouse-over, add a grey background color */
+.containerCC:hover input ~ .checkmarkCC {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.containerCC input:checked ~ .checkmarkCC {
+    background-color: green;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmarkCC:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.containerCC input:checked ~ .checkmarkCC:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.containerCC .checkmarkCC:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }

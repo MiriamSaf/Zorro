@@ -58,6 +58,11 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            /// 
+
+            [Display(Name = "User ID")]
+            public string Username { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -69,17 +74,24 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             [RegularExpression(@"^(\d{14,16})$", ErrorMessage = "Error: Invalid Credit Card Number. Enter digits that are not separated by hyphen or comma")]
             [Display(Name = "Credit Card Number")]
             public string CreditCardNumber { get; set; }
+            [Display(Name = "Upload Avatar Image")]
             public IFormFile Avatar { get; set; }
 
+            [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
+            [Display(Name = "Last Name")]
             public string Surname { get; set; }
 
             [Required]
             [DataType(DataType.Date)]
+            [Display(Name = "Date of Birth")]
             public DateTime? BirthDate { get; set; }
 
+            [Display(Name = "Mobile Number")]
             public string Mobile { get; set; }
+
+            public bool RemoveCC { get; set; }
 
         }
 
@@ -92,13 +104,15 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                Username = userName,
                 PhoneNumber = phoneNumber,
                 CreditCardNumber = user.CreditCardNumber,
                 CCExpiry = user.CCExpiry,
                 FirstName = user.FirstName,
                 Surname = user.Surname,
                 BirthDate = user.BirthDate,
-                Mobile = user.Mobile
+                Mobile = user.Mobile,
+                RemoveCC = false
             };
         }
 
@@ -119,7 +133,6 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             return Input;
         }
 
-
         public async Task<IActionResult> OnPostAsync(InputModel input, IFormFile avatar_file)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -127,7 +140,6 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
 
 
             if (!ModelState.IsValid)
@@ -174,6 +186,13 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 
             user.CreditCardNumber = Input.CreditCardNumber;
             user.CCExpiry = Input.CCExpiry;
+
+            if(Input.RemoveCC == true)
+            {
+                user.CreditCardNumber = null;
+                user.CCExpiry = null;
+            }
+
             await _userManager.UpdateAsync(user);
             var result = await _userManager.UpdateAsync(user);
 

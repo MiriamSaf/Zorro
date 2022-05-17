@@ -10,7 +10,7 @@
         public string Email { get; set; }
         public string Mobile { get; set; }
         public string Role { get; set; }
-        public bool LockedOut { get; set; }
+        public DateTime? LockoutEnd { get; set; }
         public bool AdminAccessGranted { get; set; }
     }
 }

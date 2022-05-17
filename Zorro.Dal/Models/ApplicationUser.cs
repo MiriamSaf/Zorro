@@ -25,5 +25,8 @@ namespace Zorro.Dal.Models
 
         public string APIKey { get; set; }
 
+        [DataType(DataType.DateTime)]
+        public DateTime? LockoutEnd { get; set; }
+
     }
 }

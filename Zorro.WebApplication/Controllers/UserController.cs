@@ -50,7 +50,7 @@ namespace Zorro.WebApplication.Models
             {
                 FirstName = user.FirstName,
                 Surname = user.Surname,
-                LockedOut = false,
+                LockoutEnd = user.LockoutEnd,
                 Id = user.Id,
                 UserName = user.UserName,
                 Email = user.Email
@@ -88,7 +88,7 @@ namespace Zorro.WebApplication.Models
                     PasswordHash = user.PasswordHash,
                     Email = user.Email,
                     TwoFactorEnabled = user.TwoFactorEnabled,
-                    //LockoutEnd = (DateTime)user.LockoutEnd
+                    LockoutEnd = (DateTime)user.LockoutEnd
                 };
 
                
@@ -175,11 +175,12 @@ namespace Zorro.WebApplication.Models
             {
                 ModelState.AddModelError("", "Email field cannot be left empty");
             }
-
             if (!string.IsNullOrEmpty(null))
             {
                 user.PasswordHash = _passwordHashed.HashPassword(user, null);
             }
+
+            user.LockoutEnd = userViewModel.LockoutEnd;
 
             IdentityResult idResult = await _userManager.UpdateAsync(user);
             if (idResult.Succeeded)

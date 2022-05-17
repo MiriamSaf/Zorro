@@ -43,16 +43,14 @@
                     <td>@user.FirstName</td>
                     <td>@user.Surname</td>
                     <td>@user.Email</td>
-                    <td class="text-center">
-                        @if (!user.LockedOut)
+                    @if (user.LockoutEnd == null || user.LockoutEnd < DateTime.UtcNow)
                         {
-                            <i class="bi bi-check-circle-fill"></i>
+                            <td>No</td>
                         }
                         else
                         {
-                            <i class="bi bi-x-circle-fill"></i>
+                            <td>Yes</td>
                         }
-                    </td>
                     <td>
                         <a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@user.Id">
                             Update

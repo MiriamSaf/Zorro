@@ -42,11 +42,12 @@ app.UseHttpsRedirection();
 
 app.MapPost("/ProcessPayment", [Authorize] async ([FromServices] IBusinessBankerService banker, TransactionRequest transactionRequest, HttpRequest req) =>
 {
-    if (req.HttpContext.User.Identity is null)
-        return Results.Unauthorized();
-    var merchantWallet = req.HttpContext.User.Identity.Name;
     try
     {
+        if (req.HttpContext.User.Identity is null)
+            return Results.Unauthorized();
+        var merchantWallet = req.HttpContext.User.Identity.Name;
+
         var receipt = await banker.ProcessPayment(
         merchantWallet,
         transactionRequest.CustomerWalletId,
@@ -56,11 +57,14 @@ app.MapPost("/ProcessPayment", [Authorize] async ([FromServices] IBusinessBanker
 
         return Results.Ok(new Receipt() { ReceiptNumber = receipt.ToString() });
     }
-    catch (Exception ex)
+    catch (AbstractZorroException ex)
     {
         return Results.Problem(ex.Message);
     }
-
+    catch (Exception)
+    {
+        return Results.Problem("An unexpected error occurred. Contact the Zorro service desk for support.");
+    }
 
 });
 

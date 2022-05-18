@@ -23,23 +23,32 @@ namespace Zorro.Api.Services
         public async Task<Guid> ProcessPayment(string merchantWalletId, string customerWalletId,
             decimal amount, Currency currencyType, string comment)
         {
+            amount = Math.Round(amount, 2);
             using var scope = _serviceScopeFactory.CreateScope();
             using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var now = DateTime.Now;
-            var customerWallet = await GetWalletByDisplayName(customerWalletId, context);
+
             var merchantWallet = await GetWalletByDisplayName(merchantWalletId, context);
+            if (merchantWallet is null)
+                throw new WalletNotFoundException("Unable to find merchant wallet");
+            var customerWallet = await GetWalletByDisplayName(customerWalletId, context);
+            if (customerWallet is null)
+                throw new WalletNotFoundException("Unable to find customer wallet");
 
             // convert currency and determine fee (if applicable)
-            var convertedAmount = ConvertCurrency(amount, currencyType);
+            decimal convertedAmount = Math.Round(ConvertCurrency(amount, currencyType), 2);
+            if (convertedAmount < 1)
+                throw new InvalidAmountException("Amount must be at least $1.00 AUD");
+
             decimal fee = new();
             if (currencyType != Currency.Aud)
             {
-                fee = convertedAmount * _conversionFee;
+                fee = Math.Round(convertedAmount * _conversionFee);
                 convertedAmount += fee;
             }
 
             if (customerWallet.Balance < (convertedAmount + fee))
-                throw new Exception("insufficient funds");
+                throw new InsufficientFundsException("Customer has insufficient funds for payment");
 
             var transactionComment = comment;
             if (currencyType != Currency.Aud)
@@ -52,7 +61,7 @@ namespace Zorro.Api.Services
                 CurrencyType = Currency.Aud,
                 TransactionTimeUtc = now,
                 TransactionType = TransactionType.Transfer,
-                Wallet = customerWallet
+                Wallet = customerWallet,
             };
 
             var merchantTX = new Transaction()

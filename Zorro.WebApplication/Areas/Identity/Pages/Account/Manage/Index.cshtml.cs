@@ -186,8 +186,23 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 
             user.CreditCardNumber = Input.CreditCardNumber;
             user.CCExpiry = Input.CCExpiry;
+            if(input.FirstName == null)
+            {
+                ModelState.AddModelError(string.Empty, "You cannot leave the firstname or surname blank");
 
-            if(Input.RemoveCC == true)
+                StatusMessage = "You cannot leave firstname input field blank";
+                return RedirectToPage();
+            }
+
+            if (input.Surname == null)
+            {
+                ModelState.AddModelError(string.Empty, "You cannot leave the surname field blank");
+
+                StatusMessage = "You cannot leave surname input field blank";
+                return RedirectToPage();
+            }
+
+            if (Input.RemoveCC == true)
             {
                 user.CreditCardNumber = null;
                 user.CCExpiry = null;
@@ -200,5 +215,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
         }
+
+
     }
 }

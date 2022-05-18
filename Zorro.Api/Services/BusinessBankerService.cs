@@ -1,19 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Zorro.Api.Exceptions;
 using Zorro.Dal;
 using Zorro.Dal.Models;
 
 namespace Zorro.Api.Services
 {
-    public class BusinessBankerService
+    public class BusinessBankerService : IBusinessBankerService
     {
-        private readonly ApplicationDbContext _context;
         private readonly ILogger<BusinessBankerService> _logger;
-        private const decimal _currenConversionFee = 0.01M;
+        private const decimal _conversionFee = 0.01M;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public BusinessBankerService(ApplicationDbContext applicationDBContext, ILogger<BusinessBankerService> logger)
+        public BusinessBankerService(ILogger<BusinessBankerService> logger, IServiceScopeFactory serviceScopeFactory)
         {
-            _context = applicationDBContext;
             _logger = logger;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         private static decimal ConvertCurrency(decimal amount, Currency currencyType)
@@ -22,26 +23,31 @@ namespace Zorro.Api.Services
         public async Task<Guid> ProcessPayment(string merchantWalletId, string customerWalletId,
             decimal amount, Currency currencyType, string comment)
         {
+            using var scope = _serviceScopeFactory.CreateScope();
+            using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var now = DateTime.Now;
-            var customerWallet = await GetWalletByDisplayName(customerWalletId);
-            var merchantWallet = await GetWalletByDisplayName(merchantWalletId);
+            var customerWallet = await GetWalletByDisplayName(customerWalletId, context);
+            var merchantWallet = await GetWalletByDisplayName(merchantWalletId, context);
 
             // convert currency and determine fee (if applicable)
             var convertedAmount = ConvertCurrency(amount, currencyType);
             decimal fee = new();
             if (currencyType != Currency.Aud)
-                fee = convertedAmount * _currenConversionFee;
+            {
+                fee = convertedAmount * _conversionFee;
+                convertedAmount += fee;
+            }
 
             if (customerWallet.Balance < (convertedAmount + fee))
                 throw new Exception("insufficient funds");
 
             var transactionComment = comment;
             if (currencyType != Currency.Aud)
-                transactionComment += $" ({Currency.Aud}{amount} + 1%)";
+                transactionComment += $" ({currencyType}{amount} + 1%)";
 
             var customerTX = new Transaction()
             {
-                Amount = amount * -1,
+                Amount = convertedAmount * -1,
                 Comment = transactionComment,
                 CurrencyType = Currency.Aud,
                 TransactionTimeUtc = now,
@@ -51,27 +57,28 @@ namespace Zorro.Api.Services
 
             var merchantTX = new Transaction()
             {
-                Amount = amount,
+                Amount = convertedAmount,
                 Comment = transactionComment,
                 CurrencyType = Currency.Aud,
                 TransactionTimeUtc = now,
                 TransactionType = TransactionType.Transfer,
                 Wallet = merchantWallet
             };
-            return await CommitTransactions(customerTX, merchantTX);
+            return await CommitTransactions(customerTX, merchantTX, context);
+
         }
 
-        private async Task<Guid> CommitTransactions(Transaction sourceTransaction, Transaction destionationTransaction)
+        private static async Task<Guid> CommitTransactions(Transaction sourceTransaction, Transaction destionationTransaction, ApplicationDbContext context)
         {
-            await _context.AddAsync(sourceTransaction);
+            await context.AddAsync(sourceTransaction);
             sourceTransaction.Wallet.Balance += sourceTransaction.Amount;
-            _context.Wallets.Update(sourceTransaction.Wallet);
+            context.Wallets.Update(sourceTransaction.Wallet);
 
-            await _context.AddAsync(destionationTransaction);
+            await context.AddAsync(destionationTransaction);
             destionationTransaction.Wallet.Balance += destionationTransaction.Amount;
-            _context.Wallets.Update(destionationTransaction.Wallet);
+            context.Wallets.Update(destionationTransaction.Wallet);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return destionationTransaction.Id;
         }
 
@@ -80,10 +87,10 @@ namespace Zorro.Api.Services
             throw new NotImplementedException();
         }
 
-        private async Task<Wallet> GetWalletByDisplayName(string displayName)
+        private static async Task<Wallet> GetWalletByDisplayName(string displayName, ApplicationDbContext context)
         {
             string normalizedDisplayName = displayName.ToUpper();
-            var result = await _context.Wallets
+            var result = await context.Wallets
                 .Include(x => x.ApplicationUser)
                 .Where(y => y.ApplicationUser.NormalizedEmail == normalizedDisplayName)
                 .FirstOrDefaultAsync();
@@ -91,18 +98,6 @@ namespace Zorro.Api.Services
                 throw new WalletNotFoundException($"Unable to find wallet with ID {normalizedDisplayName}");
 
             return result;
-        }
-
-        public class WalletNotFoundException : Exception
-        {
-            public WalletNotFoundException()
-            {
-            }
-
-            public WalletNotFoundException(string message)
-                : base(message)
-            {
-            }
         }
     }
 }

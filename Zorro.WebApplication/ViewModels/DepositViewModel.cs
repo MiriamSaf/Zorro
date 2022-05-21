@@ -9,7 +9,6 @@ namespace Zorro.WebApplication.ViewModels
         public DateTime Date { get; set; }
         public string Description { get; set; } = "";
 
-        [Range(0.000001, double.MaxValue, ErrorMessage = "Amount must be positive")]
         public decimal Amount { get; set; }
 
         public Guid Id { get; set; }

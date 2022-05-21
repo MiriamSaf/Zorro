@@ -59,7 +59,7 @@ namespace Zorro.WebApplication.Models
             merchant.Status = MerchantStatus.Pending;
             await _applicationDbContext.Merchants.AddAsync(merchant);
             await _applicationDbContext.SaveChangesAsync();
-            return View("Index");
+            return View("Pending");
         }
 
         public async Task<IActionResult> Approve(int id)

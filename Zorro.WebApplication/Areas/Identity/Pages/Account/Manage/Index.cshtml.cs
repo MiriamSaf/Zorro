@@ -95,6 +95,19 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 
         }
 
+        // code to get users age diff from today and birthdate adapted from
+        //https://stackoverflow.com/questions/9/how-do-i-calculate-someones-age-based-on-a-datetime-type-birthday
+        public static int GetAge(DateTime birthDate)
+        {
+            DateTime today = DateTime.Now; // To avoid a race condition around midnight
+            int age = today.Year - birthDate.Year;
+
+            if (today.Month < birthDate.Month || (today.Month == birthDate.Month && today.Day < birthDate.Day))
+                age--;
+
+            return age;
+        }
+
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
@@ -141,24 +154,6 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-
-            if (!ModelState.IsValid)
-            {
-                await LoadAsync(user);
-
-                user.FirstName = Input.FirstName;
-                user.Surname = Input.Surname;
-                user.BirthDate = Input.BirthDate;
-                user.Mobile = user.Mobile;
-                user.CreditCardNumber = input.CreditCardNumber;
-                user.CCExpiry = input.CCExpiry;
-
-
-                await _userManager.UpdateAsync(user);
-
-                return Page();
-            }
-
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -166,7 +161,7 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
                 if (!setPhoneResult.Succeeded)
                 {
                     StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
+                    return Page();
                 }
             }
 
@@ -179,6 +174,33 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
                 user.Avatar = base64String;
             }
 
+            var dateOBirth = Input.BirthDate;
+            var ageReturn = GetAge((DateTime)dateOBirth);
+
+            if (ageReturn <= 18)
+            {
+                ModelState.AddModelError(string.Empty, "Error: Your Date of Birth must be at least 18+ Years");
+                return Page();
+            }
+
+            if(input.FirstName == null)
+            {
+                ModelState.AddModelError(string.Empty, "You cannot leave the firstname or surname blank");
+                return Page();
+            }
+
+            if (input.Surname == null)
+            {
+                ModelState.AddModelError(string.Empty, "You cannot leave the surname field blank");
+                return Page();
+            }
+
+            if (Input.RemoveCC == true)
+            {
+                user.CreditCardNumber = null;
+                user.CCExpiry = null;
+            }
+
             user.FirstName = Input.FirstName;
             user.Surname = Input.Surname;
             user.BirthDate = Input.BirthDate;
@@ -186,26 +208,21 @@ namespace Zorro.WebApplication.Areas.Identity.Pages.Account.Manage
 
             user.CreditCardNumber = Input.CreditCardNumber;
             user.CCExpiry = Input.CCExpiry;
-            if(input.FirstName == null)
+
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "You cannot leave the firstname or surname blank");
+                await LoadAsync(user);
 
-                StatusMessage = "You cannot leave firstname input field blank";
-                return RedirectToPage();
-            }
+                user.FirstName = Input.FirstName;
+                user.Surname = Input.Surname;
+                user.BirthDate = Input.BirthDate;
+                user.Mobile = user.Mobile;
+                user.CreditCardNumber = input.CreditCardNumber;
+                user.CCExpiry = input.CCExpiry;
 
-            if (input.Surname == null)
-            {
-                ModelState.AddModelError(string.Empty, "You cannot leave the surname field blank");
+                await _userManager.UpdateAsync(user);
 
-                StatusMessage = "You cannot leave surname input field blank";
-                return RedirectToPage();
-            }
-
-            if (Input.RemoveCC == true)
-            {
-                user.CreditCardNumber = null;
-                user.CCExpiry = null;
+                return Page();
             }
 
             await _userManager.UpdateAsync(user);

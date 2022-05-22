@@ -55,12 +55,17 @@ namespace Zorro.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateTransfer(TransferRequestDto request)
         {
+            Guid guid = Guid.NewGuid();
+            var TransactionID = guid.ToString();
+
             var transferResult = new TransferResultViewModel()
             {
                 Amount = request.Amount,
                 RecipientDisplayName = request.RecipientWallet,
-                Comment = request.Description
+                Comment = request.Description,
+                TransactionID = TransactionID
             };
+
             if(request.Description.Length > 50)
             {
                 ModelState.AddModelError(string.Empty, "Error: the comment cannot be longer than 50 characters"); 
@@ -114,12 +119,15 @@ namespace Zorro.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateDeposit(DepositRequestDto request)
         {
+            Guid guid = Guid.NewGuid();
+            var TransactionID = guid.ToString();
+
             var deResult = new DepositViewModel()
             {
                 Amount = request.Amount,
                 Description = request.Description,
                 Date = DateTime.UtcNow,
-                Id = request.Id,
+                TransactionID = TransactionID
             };
 
 
@@ -171,8 +179,12 @@ namespace Zorro.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateBPay(BpayRequestDto request)
         {
+            Guid guid = Guid.NewGuid();
+            var TransactionID = guid.ToString();
+
             var bpayResult = new BpayRequestViewModel()
             {
+                TransactionID = TransactionID,
                 Amount = request.Amount,
                 Description = "bpay to "+request.BillPayID,
                 Date = DateTime.UtcNow,

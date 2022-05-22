@@ -3,6 +3,7 @@
     public class TransferResultViewModel
     {
         public TransferResultViewModelStatus Status { get; set; }
+        public string TransactionID { get; set; }
         public string RecipientDisplayName { get; set; }
         public decimal Amount { get; set; }
         public string Comment { get; set; }

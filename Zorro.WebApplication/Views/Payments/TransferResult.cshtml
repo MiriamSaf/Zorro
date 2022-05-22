@@ -8,16 +8,16 @@
         <h5 class="card-header">Transfer Successful</h5>
         <div class="card-body">
             <div class="row">
-                <div class="col">Receipt No.</div><div class="col">1234567</div>
+                <div class="col">Transaction ID: </div><div class="col">@Model.TransactionID</div>
             </div>
             <div class="row">
-                <div class="col">Recipient</div><div class="col">@Model.RecipientDisplayName</div>
+                <div class="col">Recipient: </div><div class="col">@Model.RecipientDisplayName</div>
             </div>
             <div class="row">
-                <div class="col">Amount</div><div class="col">$@Model.Amount</div>
+                <div class="col">Amount: </div><div class="col">$@Model.Amount</div>
             </div>
             <div class="row">
-                <div class="col">Comment</div><div class="col">@Model.Comment</div>
+                <div class="col">Comment: </div><div class="col">@Model.Comment</div>
             </div>
         </div>
     </div>

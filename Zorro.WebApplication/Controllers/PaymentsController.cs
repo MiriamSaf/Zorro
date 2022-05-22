@@ -182,11 +182,20 @@ namespace Zorro.WebApplication.Controllers
             Guid guid = Guid.NewGuid();
             var TransactionID = guid.ToString();
 
+            var payeeName = "blank";
+
+            foreach (var billername in _context.Payees)
+            {
+                if (billername.BillerCode == request.BillPayID)
+                {
+                    payeeName = billername.BillerName;
+                }
+            }
             var bpayResult = new BpayRequestViewModel()
             {
                 TransactionID = TransactionID,
                 Amount = request.Amount,
-                Description = "bpay to "+request.BillPayID,
+                Description = "BPAY Paid to: " + payeeName,
                 Date = DateTime.UtcNow,
                 BillPayID = request.BillPayID,
             };
@@ -240,7 +249,7 @@ namespace Zorro.WebApplication.Controllers
             }
 
 
-            await _banker.BpayTransfer(sourceWallet, request.Amount, request.BillPayID, "bpay");
+            await _banker.BpayTransfer(sourceWallet, request.Amount, request.BillPayID, "BPAY Paid to: " + payeeName);
 
             bpayResult.Status = BpayResultViewModelStatus.Approved;
 

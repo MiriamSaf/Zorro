@@ -118,16 +118,16 @@ namespace Zorro.WebApplication.Data
             return result.Balance >= amount;
         }
 
-        public async Task<bool> BpayTransfer(Wallet sourceWallet, decimal amount, int BpayBillerCode, string comment, Currency currency, TransactionType transaction)
+        public async Task<bool> BpayTransfer(Wallet sourceWallet, decimal amount, int BpayBillerCode, string comment, Currency currency = Currency.Aud, TransactionType transaction = TransactionType.BPay)
         {
             var now = DateTime.Now;
             var bpayTransaction = new Transaction()
             {
-                Amount = amount,
-                Comment = comment + " "+ BpayBillerCode,
-                CurrencyType = currency,
+                Amount = amount * -1,
+                Comment = comment,
+                CurrencyType = Currency.Aud,
                 TransactionTimeUtc = now,
-                TransactionType = transaction,
+                TransactionType = TransactionType.BPay,
                 Wallet = sourceWallet
 
             };

@@ -6,15 +6,18 @@ using Zorro.WebApplication.ViewModels;
 
 namespace Zorro.WebApplication.Controllers
 {
+    //home controller pages and views - the base pages of the site
     public class HomeController : Controller
     {
         private readonly IBanker _banker;
 
+        //load in banker with Dependency Injection so can be used in dashboard
         public HomeController(IBanker banker)
         {
             _banker = banker;
         }
 
+        //returns dashboard view
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
@@ -25,6 +28,8 @@ namespace Zorro.WebApplication.Controllers
             return View();
         }
 
+        //loads all that is needed for the dashboard such as the balance of the current user and the 
+        //previous transactions to be displayed
         [Authorize]
         public async Task<IActionResult> Dashboard()
         {
@@ -48,25 +53,29 @@ namespace Zorro.WebApplication.Controllers
                         Description = transaction.Comment,
                     });
             }
-            
+            //show the view with the data that we have grabbed
             return View("Dashboard", dashboardData);
         }
 
+        //show privacy cshtml page
         public IActionResult Privacy()
         {
             return View();
         }
 
+        //show partner page
         public IActionResult Partner()
         {
             return View();
         }
 
+        //show homeview page
         public IActionResult HomeView()
         {
             return View();
         }
 
+        //show error page if site is not working properly
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

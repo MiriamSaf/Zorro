@@ -7,6 +7,8 @@ using Zorro.Dal.Models;
 
 namespace Zorro.WebApplication.Controllers
 {
+    //controller for chat function 
+    //creating new chat and chatting with other users
     [Authorize]
     public class ChatController : Controller
     {
@@ -19,6 +21,7 @@ namespace Zorro.WebApplication.Controllers
             _userManager = userManager;
         }
 
+        //show chat and pass the messages to show conversation
         public async Task<IActionResult> Index(string id)
         {
             ApplicationUser otherUser = null;
@@ -35,6 +38,7 @@ namespace Zorro.WebApplication.Controllers
             return View("Chat", messages);
         }
 
+        //show current messages in conversation
         private async Task<IEnumerable<ChatMessage>> GetCurrentConversationAsync(ApplicationUser user1, ApplicationUser user2)
         {
             var messages = await _context.ChatMessages

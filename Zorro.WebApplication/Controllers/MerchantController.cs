@@ -3,16 +3,19 @@ using Zorro.Dal.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
 using Zorro.Dal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Zorro.WebApplication.Models
 {
-   
+    //merchant controller - deals with displaying merchant views, pages and detail
+    [Authorize]
     public class MerchantController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IPasswordHasher<ApplicationUser> _passwordHashed;
         private readonly ApplicationDbContext _applicationDbContext;
 
+        //DI for merchant controller
         public MerchantController(UserManager<ApplicationUser> userManager,
             IPasswordHasher<ApplicationUser> passwordHashed, ApplicationDbContext applicationDbContext)
         {
@@ -21,6 +24,7 @@ namespace Zorro.WebApplication.Models
             _applicationDbContext = applicationDbContext;
         }
 
+        //return merchant index - default page
         public async Task<IActionResult> Index()
         {
             //pass all users to view
@@ -29,11 +33,13 @@ namespace Zorro.WebApplication.Models
             return View(user);
         }
 
+        //update Api key view behind the scenes 
         public async Task<IActionResult> UpdateAPIKey()
         {
             //pass all users to view
             var user = await _userManager.GetUserAsync(User);
 
+            //set the new key by a random generator
             var key = new byte[32];
             using (var generator = RandomNumberGenerator.Create())
                 generator.GetBytes(key);
@@ -42,26 +48,32 @@ namespace Zorro.WebApplication.Models
             user.APIKey = apiKey;
 
             await _userManager.UpdateAsync(user);
-
+            //send the view with the updates user and their new key
             return View("Index",user);
         }
 
+        //return register view for merchant 
         public ViewResult Register() => View();
         
+        //register post view for merchants 
         [HttpPost]
         public async Task<IActionResult> Register(Merchant merchant)
         {
             var user = await _userManager.GetUserAsync(User);
             var foundMerchant = _applicationDbContext.Merchants.Where(m => m.ApplicationUser == user && m.Status == MerchantStatus.Approved);
+            //ensure the user is not already a merchant
             if (foundMerchant.Any())
-                throw new Exception("User is already related to a active merchant");
+                throw new Exception("User is already related to an active merchant");
             merchant.ApplicationUser = user;
             merchant.Status = MerchantStatus.Pending;
+            //add the merchant to the database
             await _applicationDbContext.Merchants.AddAsync(merchant);
             await _applicationDbContext.SaveChangesAsync();
+            //return the pending view
             return View("Pending");
         }
 
+        //approved merchant view
         public async Task<IActionResult> Approve(int id)
         {
             var merchant = await _applicationDbContext.Merchants.FindAsync(id);
@@ -72,6 +84,7 @@ namespace Zorro.WebApplication.Models
             return RedirectToAction("Index", "User");
         }
 
+        //create merchant view 
         public ViewResult Create() => View();
 
         //create new user 
@@ -81,6 +94,7 @@ namespace Zorro.WebApplication.Models
             addError(user);
             if (ModelState.IsValid)
             {
+                //sets the new user to the passed in fields
                 ApplicationUser appUser = new ApplicationUser
                 {
                     UserName = user.UserName,
@@ -92,16 +106,16 @@ namespace Zorro.WebApplication.Models
                     PasswordHash = user.PasswordHash,
                     Email = user.Email,
                     TwoFactorEnabled = user.TwoFactorEnabled,
-                    //LockoutEnd = (DateTime)user.LockoutEnd
                 };
 
                
-
+                //create the new user
                 IdentityResult result = await _userManager.CreateAsync(appUser, user.PasswordHash);
                 if (result.Succeeded)
                     return RedirectToAction("Index");
                 else
                 {
+                    //it didn't go through so add an error
                     foreach (IdentityError error in result.Errors)
                         ModelState.AddModelError("", error.Description);
                 }
@@ -109,6 +123,7 @@ namespace Zorro.WebApplication.Models
             return View(user);
         }
 
+        //update user by passing in their unique id
         public async Task<IActionResult> Update(string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
@@ -118,11 +133,13 @@ namespace Zorro.WebApplication.Models
                 return RedirectToAction("Index");
         }
 
-        //update user 
+        //update user post method to save in the DB
         [HttpPost]
         public async Task<IActionResult> Update(string id, string firstname, string surname, string mobile, string email, string password, bool TwoFactorEnabled, DateTime LockoutEnd)
         {
+
             ApplicationUser user = await _userManager.FindByIdAsync(id);
+            //check that fields are all not empty
             if (user != null)
             {
                 if (!string.IsNullOrEmpty(mobile))
@@ -169,9 +186,10 @@ namespace Zorro.WebApplication.Models
 
                 user.TwoFactorEnabled = TwoFactorEnabled;
                 user.LockoutEnd = LockoutEnd;
-
+                //if all is filled out and not empty fields
                 if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(firstname) && !string.IsNullOrEmpty(surname) && !string.IsNullOrEmpty(mobile))
                 {
+                    //update the user and return to index page
                     IdentityResult idResult = await _userManager.UpdateAsync(user);
                     if (idResult.Succeeded)
                         return RedirectToAction("Index");
@@ -184,13 +202,15 @@ namespace Zorro.WebApplication.Models
             return View(user);
         }
 
-        //delete 
+        //delete user by passing in their id
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
+            //check user exists that are trying to delete
             if (user != null)
             {
+                //delete the user
                 IdentityResult result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded)
                     return RedirectToAction("Index");
@@ -202,12 +222,14 @@ namespace Zorro.WebApplication.Models
             return View("Index", _userManager.Users);
         }
 
+        //errors function to display error
         private void Errors(IdentityResult result)
         {
             foreach (IdentityError error in result.Errors)
                 ModelState.AddModelError("", error.Description);
         }
 
+        //add error to model state if empty 
         private void addError(ApplicationUser user)
         {
             if (string.IsNullOrEmpty(user.PasswordHash))

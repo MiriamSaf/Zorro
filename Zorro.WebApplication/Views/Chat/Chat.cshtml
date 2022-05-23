@@ -51,7 +51,7 @@
                 <ul id="messagesList">
                     @foreach (var message in Model)
                     {
-                        <li>From: @message.Sender.NormalizedEmail.ToLower() Message: @message.Message To: @message.document.getElementById("friend").innerHTML.NormalizedEmail.ToLower()</li>
+                        <li>From: @message.Sender.NormalizedEmail.ToLower() Message: @message.Message To:@message.Recipient  document.getElementById("friend").innerHTML.NormalizedEmail.ToLower()</li>
                     }
                 </ul>
             </div>

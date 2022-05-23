@@ -7,6 +7,7 @@ using Zorro.Dal;
 namespace Zorro.WebApplication.Models
 {
    
+    //user controller - deals with editing users - should only be able to view id admin
     public class UserController : Controller
     {
 
@@ -26,6 +27,7 @@ namespace Zorro.WebApplication.Models
             _applicationDbContext = applicationDbContext;
         }
 
+        //shows initial user view 
         public async Task<IActionResult> Index()
         {
             // build view items
@@ -44,6 +46,7 @@ namespace Zorro.WebApplication.Models
             return View(viewModel);
         }
 
+        //gets the users role
         private async Task<UserViewModel> MapUserToViewModel(ApplicationUser user)
         {
             var userViewItem = new UserViewModel()
@@ -105,6 +108,7 @@ namespace Zorro.WebApplication.Models
             return View(user);
         }
 
+        //update the chosen user view
         public async Task<IActionResult> Update(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -116,7 +120,7 @@ namespace Zorro.WebApplication.Models
             return View(userViewModel);
         }
 
-        //update user 
+        //update user post action
         [HttpPost]
         public async Task<IActionResult> Update(UserViewModel userViewModel)
         {
@@ -142,7 +146,7 @@ namespace Zorro.WebApplication.Models
                 await _userManager.AddToRoleAsync(user, "Administrator");
             else
                 await _userManager.RemoveFromRoleAsync(user, "Administrator");
-
+            //check input is valid
             if (!string.IsNullOrEmpty(userViewModel.Mobile))
             {
                 user.Mobile = userViewModel.Mobile;
@@ -191,7 +195,7 @@ namespace Zorro.WebApplication.Models
             return View(user);
         }
 
-        //delete 
+        //delete a user 
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
@@ -209,12 +213,14 @@ namespace Zorro.WebApplication.Models
             return View("Index", _userManager.Users);
         }
 
+        //add error to page
         private void Errors(IdentityResult result)
         {
             foreach (IdentityError error in result.Errors)
                 ModelState.AddModelError("", error.Description);
         }
 
+        //checks if input is empty and sets model state on users screen
         private void addError(ApplicationUser user)
         {
             if (string.IsNullOrEmpty(user.PasswordHash))

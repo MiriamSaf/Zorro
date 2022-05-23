@@ -10,6 +10,7 @@ using Zorro.Dal;
 
 namespace Zorro.WebApplication.Controllers
 {
+    //payments controller - deals with sending payment views and getting the data for the views
     [Authorize]
     public class PaymentsController : Controller
     {
@@ -18,6 +19,7 @@ namespace Zorro.WebApplication.Controllers
         private readonly IBanker _banker;
         private readonly UserManager<ApplicationUser> _userManager;
 
+        //gets DI needed for payments controller
         public PaymentsController(ILogger<PaymentsController> logger, ApplicationDbContext applicationDbContext,
             UserManager<ApplicationUser> userManager, IBanker banker)
         {
@@ -27,11 +29,13 @@ namespace Zorro.WebApplication.Controllers
             _banker = banker;
         }
 
+        //return transfer creation view
         public ActionResult Transfer()
         {
             return View("CreateTransfer");
         }
 
+        //bpay view and gets the details needed for the view
         public async Task <ActionResult> Bpay()
         {
             // find remembered biller and pass to view
@@ -41,16 +45,17 @@ namespace Zorro.WebApplication.Controllers
                 .Include(z => z.BpayBiller)
                 .ToListAsync();
             ViewBag.RememberedBillers = rememberedBillers;
-
+            //return the view 
             return View("CreateBpay");
         }
 
+        //return create deposit view
         public ActionResult CreateDeposit()
         {
             return View("CreateDeposit");
         }
 
-
+        //post the result for creating a transfer to another user
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateTransfer(TransferRequestDto request)
@@ -58,6 +63,7 @@ namespace Zorro.WebApplication.Controllers
             Guid guid = Guid.NewGuid();
             var TransactionID = guid.ToString();
 
+            //creates a transfer result from the passed in request
             var transferResult = new TransferResultViewModel()
             {
                 Amount = request.Amount,
@@ -66,62 +72,83 @@ namespace Zorro.WebApplication.Controllers
                 TransactionID = TransactionID
             };
 
-            if(request.Description.Length > 50)
+            //set desciption to blank if no desciption entered 
+            if (request.Description == null)
+            {
+                request.Description = "";
+            }
+
+            //checks the description length and adds error if too long
+            if (request.Description.Length > 50)
             {
                 ModelState.AddModelError(string.Empty, "Error: the comment cannot be longer than 50 characters"); 
                 return View("CreateTransfer");
             }
+
+          
+
             //check for decimals greater than 3 places 
             String checkDec = request.Amount.ToString();
             if (checkDec.Contains("."))
             {
                 string[] a = checkDec.Split(new char[] { '.' });
                 int decimals = a[1].Length;
+                //add error if more than 3 decimals
                 if (decimals >= 3)
                 {
                     ModelState.AddModelError(string.Empty, "The amount entered cannot have more than 2 decimal places"); 
                     return View("CreateTransfer");
                 }
             }
+            //if the recipient doesn't exists then let user know with error
             if (request.RecipientWallet is null)
             {
                 ModelState.AddModelError(string.Empty, "The Recipient ID doesn't exist, please check your details again.");
                 return View("CreateTransfer");
             }
+            //if amount below 0 then add error
             if(!(request.Amount > 0))
             {
-                ModelState.AddModelError(string.Empty, "The amount entered is not a valid amount. Please try again.");
+                ModelState.AddModelError(string.Empty, "The amount entered is below zero and not a valid amount. Please try again.");
                 return View("CreateTransfer");
             }
-
+            //if amount is 0 then add error
+            if ((request.Amount == 0))
+            {
+                ModelState.AddModelError(string.Empty, "The amount entered cannot be zero. Please try again.");
+                return View("CreateTransfer");
+            }
+            //check user and source wallet
             var user = await _userManager.GetUserAsync(User);
             var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
+            //if there is not enough funds in the users wallet then they should get an error message
             if (!await _banker.VerifyBalance(sourceWallet.Id, request.Amount))
             {
                 ModelState.AddModelError(string.Empty, "You have insufficent funds to process this request. Please check the Amount Entered.");
                 return View("CreateTransfer");
             }
+            //check the destination wallet and that it exists and add error if doesn't exist
             var destinationWallet = await _banker.GetWalletByDisplayName(request.RecipientWallet);
             if (destinationWallet is null)
             {
                 ModelState.AddModelError(string.Empty, "The Recipient ID doesn't exist, please check your details again.");
                 return View("CreateTransfer");
             }
-
+            //all is okay so transfer the funds by calling bankers transfer method
             await _banker.TransferFunds(sourceWallet, destinationWallet, request.Amount, request.Description);
-
+            //set the status and return the transfer page 
             transferResult.Status = TransferResultViewModelStatus.Approved;
             return View("TransferResult", transferResult);
         }
 
-        //deposit task post 
+        //deposit task post and does checks for correct request
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateDeposit(DepositRequestDto request)
         {
             Guid guid = Guid.NewGuid();
             var TransactionID = guid.ToString();
-
+            //set the deposit result fields from passed in request
             var deResult = new DepositViewModel()
             {
                 Amount = request.Amount,
@@ -130,14 +157,18 @@ namespace Zorro.WebApplication.Controllers
                 TransactionID = TransactionID
             };
 
-
-            if (request.Description.Length > 50)
+            //if there is a description
+            if (request.Description != null)
             {
-                ModelState.AddModelError(string.Empty, "Error: the comment cannot be longer than 50 characters");
-                return View("CreateDeposit");
+                //if greater than 50 chars in description add error
+                if (request.Description.Length > 50)
+                {
+                    ModelState.AddModelError(string.Empty, "Error: the comment cannot be longer than 50 characters");
+                    return View("CreateDeposit");
+                }
             }
 
-
+            //if request less than 0, add error
             if (!(request.Amount > 0))
             {
                 ModelState.AddModelError(string.Empty, "The amount entered is not a valid amount. Please try again.");
@@ -150,6 +181,7 @@ namespace Zorro.WebApplication.Controllers
             {
                 string[] a = checkDec.Split(new char[] { '.' });
                 int decimals = a[1].Length;
+                //add error if 3 or more decimals
                 if (decimals >= 3)
                 {
                     ModelState.AddModelError(string.Empty, "The amount entered cannot have more than 2 decimal places"); ;
@@ -157,10 +189,11 @@ namespace Zorro.WebApplication.Controllers
                 }
             }
 
+            //see if user has a credit card in their wallet
             var user = await _userManager.GetUserAsync(User);
             var CCNum = user.CreditCardNumber;
             var CCExpiry = user.CCExpiry;
-
+            //if no cc do not allow them to make deposit and show error 
             if(CCNum == null || CCExpiry == null)
             {
                 ModelState.AddModelError(string.Empty, "You don't have a Credit Card Added to your Wallet. Please add one first.");
@@ -170,7 +203,7 @@ namespace Zorro.WebApplication.Controllers
            
             await _banker.DepositFunds(sourceWallet, request.Amount, request.Description);
             deResult.Status = DepResultViewModelStatus.Approved;
-           
+           //show the success receipt page
             return View("DepositResult", deResult);
         }
 
@@ -183,7 +216,7 @@ namespace Zorro.WebApplication.Controllers
             var TransactionID = guid.ToString();
 
             var payeeName = "blank";
-
+            //get billernames in payees table
             foreach (var billername in _context.Payees)
             {
                 if (billername.BillerCode == request.BillPayID)
@@ -191,6 +224,7 @@ namespace Zorro.WebApplication.Controllers
                     payeeName = billername.BillerName;
                 }
             }
+            //create a bpay result with request passed in 
             var bpayResult = new BpayRequestViewModel()
             {
                 TransactionID = TransactionID,
@@ -208,25 +242,26 @@ namespace Zorro.WebApplication.Controllers
 
                 int decimals = a[1].Length;
 
+                //if >=3 decimals add error
                 if (decimals >= 3)
                 {
                     ModelState.AddModelError(string.Empty, "The amount entered cannot have more than 2 decimal places"); ;
                     return View("CreateBPAY");
                 }
             }
-
+            //0 amoutn add error
             if (request.Amount == 0)
             {
                 ModelState.AddModelError(string.Empty, "The amount entered cannot by zero. Please try again");
                 return View("CreateBPAY");
             }
-
+            //greater than 10000 add error
             if(request.Amount > 10000)
             {
                 ModelState.AddModelError(string.Empty, "The amount to pay must not be greater than $10 000. Please try again");
                 return View("CreateBpay");
             }
-            
+            //less than 0 add error
             if (!(request.Amount >= 0))
             {
                 ModelState.AddModelError(string.Empty, "The amount entered is not a valid amount. Please try again.");

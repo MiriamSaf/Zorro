@@ -1,0 +1,56 @@
+﻿@model Zorro.WebApplication.Dtos.TransferRequestDto
+
+@{
+    ViewData["Title"] = "Transfer";
+}
+<div class="center-block" style="display:flex;justify-content:center;">
+    <div class="content-width">
+        <div class="card">
+            <h5 class="card-header">Transfer Money</h5>
+            <div class="card-body">
+                <form asp-action="CreateTransfer" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="RecipientWallet" class="form-label">Recipient (User ID)</label>
+                        <input asp-for="RecipientWallet" type="text" class="form-control" id="recipientWalletInput">
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <input type="text" class="form-control" asp-for="Description" />
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <label asp-for="Amount" class="form-label">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="Amount" onkeydown="ingoreHyphenAndEKeys(event)" 
+                                oninput="formatAmount(this)" class="form-control" aria-describedby="amountHelp"/>
+                            </div>
+                            <div id="amountHelp" class="form-text">Maximum amount $10,000</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-dark" onclick="location.href='@Url.Action("Dashboard", "Home")'">Cancel</button>
+                    <input id="transferButton" type="submit" class="btn btn-dark disabled" value="Transfer" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+<script>
+    // validate transfer recipient when focusing off the input
+    const walletInput = document.getElementById("recipientWalletInput");
+    walletInput.addEventListener("blur", async () => {
+        verifyWallet('recipientWalletInput', 'transferButton')
+    }, false);
+
+    // only force recipient validation on load if initial transfer request failed
+    if (walletInput.value) {
+        verifyWallet('recipientWalletInput', 'transferButton');
+    }
+</script>
+}

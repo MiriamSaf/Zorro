@@ -8,17 +8,24 @@
                 <div class="row">&nbsp;</div>
                 <div class="col">
                     <div class="list-group">
+
+                     <select>
                         @foreach (var friend in @ViewBag.Friends)
                         {
-                            <a asp-route-id="@friend" class="list-group-item list-group-item-action">@friend</a>
+                           <option>
+                             <a asp-route-id="@friend" class="list-group-item list-group-item-action">@friend</a>
+                            </option>
                         }
+                </select>
+                       
                     </div>
                 </div>
                 <dic class="col">
                     <div class="row top-row">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" value="@ViewBag.UserName" id="myUser" />
-                        <input type="hidden" value="@ViewBag.Recipient" id="userInput" />
+                        <input type="hidden" value="document.getElementById("friend").innerHTML" id="userInput" />
+                      
                     </div>
                     <div class="row top-row">
                         <div class="col-2">Message</div>
@@ -44,7 +51,7 @@
                 <ul id="messagesList">
                     @foreach (var message in Model)
                     {
-                        <li>From: @message.Sender.NormalizedEmail.ToLower() Message: @message.Message To: @message.Recipient.NormalizedEmail.ToLower()</li>
+                        <li>From: @message.Sender.NormalizedEmail.ToLower() Message: @message.Message To: @message.document.getElementById("friend").innerHTML.NormalizedEmail.ToLower()</li>
                     }
                 </ul>
             </div>

@@ -8,10 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\NewFolder\**" />
     <Compile Remove="Data\Migrations\**" />
+    <Content Remove="Areas\NewFolder\**" />
     <Content Remove="Data\Migrations\**" />
+    <EmbeddedResource Remove="Areas\NewFolder\**" />
     <EmbeddedResource Remove="Data\Migrations\**" />
+    <None Remove="Areas\NewFolder\**" />
     <None Remove="Data\Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Friending\Friends.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Friending\CreateTransfer.cshtml" />
+    <Content Remove="Views\Friending\Friends.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

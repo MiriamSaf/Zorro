@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zorro.Api", "Zorro.Api\Zorr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zorro.Dal", "Zorro.Dal\Zorro.Dal.csproj", "{36CA7C45-EA11-446B-A50F-1E5AF90992E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZorroTest", "ZorroTest\ZorroTest.csproj", "{B0B1042C-DB48-4793-B583-24EA508F3C00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZorroTest", "ZorroTest\ZorroTest.csproj", "{B0B1042C-DB48-4793-B583-24EA508F3C00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

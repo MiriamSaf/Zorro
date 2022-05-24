@@ -4,6 +4,7 @@ using Zorro.Dal.Models;
 
 namespace Zorro.WebApplication.Data
 {
+    //banker service class 
     public class BankerService : IBanker
     {
         private readonly ApplicationDbContext _applicationDbContext;
@@ -13,16 +14,18 @@ namespace Zorro.WebApplication.Data
             _applicationDbContext = applicationDbContext;
         }
 
+        //gets a wallet by its display name 
         public async Task<Wallet> GetWalletByDisplayName(string displayName)
         {
             string normalizedDisplayName = displayName.ToUpper();
             var result = _applicationDbContext.Wallets
                 .Include(x => x.ApplicationUser)
                 .Where(y => y.ApplicationUser.NormalizedEmail == normalizedDisplayName);
-
+            //returns the wallet that matches 
             return await result.FirstOrDefaultAsync();
         }
 
+        //transfer funds from source to destination
         public async Task TransferFunds(Wallet sourceWallet, Wallet destinationWallet,
             decimal amount, string comment, Currency currency = Currency.Aud,
             TransactionType transactionType = TransactionType.Transfer)
@@ -43,18 +46,22 @@ namespace Zorro.WebApplication.Data
             {
                 throw new InvalidTransferAmountException("Transfer amount must not be zero");
             }
+            //check if posotive amt
             if (transactionType == TransactionType.Transfer && amount < 0)
             {
                 throw new InvalidTransferAmountException("Transfer amount must be a positive number");
             }
+            //check that refund is not negative 
             if (transactionType == TransactionType.Refund && amount > 0)
             {
                 throw new InvalidTransferAmountException("Refund amount must be a negative number");
             }
+            //check has sufficient funds in wallet 
             if (sourceWallet.Balance < amount)
                 throw new InsufficientFundsException("The sender has insufficient funds");
 
             var now = DateTime.Now;
+            //all pass so create a source transaction
             var sourceTransaction = new Transaction()
             {
                 Amount = amount * -1,
@@ -64,7 +71,7 @@ namespace Zorro.WebApplication.Data
                 TransactionType = TransactionType.Transfer,
                 Wallet = sourceWallet
             };
-
+            //destination transaction
             var destinationTransaction = new Transaction()
             {
                 Amount = amount,
@@ -74,11 +81,11 @@ namespace Zorro.WebApplication.Data
                 TransactionType = TransactionType.Transfer,
                 Wallet = destinationWallet
             };
-
+            //add source trnsaction
             await _applicationDbContext.AddAsync(sourceTransaction);
             sourceWallet.Balance += sourceTransaction.Amount;
             _applicationDbContext.Wallets.Update(sourceWallet);
-
+            //add destination transaction
             await _applicationDbContext.AddAsync(destinationTransaction);
             destinationWallet.Balance += destinationTransaction.Amount;
             _applicationDbContext.Wallets.Update(sourceWallet);
@@ -115,6 +122,7 @@ namespace Zorro.WebApplication.Data
             
 
             var now = DateTime.Now;
+            //add deposit transaction
             var depositTransaction = new Transaction()
             {
                 Amount = amount,
@@ -134,11 +142,12 @@ namespace Zorro.WebApplication.Data
                 await _applicationDbContext.AddAsync(depositTransaction);
 
             }
+            //save changes to DB
             await _applicationDbContext.SaveChangesAsync();
         }
 
 
-
+        //get transactions by id
         public async Task<List<Transaction>> GetTransactionsByWallet(Guid walletId)
         {
             var results = await _applicationDbContext
@@ -147,13 +156,14 @@ namespace Zorro.WebApplication.Data
 
             return results;
         }
-
+        //verify users balance
         public async Task<bool> VerifyBalance(Guid walletId, decimal amount)
         {
             var result = await _applicationDbContext.Wallets.FindAsync(walletId);
             return result.Balance >= amount;
         }
 
+        //bpay transfer function
         public async Task<bool> BpayTransfer(Wallet sourceWallet, decimal amount, int BpayBillerCode, string comment, Currency currency, TransactionType transaction)
         {
             //check for decimals greater than 3 places 
@@ -162,12 +172,13 @@ namespace Zorro.WebApplication.Data
             {
                 string[] a = checkDec.Split(new char[] { '.' });
                 int decimals = a[1].Length;
+                //if decimal is more than 3 throw error
                 if (decimals >= 3)
                 {
                     throw new InvalidBillPayAmountException("BillPay amount cannot have more than 2 decimal places");
                 }
             }
-
+            //if comment is too long
             if(comment.Length > 50)
             {
                 throw new Exception("Cannot have comment longer than 50 characters");
@@ -185,6 +196,7 @@ namespace Zorro.WebApplication.Data
                 throw new InvalidBillPayAmountException("BillPay amount must not be zero");
             }
             var now = DateTime.Now;
+            //create bpay transaction
             var bpayTransaction = new Transaction()
             {
                 Amount = amount,
@@ -221,10 +233,11 @@ namespace Zorro.WebApplication.Data
 
 
         }
-
+        //make a shop purchase 
         public async Task ShopPurchase(Wallet destinationWallet, int amount)
         {
             var now = DateTime.Now;
+            //create new shop transaction
             var shopTransaction = new Transaction()
             {
                 Amount = amount,
@@ -243,7 +256,7 @@ namespace Zorro.WebApplication.Data
     }
 
 
-
+    //add exceptions that are custom for their types 
     public class InvalidBillPayAmountException : Exception
     {
         public InvalidBillPayAmountException()

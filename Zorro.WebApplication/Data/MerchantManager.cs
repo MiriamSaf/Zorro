@@ -4,6 +4,7 @@ using Zorro.Dal.Models;
 
 namespace Zorro.WebApplication.Data
 {
+    //manages the merchant functions
     public class MerchantManager
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -11,6 +12,7 @@ namespace Zorro.WebApplication.Data
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly RoleManager<IdentityRole> _roleManager;
 
+        //DI for merchant functions
         public MerchantManager(UserManager<ApplicationUser> userManager, ILogger<Banker> logger, ApplicationDbContext applicationDbContext, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -19,6 +21,7 @@ namespace Zorro.WebApplication.Data
             _roleManager = roleManager;
         }
 
+        //change a consumer to a merchant 
         public async Task MigrateConsumerToMerchant(string userId, string businessName, string abn)
         {
             const string merchantRoleName = "Merchant";
@@ -40,6 +43,7 @@ namespace Zorro.WebApplication.Data
                 ApplicationUser = user,
                 BusinessName = businessName,
             };
+            //add the merchant to Db
             await _applicationDbContext.Merchants.AddAsync(merchant);
             await _applicationDbContext.SaveChangesAsync();
         }

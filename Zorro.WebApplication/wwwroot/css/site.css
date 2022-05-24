@@ -8,9 +8,7 @@
 
 */
 
-/* heading font*/
-<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque&family=Saira+Semi+Condensed:wght@300;400&display=swap" rel="stylesheet">
-/*writing font */
+
 :root {
     --headings-font-family: 'Saira Semi Condensed', sans-serif;
     --body-font-family: 'Darker Grotesque', sans-serif;

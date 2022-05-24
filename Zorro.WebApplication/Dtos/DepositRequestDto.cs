@@ -9,7 +9,7 @@ namespace Zorro.WebApplication.Dtos
         public decimal Amount { get; set; }
         public string Description { get; set; } = "";
 
-        public String CreditCardNumber { get; set; }
-        public String CCExpiry { get; set; }
+        public string CreditCardNumber { get; set; }
+        public string CCExpiry { get; set; }
     }
 }

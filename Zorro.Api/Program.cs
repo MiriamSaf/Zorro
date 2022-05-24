@@ -80,5 +80,5 @@ class TransactionRequest
 
 class Receipt
 {
-    public string ReceiptNumber { get; set; }
+    public string? ReceiptNumber { get; set; }
 }

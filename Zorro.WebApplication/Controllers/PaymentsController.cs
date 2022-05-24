@@ -267,6 +267,7 @@ namespace Zorro.WebApplication.Controllers
                 ModelState.AddModelError(string.Empty, "The amount entered is not a valid amount. Please try again.");
                 return View("CreateBPAY");
             }
+            //add error if amount is incorrect
             if (!(request.Amount > 0))
             {
                 ModelState.AddModelError(string.Empty, "The amount entered is not a valid amount. Please try again.");
@@ -276,14 +277,15 @@ namespace Zorro.WebApplication.Controllers
 
             var user = await _userManager.GetUserAsync(User);
             var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
-
+            //check there is enough funds for the boay to go through
             if (!await _banker.VerifyBalance(sourceWallet.Id, request.Amount))
             {
+                //if not add error to model
                 ModelState.AddModelError(string.Empty, "You have insufficent funds to process this request. Please check the Amount Entered.");
                 return View("CreateBpay");
             }
 
-
+            //all have passed so conduct the bpay
             await _banker.BpayTransfer(sourceWallet, request.Amount, request.BillPayID, "BPAY Paid to: " + payeeName);
 
             bpayResult.Status = BpayResultViewModelStatus.Approved;
@@ -291,6 +293,7 @@ namespace Zorro.WebApplication.Controllers
             // remember biller
             if (request.RememberBiller)
             {
+                //get the billerid and save it 
                 var biller = await _context.Payees.FindAsync(request.BillPayID);
                 var rememberedBiller = await _context.FindAsync<RememberedBiller>(biller.BillerCode, user.Id);
                 if (rememberedBiller is null)
@@ -304,27 +307,35 @@ namespace Zorro.WebApplication.Controllers
                     await _context.SaveChangesAsync();
                 }
             }            
-
+            //return bpay result view 
             return View("BpayResult", bpayResult);
         }
 
+        //check for valid wallet else send invalid response
         public async Task<ActionResult> VerifyWalletId(string id)
         {
+            //if id is not valid
             if (string.IsNullOrEmpty(id))
                 return StatusCode(404);
             var foundWallet = await _banker.GetWalletByDisplayName(id.ToUpper());
+            //if wallet is null value
             if (foundWallet is null)
                 return StatusCode(404);
             return StatusCode(204);
         }
 
+        //check biller code is valid
         public async Task<BpayBillerVerificationResult> VerifyBillerCode(string id)
         {
+            //check the id is valid
             if (string.IsNullOrEmpty(id))
                 throw new FileNotFoundException();
+            //find the biller
             var foundBiller = await _context.Payees.FindAsync(int.Parse(id));
+            //if biller is null throw exception
             if (foundBiller is null)
                 throw new FileNotFoundException();
+            //return result
             return new BpayBillerVerificationResult() { BillerName = foundBiller.BillerName };
         }
     }

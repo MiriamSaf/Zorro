@@ -139,7 +139,7 @@ namespace Zorro.WebApplication.Models
         {
 
             ApplicationUser user = await _userManager.FindByIdAsync(id);
-            //check that fields are all not empty
+            //check that fields required are all not empty
             if (user != null)
             {
                 if (!string.IsNullOrEmpty(mobile))

@@ -10,6 +10,8 @@ using Zorro.Dal;
 
 namespace Zorro.WebApplication.Controllers
 {
+    //friending controller - deals with making friends for users
+    [Authorize]
     public class FriendingController : ControllerBase
     {
         public ActionResult Friending()

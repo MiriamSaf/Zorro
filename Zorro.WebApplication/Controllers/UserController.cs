@@ -10,7 +10,7 @@ namespace Zorro.WebApplication.Models
 
     //user controller - deals with editing users and deleting -
     //should only be able to view if logged in as admin
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class UserController : Controller
     {
 

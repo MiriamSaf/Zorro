@@ -1,7 +1,4 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿//JS for site
 const validationClasses = ['is-invalid', 'is-valid']
 const transferLimit = 10000;
 
@@ -35,6 +32,7 @@ async function verifyWalletWithServer(walletId) {
     }
 }
 
+//verify biller code
 async function verifyBillerCode(inputId, billerNameInputId, buttonId = null) {
     let status = 1;
     let billerInput = document.getElementById(inputId);
@@ -57,6 +55,7 @@ async function verifyBillerCode(inputId, billerNameInputId, buttonId = null) {
     enableOrDisableButton(status, buttonId);
 }
 
+//get biller name
 async function getBpayBillerName(billerCode) {
     let uri = "VerifyBillerCode" + '?' + new URLSearchParams({
         id: billerCode,
@@ -67,18 +66,21 @@ async function getBpayBillerName(billerCode) {
     return data['billerName'];
 }
 
+//show status
 function showVerificationStatus(status, elementId) {
     const inputElement = document.getElementById(elementId);
     resetValidation(inputElement)
     inputElement.classList.add(validationClasses[status]);
 }
 
+//reset validation 
 function resetValidation(input) {
     if (input == null)
         return;
     input.classList.remove(validationClasses[0], validationClasses[1])
 }
 
+//enable or disable buttons by passing button id
 function enableOrDisableButton(status, buttonId) {
     let transferButton = document.getElementById(buttonId);
     if (status == 1) {
@@ -89,6 +91,7 @@ function enableOrDisableButton(status, buttonId) {
     }
 }
 
+//formar amount of passed in input
 function formatAmount(input) {
     if (!input.hasAttribute('data-previous-amount')) {
         input.dataset.previousAmount = 0;
@@ -107,6 +110,7 @@ function formatAmount(input) {
     }
 }
 
+//ignores hyphen and e keys
 function ingoreHyphenAndEKeys(event) {
     return event.keyCode !== 69 && event.keyCode !== 189
 }

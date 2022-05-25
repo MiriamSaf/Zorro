@@ -8,7 +8,8 @@
 
 */
 
-    : root {
+
+:root {
     --headings-font-family: 'Saira Semi Condensed', sans-serif;
     --body-font-family: 'Darker Grotesque', sans-serif;
     --color-dark-blue: #213440;
@@ -87,9 +88,9 @@ h2 {
 }
 
 .spacer_hardline {
-    margin-top:5px;
-    margin-bottom:5px;
-    height:2px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 2px;
     border-bottom: 2px solid grey;
 }
 
@@ -169,12 +170,12 @@ h2 {
     transition: all ease-in-out 0.5s;
 }
 
-    .nav-link-prof:hover {
-        color: #FFFFFF !important;
-        border-radius: 3px;
-        text-decoration: none;
-        background-color: #1A2238;
-    }
+.nav-link-prof:hover {
+    color: #FFFFFF !important;
+    border-radius: 3px;
+    text-decoration: none;
+    background-color: #1A2238;
+}
 
 .left-aligned-nav {
     text-align: left;
@@ -196,22 +197,23 @@ h2 {
     #update-profile-button:hover,
     #change-email-button :hover,
     #submit-newpwd :hover,
-    #submit-newpwd-btn :hover{
+    #submit-newpwd-btn :hover {
         background-color: #e43603 !important;
     }
-    .btn-dark, #update-profile-button {
-        transition: all ease-in-out 0.5s;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        height: 40px;
-        text-align: center;
-        border: none;
-        border-radius: 10px;
-    }
+
+.btn-dark, #update-profile-button {
+    transition: all ease-in-out 0.5s;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    height: 40px;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+}
 
     .btn-dark :hover::after,
-    #update-profile-button  :hover::after{
+    #update-profile-button :hover::after {
         background-color: #FF6A3D;
     }
 
@@ -299,35 +301,30 @@ h2 {
     display: table;
 }
 
-table, th, td {
-    /* MS : I removed it for now as lent a dizzying feel and also 
-       is not aligning with table
-       border: 1px solid;*/
-}
 
 /** nav identity buttons */
-    .nav-page-identity {
-        text-decoration: none;
-        color: #FFFFFF;
-        transition: all ease-in-out 0.3s;
-    }
+.nav-page-identity {
+    text-decoration: none;
+    color: #FFFFFF;
+    transition: all ease-in-out 0.3s;
+}
 
 
-    registerSubmit,
-    #login-submit {
-        background-color: #1A2238;
-        border: none;
-    }
+#registerSubmit,
+#login-submit {
+    background-color: #1A2238;
+    border: none;
+}
 
     #registerSubmit:hover,
     #login-submit:hover {
         background-color: #FF6A3D;
     }
 
-    .nav-page-identity:hover {
-        text-decoration: none;
-        color: #FFFFFF;
-    }
+.nav-page-identity:hover {
+    text-decoration: none;
+    color: #FFFFFF;
+}
 
 .list-group-item {
     background-color: #EFF3F8 !important;
@@ -346,13 +343,13 @@ table, th, td {
     user-select: none;
 }
 
-/* Hide the browser's default checkbox */
+/* Hide the browser's default checkbox */ 
 .containerCC input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
 }
 
 /* Create a custom checkbox */

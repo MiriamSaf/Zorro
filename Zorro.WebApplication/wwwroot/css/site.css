@@ -8,8 +8,7 @@
 
 */
 
-
-:root {
+    : root {
     --headings-font-family: 'Saira Semi Condensed', sans-serif;
     --body-font-family: 'Darker Grotesque', sans-serif;
     --color-dark-blue: #213440;
@@ -309,6 +308,18 @@ table, th, td {
     color: #FFFFFF;
     transition: all ease-in-out 0.3s;
 }
+
+
+#registerSubmit,
+#login-submit {
+    background-color: #1A2238;
+    border: none;
+}
+
+    #registerSubmit:hover,
+    #login-submit:hover {
+        background-color: #FF6A3D;
+    }
 
     .nav-page-identity:hover {
         text-decoration: none;

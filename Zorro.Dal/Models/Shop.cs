@@ -2,6 +2,7 @@
 
 namespace Zorro.Dal.Models
 {
+    //shop model with shop fields
     public class Shops
     {
         [Key, Required]

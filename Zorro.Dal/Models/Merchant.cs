@@ -3,8 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zorro.Dal.Models
 {
+    //merchant model with fields for the merchant
     public class Merchant
     {
+        //PK - ID
         [Key, Required]
         public int Id { get; set; }
 

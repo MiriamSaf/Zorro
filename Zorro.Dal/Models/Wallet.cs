@@ -3,9 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zorro.Dal.Models
 {
-    //account model
+    //wallet model with relevant wallet fields
     public class Wallet
     {
+        //the key is the ID
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Display(Name = "Wallet ID")]
         public Guid Id { get; set; }
 
@@ -21,6 +22,8 @@ namespace Zorro.Dal.Models
         public decimal Balance { get; set; }
 
         public virtual List<Transaction> Transactions { get; set; }
+
+        //each wallet has an application user attached to it 
         public ApplicationUser ApplicationUser { get; set; }
 
     }

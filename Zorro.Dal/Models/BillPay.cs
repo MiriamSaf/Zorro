@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zorro.Dal.Models
 {
+    //billpay model with relevant fields for the billpay and 
+    //data annotations as well
     public class BillPay
     {
         [Key, Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]

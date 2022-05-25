@@ -2,6 +2,7 @@
 
 namespace Zorro.Dal.Models
 {
+    //bpay biller model with fields
     public class BpayBiller
     {
         [Key, Required]

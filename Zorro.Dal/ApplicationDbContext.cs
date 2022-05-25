@@ -4,6 +4,7 @@ using Zorro.Dal.Models;
 
 namespace Zorro.Dal
 {
+    //application db context class
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options)
@@ -17,6 +18,7 @@ namespace Zorro.Dal
             base.OnModelCreating(modelBuilder);
         }
 
+        //all the models in the database
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<BillPay> BillPays { get; set; }
         public DbSet<BpayBiller> Payees { get; set; }

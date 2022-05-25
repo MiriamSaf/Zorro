@@ -2,6 +2,7 @@
 
 namespace Zorro.Dal.Models
 {
+    //chat message model with chat message fields
     public class ChatMessage
     {
         public int Id { get; set; }

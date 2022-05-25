@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Zorro.Dal.Models
 {
+    //application user is the user and it extends identity user
+    //all the fiels that are part of application user with their 
+    //relevant data annotations 
     public class ApplicationUser : IdentityUser
     {
         [StringLength(50, ErrorMessage = "Error: First Name has a maximum of 50 Characters.")]

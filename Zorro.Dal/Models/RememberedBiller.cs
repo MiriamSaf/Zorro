@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zorro.Dal.Models
 {
+    //remembered biller model for remembering the billers that a user has saved 
     public class RememberedBiller
     {
         [Required, ForeignKey("BpayBiller")]

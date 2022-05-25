@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zorro.Dal.Models
 {
+    //transaction model with transaction fields 
     public class Transaction
     {
         //transaction id - each unique

@@ -1,6 +1,6 @@
-/** site colours 4/4/22
+/** site colours
     #FFFFFF - white
-    #5EBEC4 - blue (buttons)
+    #5EBEC4 - blue 
     #EFF3F8 - pale blue/whitish tinge
     #F4DB7D - mustard/yellow
     #FF6A3D - burnt orange (buttons)/ contrast
@@ -14,16 +14,19 @@
     --color-dark-blue: #213440;
 }
 
+/* default for site */
 html, body, nav {
     font-size: 14px;
     font-family: 'Darker Grotesque', sans-serif;
 }
 
+/* headings */
 h1, h2, h3, h4, h5 {
     font-family: 'Saira Semi Condensed', sans-serif;
     color: #213440;
 }
 
+/* screens media query */
 @media (min-width: 768px) {
     html {
         font-size: 16px;
@@ -303,18 +306,18 @@ table, th, td {
 }
 
 /** nav identity buttons */
-.nav-page-identity {
-    text-decoration: none;
-    color: #FFFFFF;
-    transition: all ease-in-out 0.3s;
-}
+    .nav-page-identity {
+        text-decoration: none;
+        color: #FFFFFF;
+        transition: all ease-in-out 0.3s;
+    }
 
 
-#registerSubmit,
-#login-submit {
-    background-color: #1A2238;
-    border: none;
-}
+    registerSubmit,
+    #login-submit {
+        background-color: #1A2238;
+        border: none;
+    }
 
     #registerSubmit:hover,
     #login-submit:hover {

@@ -2,6 +2,7 @@
 
 namespace Zorro.WebApplication.Dtos
 {
+    //deposit request data transfer object
     public class DepositRequestDto
     {
         public static ClaimsPrincipal User { get; private set; }

@@ -1,5 +1,6 @@
 ﻿namespace Zorro.WebApplication.Dtos
 {
+    //bpay request data transfer object
     public class BpayRequestDto
     {
         public int BillPayID { get; set; }

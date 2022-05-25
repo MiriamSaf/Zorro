@@ -86,9 +86,6 @@
                     <td>@merchant.ApplicationUser.UserName</td>
                     <td class="text-center">@merchant.Status</td>
                     <td class="text-center">
-                        <button class="d-inline btn btn-sm btn-primary" asp-controller="Merchant" asp-action="Update" asp-route-id="@merchant.Id">
-                            Update
-                        </button>
                         <form asp-action="Delete" asp-controller="Merchant" asp-route-id="@merchant.Id" method="post" class="d-inline">
                             <button type="submit" class="btn btn-sm btn-danger">
                                 Delete

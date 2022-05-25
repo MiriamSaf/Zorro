@@ -1,5 +1,6 @@
 ﻿namespace Zorro.WebApplication.ViewModels
 {
+    //dashboard class
     public class DashboardViewModel
     {
         public string WalletId { get; set; } = "";

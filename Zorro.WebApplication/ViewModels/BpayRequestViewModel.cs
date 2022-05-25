@@ -2,6 +2,7 @@
 
 namespace Zorro.WebApplication.ViewModels
 {
+    //bpay class with bpay fields
     public class BpayRequestViewModel
     {
         public BpayResultViewModelStatus Status { get; set; }
@@ -15,6 +16,7 @@ namespace Zorro.WebApplication.ViewModels
         public int PayeeId { get; internal set; }
     }
 
+    //bpay results 
     public enum BpayResultViewModelStatus
     {
         Approved,

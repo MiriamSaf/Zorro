@@ -1,6 +1,7 @@
 ﻿namespace Zorro.WebApplication.ViewModels
 
 {
+    //user view model class with user fields
     public class UserViewModel
     {
         public string Id { get; set; }

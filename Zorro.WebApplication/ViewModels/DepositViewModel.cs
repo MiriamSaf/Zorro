@@ -2,6 +2,7 @@
 
 namespace Zorro.WebApplication.ViewModels
 {
+    //deposit class with deposit fields 
     public class DepositViewModel
 
     {
@@ -13,7 +14,8 @@ namespace Zorro.WebApplication.ViewModels
         public string CreditCardNumber { get; set; }
         public string CCExpiry { get; set; }
     }
-
+    
+    //status's for the deposit view 
     public enum DepResultViewModelStatus
     {
         Approved,

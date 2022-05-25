@@ -1,5 +1,6 @@
 ﻿namespace Zorro.WebApplication.ViewModels
 {
+    //shop view model with essentail shop fields
     public class ShopViewModel
     {
         public int ShopID { get; set; }

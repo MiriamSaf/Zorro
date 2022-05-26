@@ -21,8 +21,8 @@ namespace ZorroTest
            .UseInMemoryDatabase(databaseName: "FakeDB")
            .Options;
 
-            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Test" };
-            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Tester" };
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith", NormalizedEmail = "JOHN.SMITH@HOTMAIL.COM" };
+            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza", NormalizedEmail = "KEITH.BAZZA@HOTMAIL.COM" };
 
             // Insert seed data into the database using one instance of the context
             using var context = new ApplicationDbContext(options);
@@ -35,7 +35,7 @@ namespace ZorroTest
 
             var bankerService = new BankerService(context);
             //try to transfer 0 
-            await bankerService.TransferFunds(wallet1, wallet2, -7M, "my transfer less than zero");
+            await bankerService.TransferFunds(wallet1.DisplayName, wallet2.DisplayName, -7M, "my transfer less than zero");
         }
 
         //test transfer with less than zero transfer amount
@@ -47,8 +47,8 @@ namespace ZorroTest
            .UseInMemoryDatabase(databaseName: "FakeDB")
            .Options;
 
-            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Test" };
-            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Tester" };
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith", NormalizedEmail = "JOHN.SMITH@HOTMAIL.COM" };
+            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza", NormalizedEmail = "KEITH.BAZZA@HOTMAIL.COM" };
 
             // Insert seed data into the database using one instance of the context
             using var context = new ApplicationDbContext(options);
@@ -61,7 +61,7 @@ namespace ZorroTest
 
             var bankerService = new BankerService(context);
             //try to transfer 0 
-            await bankerService.TransferFunds(wallet1, wallet2, 0M, "my transfer zero dollars");
+            await bankerService.TransferFunds(wallet1.DisplayName, wallet2.DisplayName, 0M, "my transfer zero dollars");
         }
 
         //test transfer with sufficient funds so should go through
@@ -72,8 +72,8 @@ namespace ZorroTest
             .UseInMemoryDatabase(databaseName: "FakeDB")
             .Options;
 
-            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith" };
-            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza" };
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith", NormalizedEmail = "JOHN.SMITH@HOTMAIL.COM" };
+            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza", NormalizedEmail = "KEITH.BAZZA@HOTMAIL.COM" };
 
             // Insert seed data into the database using one instance of the context
             using var context = new ApplicationDbContext(options);
@@ -85,9 +85,10 @@ namespace ZorroTest
             context.SaveChanges();
 
             var bankerService = new BankerService(context);
-            await bankerService.TransferFunds(wallet1, wallet2, 2.00M, "transfer allowed as have funds");
+            await bankerService.TransferFunds(wallet1.DisplayName, wallet2.DisplayName, 2.00M, "transfer allowed as have funds");
+            Assert.AreEqual(8.00M, wallet1.Balance);
+            Assert.AreEqual(12.00M, wallet2.Balance);
         }
-
 
         //test transfer with insufficient funds in recipient wallet
         [ExpectedException(typeof(InsufficientFundsException))]
@@ -98,8 +99,8 @@ namespace ZorroTest
             .UseInMemoryDatabase(databaseName: "FakeDB")
             .Options;
 
-            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith" };
-            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza" };
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith", NormalizedEmail = "JOHN.SMITH@HOTMAIL.COM" };
+            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza", NormalizedEmail = "KEITH.BAZZA@HOTMAIL.COM" };
 
             // Insert seed data into the database using one instance of the context
             using var context = new ApplicationDbContext(options);
@@ -111,7 +112,7 @@ namespace ZorroTest
             context.SaveChanges();
 
             var bankerService = new BankerService(context);
-            await bankerService.TransferFunds(wallet1, wallet2, 11.00M, "transfer more than have in wallets");
+            await bankerService.TransferFunds(wallet1.DisplayName, wallet2.DisplayName, 11.00M, "transfer more than have in wallets");
         }
 
         //test refund positive amount
@@ -123,8 +124,8 @@ namespace ZorroTest
             .UseInMemoryDatabase(databaseName: "FakeDB")
             .Options;
 
-            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith" };
-            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza" };
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith", NormalizedEmail = "JOHN.SMITH@HOTMAIL.COM" };
+            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza", NormalizedEmail = "KEITH.BAZZA@HOTMAIL.COM" };
 
             // Insert seed data into the database using one instance of the context
             using var context = new ApplicationDbContext(options);
@@ -136,7 +137,7 @@ namespace ZorroTest
             context.SaveChanges();
 
             var bankerService = new BankerService(context);
-            await bankerService.TransferFunds(wallet1, wallet2, 5.00M, "refund positive", Currency.Aud, TransactionType.Refund);
+            await bankerService.TransferFunds(wallet1.DisplayName, wallet2.DisplayName, 5.00M, "refund positive", Currency.Aud, TransactionType.Refund);
         }
 
 
@@ -149,8 +150,8 @@ namespace ZorroTest
             .UseInMemoryDatabase(databaseName: "FakeDB")
             .Options;
 
-            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith" };
-            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza" };
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith", NormalizedEmail = "JOHN.SMITH@HOTMAIL.COM" };
+            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza", NormalizedEmail = "KEITH.BAZZA@HOTMAIL.COM" };
 
             // Insert seed data into the database using one instance of the context
             using var context = new ApplicationDbContext(options);
@@ -162,9 +163,8 @@ namespace ZorroTest
             context.SaveChanges();
 
             var bankerService = new BankerService(context);
-            await bankerService.TransferFunds(wallet1, wallet2, 5.123M, "decimal 3", Currency.Aud, TransactionType.Transfer);
+            await bankerService.TransferFunds(wallet1.DisplayName, wallet2.DisplayName, 5.123M, "decimal 3", Currency.Aud, TransactionType.Transfer);
         }
-
 
         //tranfer negative refund amount - following rules so should pass
         [TestMethod]
@@ -174,8 +174,8 @@ namespace ZorroTest
             .UseInMemoryDatabase(databaseName: "FakeDB")
             .Options;
 
-            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith" };
-            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza" };
+            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Smith", NormalizedEmail = "JOHN.SMITH@HOTMAIL.COM" };
+            var user2 = new ApplicationUser() { FirstName = "Keith", Surname = "Bazza", NormalizedEmail = "KEITH.BAZZA@HOTMAIL.COM" };
 
             // Insert seed data into the database using one instance of the context
             using var context = new ApplicationDbContext(options);
@@ -187,8 +187,9 @@ namespace ZorroTest
             context.SaveChanges();
 
             var bankerService = new BankerService(context);
-            await bankerService.TransferFunds(wallet1, wallet2, -5.00M, "refund negative-should work", Currency.Aud, TransactionType.Refund);
+            await bankerService.TransferFunds(wallet1.DisplayName, wallet2.DisplayName, -5.00M, "refund negative-should work", Currency.Aud, TransactionType.Refund);
+            Assert.AreEqual(15.00M, wallet1.Balance);
+            Assert.AreEqual(5.00M, wallet2.Balance);
         }
-
     }
 }

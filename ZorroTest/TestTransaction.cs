@@ -39,7 +39,6 @@ namespace ZorroTest
                
         }
 
-
         //transfer to fake db
         [TestMethod]
         public async Task TestTransferTrans()
@@ -81,10 +80,8 @@ namespace ZorroTest
 
             };
 
-
             await context.AddAsync(sourceTransaction);
             wallet1.Balance += sourceTransaction.Amount;
-            
 
             await context.AddAsync(destTransaction);
             wallet2.Balance += destTransaction.Amount;
@@ -92,7 +89,6 @@ namespace ZorroTest
             await context.SaveChangesAsync();
 
         }
-
 
         //deposit transaction to DB
         [TestMethod]
@@ -120,7 +116,6 @@ namespace ZorroTest
                 Wallet = wallet1
 
             };
-
 
             await context.Wallets.AddRangeAsync(wallets);
             context.SaveChanges();

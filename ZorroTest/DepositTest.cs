@@ -27,14 +27,19 @@ namespace ZorroTest
            .UseInMemoryDatabase(databaseName: "FakeDB")
            .Options;
 
-            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Test", CreditCardNumber = "1111222233334444", CCExpiry = "11/23"};
+            var user1 = new ApplicationUser()
+            {
+                FirstName = "John",
+                Surname = "Test",
+                CreditCardNumber = "1111222233334444",
+                CCExpiry = "11/23"
+            };
 
             // Insert seed data into the database using one instance of the context
             using var context = new ApplicationDbContext(options);
             var wallet1 = new Wallet() { Balance = 20.00M, ApplicationUser = user1 };
-            var wallets = new Wallet[] { wallet1 };
 
-            await context.Wallets.AddRangeAsync(wallets);
+            await context.Wallets.AddAsync(wallet1);
             context.SaveChanges();
 
             var bankerService = new BankerService(context);
@@ -51,14 +56,19 @@ namespace ZorroTest
            .UseInMemoryDatabase(databaseName: "FakeDB")
            .Options;
 
-            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Test", CreditCardNumber = "1111222233334444", CCExpiry = "11/23" };
+            var user1 = new ApplicationUser()
+            {
+                FirstName = "John",
+                Surname = "Test",
+                CreditCardNumber = "1111222233334444",
+                CCExpiry = "11/23"
+            };
 
             // Insert seed data into the database using one instance of the context
             using var context = new ApplicationDbContext(options);
             var wallet1 = new Wallet() { Balance = 20.00M, ApplicationUser = user1 };
-            var wallets = new Wallet[] { wallet1 };
 
-            await context.Wallets.AddRangeAsync(wallets);
+            await context.Wallets.AddAsync(wallet1);
             context.SaveChanges();
 
             var bankerService = new BankerService(context);
@@ -75,14 +85,19 @@ namespace ZorroTest
            .UseInMemoryDatabase(databaseName: "FakeDB")
            .Options;
 
-            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Test", CreditCardNumber = "1111222233334444", CCExpiry = "11/23" };
+            var user1 = new ApplicationUser()
+            {
+                FirstName = "John",
+                Surname = "Test",
+                CreditCardNumber = "1111222233334444",
+                CCExpiry = "11/23"
+            };
 
             // Insert seed data into the database using one instance of the context
             using var context = new ApplicationDbContext(options);
             var wallet1 = new Wallet() { Balance = 20.00M, ApplicationUser = user1 };
-            var wallets = new Wallet[] { wallet1 };
 
-            await context.Wallets.AddRangeAsync(wallets);
+            await context.Wallets.AddAsync(wallet1);
             context.SaveChanges();
 
             var bankerService = new BankerService(context);
@@ -92,25 +107,31 @@ namespace ZorroTest
 
         //test deposit with valid posotive number as amount
         [TestMethod]
-        public async Task TestDepositWithPosotive()
+        public async Task TestDepositWithPositive()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
            .UseInMemoryDatabase(databaseName: "FakeDB")
            .Options;
 
-            var user1 = new ApplicationUser() { FirstName = "John", Surname = "Test", CreditCardNumber = "1111222233334444", CCExpiry = "11/23" };
+            var user1 = new ApplicationUser()
+            {
+                FirstName = "John",
+                Surname = "Test",
+                CreditCardNumber = "1111222233334444",
+                CCExpiry = "11/23"
+            };
 
             // Insert seed data into the database using one instance of the context
             using var context = new ApplicationDbContext(options);
             var wallet1 = new Wallet() { Balance = 20.00M, ApplicationUser = user1 };
-            var wallets = new Wallet[] { wallet1 };
 
-            await context.Wallets.AddRangeAsync(wallets);
+            await context.Wallets.AddAsync(wallet1);
             context.SaveChanges();
 
             var bankerService = new BankerService(context);
             //try to depsoit 0 
             await bankerService.DepositFunds(wallet1, 19, "deposit allowed");
+            Assert.AreEqual(39.00M, wallet1.Balance);
         }
     }
 }

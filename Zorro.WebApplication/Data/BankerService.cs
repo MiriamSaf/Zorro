@@ -26,13 +26,20 @@ namespace Zorro.WebApplication.Data
         }
 
         //transfer funds from source to destination
-        public async Task TransferFunds(Wallet sourceWallet, Wallet destinationWallet,
+        public async Task<Guid> TransferFunds(string sourceWalletId, string destinationWalletId,
             decimal amount, string comment, Currency currency = Currency.Aud,
             TransactionType transactionType = TransactionType.Transfer)
         {
+            var sourceWallet = await GetWalletByDisplayName(sourceWalletId);
+            if (sourceWallet is null)
+                throw new InvalidWalletException($"{sourceWalletId} is not a valid wallet");
+            var destinationWallet = await GetWalletByDisplayName(destinationWalletId);
+            if (destinationWallet is null)
+                throw new InvalidWalletException($"{destinationWalletId} is not a valid wallet");
+
             //check for decimals greater than 3 places 
             String checkDec = amount.ToString();
-            if (checkDec.Contains(".") && transactionType == TransactionType.Transfer)
+            if (checkDec.Contains('.') && transactionType == TransactionType.Transfer)
             {
                 string[] a = checkDec.Split(new char[] { '.' });
                 int decimals = a[1].Length;
@@ -91,15 +98,16 @@ namespace Zorro.WebApplication.Data
             _applicationDbContext.Wallets.Update(sourceWallet);
 
             await _applicationDbContext.SaveChangesAsync();
+            return sourceTransaction.Id;
         }
 
         //depsit funds method
-        public async Task DepositFunds(Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud,
+        public async Task<Guid> DepositFunds(Wallet destinationWallet, decimal amount, string comment, Currency currency = Currency.Aud,
           TransactionType transactionType = TransactionType.Payment)
         {
             //check for decimals greater than 3 places 
             String checkDec = amount.ToString();
-            if (checkDec.Contains(".") && transactionType == TransactionType.Payment)
+            if (checkDec.Contains('.') && transactionType == TransactionType.Payment)
             {
                 string[] a = checkDec.Split(new char[] { '.' });
                 int decimals = a[1].Length;
@@ -108,7 +116,6 @@ namespace Zorro.WebApplication.Data
                     throw new InvalidDepositAmountException("Deposit amount cannot have more than 2 decimal places");
                 }
             }
-
             // verify that deposit can proceed
             if (transactionType == TransactionType.Payment && amount < 0)
             {
@@ -120,7 +127,6 @@ namespace Zorro.WebApplication.Data
                 throw new InvalidDepositAmountException("Deposit amount must not be zero");
             }
             
-
             var now = DateTime.Now;
             //add deposit transaction
             var depositTransaction = new Transaction()
@@ -133,17 +139,12 @@ namespace Zorro.WebApplication.Data
                 Wallet = destinationWallet
             };
 
+            destinationWallet.Balance += amount;
+            await _applicationDbContext.AddAsync(depositTransaction);
 
-
-            if (amount > 0)
-            {
-                destinationWallet.Balance += amount;
-
-                await _applicationDbContext.AddAsync(depositTransaction);
-
-            }
             //save changes to DB
             await _applicationDbContext.SaveChangesAsync();
+            return depositTransaction.Id;
         }
 
 
@@ -164,11 +165,11 @@ namespace Zorro.WebApplication.Data
         }
 
         //bpay transfer function
-        public async Task<bool> BpayTransfer(Wallet sourceWallet, decimal amount, int BpayBillerCode, string comment, Currency currency, TransactionType transaction)
+        public async Task<bool> BpayTransfer(string sourceWalletId, decimal amount, int BpayBillerCode, string comment, Currency currency, TransactionType transaction)
         {
             //check for decimals greater than 3 places 
             String checkDec = amount.ToString();
-            if (checkDec.Contains(".") && transaction == TransactionType.BPay)
+            if (checkDec.Contains('.') && transaction == TransactionType.BPay)
             {
                 string[] a = checkDec.Split(new char[] { '.' });
                 int decimals = a[1].Length;
@@ -183,8 +184,6 @@ namespace Zorro.WebApplication.Data
             {
                 throw new Exception("Cannot have comment longer than 50 characters");
             }
-
-
             // verify that billpay can proceed
             if (transaction == TransactionType.BPay && amount < 0)
             {
@@ -195,6 +194,15 @@ namespace Zorro.WebApplication.Data
             {
                 throw new InvalidBillPayAmountException("BillPay amount must not be zero");
             }
+            var sourceWallet = await GetWalletByDisplayName(sourceWalletId);
+            if (sourceWallet is null)
+                throw new InvalidWalletException($"{sourceWalletId} is not a valid wallet");
+            //cannot transfer more than have in balance
+            if (amount >= sourceWallet.Balance)
+            {
+                throw new InvalidBillPayAmountException("BillPay amount must not be more than in wallet");
+            }
+
             var now = DateTime.Now;
             //create bpay transaction
             var bpayTransaction = new Transaction()
@@ -205,56 +213,35 @@ namespace Zorro.WebApplication.Data
                 TransactionTimeUtc = now,
                 TransactionType = transaction,
                 Wallet = sourceWallet
-
             };
 
-            //cannot transfer more than have in balance
-            if (amount >= sourceWallet.Balance)
-            {
+            //minus amount from balance
+            sourceWallet.Balance -= amount;
 
-                throw new InvalidBillPayAmountException("BillPay amount must not be more than in wallet");
-                //return false;
-            }
+            await _applicationDbContext.AddAsync(bpayTransaction);
 
-            if (amount > 0)
-            {
-                //minus amount from balance
-                sourceWallet.Balance -= amount;
-
-                await _applicationDbContext.AddAsync(bpayTransaction);
-
-                await _applicationDbContext.SaveChangesAsync();
-                return true;
-
-
-            }
-
-            return false;
-
-
+            await _applicationDbContext.SaveChangesAsync();
+            return true;
         }
+
         //make a shop purchase 
-        public async Task ShopPurchase(Wallet destinationWallet, int amount)
+        public async Task ShopPurchase(Wallet sourceWallet, decimal amount)
         {
             var now = DateTime.Now;
-            //create new shop transaction
+            //create a shop transaction
             var shopTransaction = new Transaction()
             {
                 Amount = amount,
+                Comment = "Shop Purchase",
                 TransactionTimeUtc = now,
                 TransactionType = TransactionType.Shop,
-                Wallet = destinationWallet
+                Wallet = sourceWallet
             };
-
+            //add the transaction into the system
+            await _applicationDbContext.AddAsync(shopTransaction);
             await _applicationDbContext.SaveChangesAsync();
         }
-
-        public Task ShopPurchase(Wallet sourceWallet, decimal amount)
-        {
-            throw new NotImplementedException();
-        }
     }
-
 
     //add exceptions that are custom for their types 
     public class InvalidBillPayAmountException : Exception
@@ -268,6 +255,18 @@ namespace Zorro.WebApplication.Data
         {
         }
 
+    }
+
+    public class InvalidWalletException : Exception
+    {
+        public InvalidWalletException()
+        {
+        }
+
+        public InvalidWalletException(string message)
+            : base(message)
+        {
+        }
     }
 
     public class InvalidDepositAmountException : Exception

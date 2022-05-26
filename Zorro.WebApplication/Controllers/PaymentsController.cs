@@ -60,82 +60,49 @@ namespace Zorro.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateTransfer(TransferRequestDto request)
         {
-            Guid guid = Guid.NewGuid();
-            var TransactionID = guid.ToString();
+            //set description to empty if null
+            if (request.Description is null)
+                request.Description = "";
+
+            //checks the description length and adds error if too long
+            if (request.Description.Length > 50)
+            {
+                ModelState.AddModelError(string.Empty, "Error: the comment cannot be longer than 50 characters");
+                return View("CreateTransfer");
+            }
 
             //creates a transfer result from the passed in request
             var transferResult = new TransferResultViewModel()
             {
                 Amount = request.Amount,
                 RecipientDisplayName = request.RecipientWallet,
-                Comment = request.Description,
-                TransactionID = TransactionID
+                Comment = request.Description
             };
 
-            //set desciption to blank if no desciption entered 
-            if (request.Description == null)
+            // attempt to process transaction and propogage user friendly warnings
+            try
             {
-                request.Description = "";
+                var receipt = await _banker.TransferFunds(
+                    User.Identity.Name, request.RecipientWallet, request.Amount, request.Description
+                    );
+                transferResult.TransactionID = receipt.ToString();
             }
-
-            //checks the description length and adds error if too long
-            if (request.Description.Length > 50)
+            catch (InvalidWalletException walEx)
             {
-                ModelState.AddModelError(string.Empty, "Error: the comment cannot be longer than 50 characters"); 
+                ModelState.AddModelError(string.Empty, $"{walEx.Message}, please check your details again.");
                 return View("CreateTransfer");
             }
-
-          
-
-            //check for decimals greater than 3 places 
-            String checkDec = request.Amount.ToString();
-            if (checkDec.Contains("."))
+            catch (InvalidTransferAmountException amtEx)
             {
-                string[] a = checkDec.Split(new char[] { '.' });
-                int decimals = a[1].Length;
-                //add error if more than 3 decimals
-                if (decimals >= 3)
-                {
-                    ModelState.AddModelError(string.Empty, "The amount entered cannot have more than 2 decimal places"); 
-                    return View("CreateTransfer");
-                }
-            }
-            //if the recipient doesn't exists then let user know with error
-            if (request.RecipientWallet is null)
-            {
-                ModelState.AddModelError(string.Empty, "The Recipient ID doesn't exist, please check your details again.");
+                ModelState.AddModelError(string.Empty, $"{amtEx.Message}, please check your details again.");
                 return View("CreateTransfer");
             }
-            //if amount below 0 then add error
-            if(!(request.Amount > 0))
-            {
-                ModelState.AddModelError(string.Empty, "The amount entered is below zero and not a valid amount. Please try again.");
-                return View("CreateTransfer");
-            }
-            //if amount is 0 then add error
-            if ((request.Amount == 0))
-            {
-                ModelState.AddModelError(string.Empty, "The amount entered cannot be zero. Please try again.");
-                return View("CreateTransfer");
-            }
-            //check user and source wallet
-            var user = await _userManager.GetUserAsync(User);
-            var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
-            //if there is not enough funds in the users wallet then they should get an error message
-            if (!await _banker.VerifyBalance(sourceWallet.Id, request.Amount))
+            catch (InsufficientFundsException)
             {
                 ModelState.AddModelError(string.Empty, "You have insufficent funds to process this request. Please check the Amount Entered.");
                 return View("CreateTransfer");
             }
-            //check the destination wallet and that it exists and add error if doesn't exist
-            var destinationWallet = await _banker.GetWalletByDisplayName(request.RecipientWallet);
-            if (destinationWallet is null)
-            {
-                ModelState.AddModelError(string.Empty, "The Recipient ID doesn't exist, please check your details again.");
-                return View("CreateTransfer");
-            }
-            //all is okay so transfer the funds by calling bankers transfer method
-            await _banker.TransferFunds(sourceWallet, destinationWallet, request.Amount, request.Description);
+            
             //set the status and return the transfer page 
             transferResult.Status = TransferResultViewModelStatus.Approved;
             return View("TransferResult", transferResult);
@@ -146,15 +113,12 @@ namespace Zorro.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateDeposit(DepositRequestDto request)
         {
-            Guid guid = Guid.NewGuid();
-            var TransactionID = guid.ToString();
             //set the deposit result fields from passed in request
             var deResult = new DepositViewModel()
             {
                 Amount = request.Amount,
                 Description = request.Description,
-                Date = DateTime.UtcNow,
-                TransactionID = TransactionID
+                Date = DateTime.UtcNow
             };
 
             //if there is a description
@@ -164,27 +128,6 @@ namespace Zorro.WebApplication.Controllers
                 if (request.Description.Length > 50)
                 {
                     ModelState.AddModelError(string.Empty, "Error: the comment cannot be longer than 50 characters");
-                    return View("CreateDeposit");
-                }
-            }
-
-            //if request less than 0, add error
-            if (!(request.Amount > 0))
-            {
-                ModelState.AddModelError(string.Empty, "The amount entered is not a valid amount. Please try again.");
-                return View("CreateDeposit");
-            }
-
-            //check for decimals greater than 3 places 
-            String checkDec = request.Amount.ToString();
-                if (checkDec.Contains("."))
-            {
-                string[] a = checkDec.Split(new char[] { '.' });
-                int decimals = a[1].Length;
-                //add error if 3 or more decimals
-                if (decimals >= 3)
-                {
-                    ModelState.AddModelError(string.Empty, "The amount entered cannot have more than 2 decimal places"); ;
                     return View("CreateDeposit");
                 }
             }
@@ -199,12 +142,23 @@ namespace Zorro.WebApplication.Controllers
                 ModelState.AddModelError(string.Empty, "You don't have a Credit Card Added to your Wallet. Please add one first.");
                 return View("CreateDeposit");
             }
+
             var sourceWallet = await _banker.GetWalletByDisplayName(user.NormalizedEmail);
-           
-            await _banker.DepositFunds(sourceWallet, request.Amount, request.Description);
-            deResult.Status = DepResultViewModelStatus.Approved;
-           //show the success receipt page
-            return View("DepositResult", deResult);
+            try
+            {
+                var result = await _banker.DepositFunds(sourceWallet, request.Amount, request.Description);
+                deResult.Status = DepResultViewModelStatus.Approved;
+                deResult.TransactionID = result.ToString();
+
+                //show the success receipt page
+                return View("DepositResult", deResult);
+            }
+            catch (InvalidDepositAmountException amtEx)
+            {
+                ModelState.AddModelError(string.Empty, $"{amtEx.Message}. Please enter a valid amount.");
+                return View("CreateDeposit");
+                throw;
+            }
         }
 
         //bpay task post 
@@ -286,7 +240,7 @@ namespace Zorro.WebApplication.Controllers
             }
 
             //all have passed so conduct the bpay
-            await _banker.BpayTransfer(sourceWallet, request.Amount, request.BillPayID, "BPAY Paid to: " + payeeName);
+            await _banker.BpayTransfer(sourceWallet.DisplayName, request.Amount, request.BillPayID, "BPAY Paid to: " + payeeName);
 
             bpayResult.Status = BpayResultViewModelStatus.Approved;
 

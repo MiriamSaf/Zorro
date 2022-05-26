@@ -8,15 +8,13 @@ namespace Zorro.WebApplication.Data
     public class MerchantManager
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ILogger<Banker> _logger;
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         //DI for merchant functions
-        public MerchantManager(UserManager<ApplicationUser> userManager, ILogger<Banker> logger, ApplicationDbContext applicationDbContext, RoleManager<IdentityRole> roleManager)
+        public MerchantManager(UserManager<ApplicationUser> userManager, ApplicationDbContext applicationDbContext, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
-            _logger = logger;
             _applicationDbContext = applicationDbContext;
             _roleManager = roleManager;
         }

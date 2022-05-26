@@ -12,7 +12,6 @@
                     <div class="col-4">
                      <select style="width:300px">
                          <option>Select User</option>
-                         <!-- Creates list of registered uers that the user can message and recieve messages from -->
                         @foreach (var friend in @ViewBag.Friends)
                         {
                            <option>
@@ -32,7 +31,6 @@
                     </div>
                     <div class="row top-row">
                         <div class="col-2">Message</div>
-                        <!-- Creates message that will be sent to the user -->
                         <div class="col-4"><input type="text" id="messageInput" placeholder="input message" /></div>
                     </div>
                     <div class="row">&nbsp;</div>

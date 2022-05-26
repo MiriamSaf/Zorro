@@ -1,4 +1,4 @@
-﻿@using Zorro.Dal.Models
+@using Zorro.Dal.Models
 @model List<ChatMessage>
 <div class="center-block" style="display:flex;justify-content:center;">
     <div class="content-width">
@@ -6,12 +6,17 @@
             <h5 class="card-header">Chat</h5>
             <div class="card-body">
                 <div class="row">&nbsp;</div>
-                <div class="col">
-                    <div class="list-group">
+               <div class="row top-row">
 
-                     <select>
+                    <! -- Creates a dropdown box that shows all active users on the application that messages can be sent to. -->
+                        <div class="col-2">Recipient</div>
+                        <div class="col-4">
+
+                     <select width=300px>
+                           <option>Select a Recipient</option>
                         @foreach (var friend in @ViewBag.Friends)
                         {
+                         
                            <option>
                              <a asp-route-id="@friend" class="list-group-item list-group-item-action">@friend</a>
                             </option>
@@ -20,7 +25,8 @@
                        
                     </div>
                 </div>
-                <dic class="col">
+             
+                <div class="col">
                     <div class="row top-row">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" value="@ViewBag.UserName" id="myUser" />
@@ -29,7 +35,8 @@
                     </div>
                     <div class="row top-row">
                         <div class="col-2">Message</div>
-                        <div class="col-4"><input type="text" id="messageInput" placeholder="input message" /></div>
+                        <! -- Allows users to enter a message that will be sent to the user selected from the dropdown box above -->
+                        <div class="col-4"><textarea type="text" id="messageInput" placeholder="input message" style="width:600px;height:100px"></textarea></div>
                     </div>
                     <div class="row">&nbsp;</div>
                     <div class="row">
@@ -37,7 +44,7 @@
                             <input type="button" class="btn btn-dark" id="sendButton" value="Send Message" />
                         </div>
                     </div>
-                </dic>
+                </div>
 
             </div>
         </div>
@@ -48,7 +55,10 @@
         </div>
         <div class="row">
             <div class="col-6">
+                <h3>Message List</h3>
                 <ul id="messagesList">
+                   
+                    <! -- Creates a list of messaged below the chat options -->
                     @foreach (var message in Model)
                     {
                         <li>From: @message.Sender.NormalizedEmail.ToLower() Message: @message.Message To:@message.Recipient  document.getElementById("friend").innerHTML.NormalizedEmail.ToLower()</li>
@@ -63,6 +73,7 @@
 <script src="~/js/chat.js"></script>
 
 
+ <! -- Styling for chat page -->
 <style>
     .col-6 ul li {
         margin: 2vh;

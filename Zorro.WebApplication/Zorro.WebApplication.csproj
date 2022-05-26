@@ -10,30 +10,15 @@
   <ItemGroup>
     <Compile Remove="Areas\NewFolder\**" />
     <Compile Remove="Data\Migrations\**" />
-    <Compile Remove="Friending\**" />
-    <Compile Remove="Views\Friending\**" />
     <Content Remove="Areas\NewFolder\**" />
     <Content Remove="Data\Migrations\**" />
-    <Content Remove="Friending\**" />
-    <Content Remove="Views\Friending\**" />
     <EmbeddedResource Remove="Areas\NewFolder\**" />
     <EmbeddedResource Remove="Data\Migrations\**" />
-    <EmbeddedResource Remove="Friending\**" />
-    <EmbeddedResource Remove="Views\Friending\**" />
     <None Remove="Areas\NewFolder\**" />
     <None Remove="Data\Migrations\**" />
-    <None Remove="Friending\**" />
-    <None Remove="Views\Friending\**" />
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
-=======
-    <Compile Remove="Controllers\ValuesController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
->>>>>>> Styling updates to chat feature
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.3" />

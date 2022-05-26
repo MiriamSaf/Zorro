@@ -7,19 +7,17 @@
             <div class="card-body">
                 <div class="row">&nbsp;</div>
                 <div class="col">
-                    <div class="row top-row">
-                        <div class="col-2">Select Recipient</div>
-                    <div class="col-4">
-                     <select style="width:300px">
-                         <option>Select User</option>
+                    <div class="list-group">
+
+                     <select>
                         @foreach (var friend in @ViewBag.Friends)
                         {
                            <option>
-                             <a asp-route-id="@friend" class="list-group-item list-group-item-action" >@friend</a>
+                             <a asp-route-id="@friend" class="list-group-item list-group-item-action">@friend</a>
                             </option>
                         }
                 </select>
-                       </div>
+                       
                     </div>
                 </div>
                 <dic class="col">
@@ -53,11 +51,7 @@
                 <ul id="messagesList">
                     @foreach (var message in Model)
                     {
-<<<<<<< HEAD
                         <li>From: @message.Sender.NormalizedEmail.ToLower() Message: @message.Message To:@message.Recipient  document.getElementById("friend").innerHTML.NormalizedEmail.ToLower()</li>
-=======
-                        <li>From: @message.Sender.NormalizedEmail.ToLower() Message: @message.Message To: @message.("friend").NormalizedEmail.ToLower()</li>
->>>>>>> Styling updates to chat feature
                     }
                 </ul>
             </div>
@@ -105,5 +99,4 @@
         #sendButton:hover {
             background-color: #1A2238
         }
-
 </style>

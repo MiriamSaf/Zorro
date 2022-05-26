@@ -222,6 +222,17 @@ namespace Zorro.WebApplication.Models
             return View("Index", _userManager.Users);
         }
 
+        // delete a merchant by their ID
+        [HttpPost]
+        public async Task<IActionResult> DeleteMerchant(int id)
+        {
+            var foundMerchant = await _applicationDbContext.Merchants.FindAsync(id);
+            _applicationDbContext.Merchants.Remove(foundMerchant);
+            await _applicationDbContext.SaveChangesAsync();
+
+            return RedirectToAction("Index","User");
+        }
+
         //errors function to display error
         private void Errors(IdentityResult result)
         {

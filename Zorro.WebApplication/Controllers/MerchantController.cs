@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Zorro.Dal.Models;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using Zorro.Dal;
-using Microsoft.AspNetCore.Authorization;
+using Zorro.Dal.Models;
 
 namespace Zorro.WebApplication.Models
 {
@@ -72,6 +72,9 @@ namespace Zorro.WebApplication.Models
             //return the pending view
             return View("Pending");
         }
+
+        // Pending merchant page
+        public IActionResult Pending() => View("Pending");
 
         //approved merchant view
         public async Task<IActionResult> Approve(int id)

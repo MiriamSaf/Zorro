@@ -7,9 +7,7 @@ using Zorro.Dal;
 using Zorro.Dal.Models;
 using Zorro.WebApplication.Chat;
 using Zorro.WebApplication.Data;
-
-
-
+using Zorro.WebApplication.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +26,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
+builder.Services.AddScoped<RedirectPendingMerchant>();
+
+// middleware to redirect pending merchants to pending page
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add<RedirectPendingMerchant>();
+});
 
 IServiceCollection serviceCollection = builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);

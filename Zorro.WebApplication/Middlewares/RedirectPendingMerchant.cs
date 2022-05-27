@@ -21,6 +21,7 @@ namespace Zorro.WebApplication.Middlewares
             _userManager = userManager;
         }
 
+        // redirect pending merchant to pending merchant page if they're logged in
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var descriptor = context.ActionDescriptor as ControllerActionDescriptor;

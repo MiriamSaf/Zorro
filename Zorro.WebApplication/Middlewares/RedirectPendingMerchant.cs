@@ -35,13 +35,17 @@ namespace Zorro.WebApplication.Middlewares
                     var user = _userManager.GetUserAsync(userClaims).GetAwaiter().GetResult();
                     if (user is not null)
                     {
-                        var pendingMerchantFlag = _context.Merchants
-                       .Any(m => m.ApplicationUser == user
-                           && m.Status == MerchantStatus.Pending);
-                        if (pendingMerchantFlag)
+                        var isAdministrator = _userManager.IsInRoleAsync(user, "Administrator").GetAwaiter().GetResult();
+                        if (!isAdministrator)
                         {
-                            var routeValue = new RouteValueDictionary(new { action = "Pending", controller = "Merchant" });
-                            context.Result = new RedirectToRouteResult(routeValue);
+                            var pendingMerchantFlag = _context.Merchants
+                                .Any(m => m.ApplicationUser == user
+                           && m.Status == MerchantStatus.Pending);
+                            if (pendingMerchantFlag)
+                            {
+                                var routeValue = new RouteValueDictionary(new { action = "Pending", controller = "Merchant" });
+                                context.Result = new RedirectToRouteResult(routeValue);
+                            }
                         }
                     }
                 }

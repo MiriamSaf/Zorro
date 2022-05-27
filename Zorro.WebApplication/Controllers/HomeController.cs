@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Zorro.Dal;
+using Zorro.Dal.Models;
 using Zorro.WebApplication.Data;
 using Zorro.WebApplication.ViewModels;
 
@@ -10,11 +13,15 @@ namespace Zorro.WebApplication.Controllers
     public class HomeController : Controller
     {
         private readonly IBanker _banker;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
         //load in banker with Dependency Injection so can be used in dashboard
-        public HomeController(IBanker banker)
+        public HomeController(IBanker banker, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _banker = banker;
+            _userManager = userManager;
+            _context = context;
         }
 
         //returns dashboard view
@@ -33,6 +40,11 @@ namespace Zorro.WebApplication.Controllers
         [Authorize]
         public async Task<IActionResult> Dashboard()
         {
+            // redirect merchant user to merchant dashboard
+            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+            if (_context.Merchants.Any(w => w.ApplicationUser == user))
+                return RedirectToAction("Index", "Merchant");
+
             // validate wallet and show balance
             var wallet = await _banker.GetWalletByDisplayName(User.Identity.Name);
             var dashboardData = new DashboardViewModel()

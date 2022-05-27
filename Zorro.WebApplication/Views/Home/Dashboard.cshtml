@@ -89,19 +89,19 @@
 <script>
     const copyButton = document.getElementById("copyButton");
 
-    copyButton.addEventListener("mouseover", function () {
+    copyWalletButton.addEventListener("mouseover", function () {
         this.classList.add("bi-clipboard-check");
         this.classList.remove("bi-clipboard");
     }, false);
 
-    copyButton.addEventListener("mouseleave", function () {
+    copyWalletButton.addEventListener("mouseleave", function () {
         this.classList.remove("bi-clipboard-check");
         this.classList.add("bi-clipboard");
     }, false);
 
-    copyButton.addEventListener("click", copyWallet, false);
+    copyWalletButton.addEventListener("click", copyToClipboard, false);
 
-    function copyWallet() {
+    function copyToClipboard() {
         var copyText = document.getElementById("walletId");
         var textArea = document.createElement("textarea");
         textArea.value = copyText.textContent;

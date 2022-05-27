@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using Zorro.Dal;
 using Zorro.Dal.Models;
+using Zorro.WebApplication.Data;
+using Zorro.WebApplication.ViewModels;
 
 namespace Zorro.WebApplication.Models
 {
@@ -14,23 +16,45 @@ namespace Zorro.WebApplication.Models
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IPasswordHasher<ApplicationUser> _passwordHashed;
         private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IBanker _banker;
 
         //DI for merchant controller
         public MerchantController(UserManager<ApplicationUser> userManager,
-            IPasswordHasher<ApplicationUser> passwordHashed, ApplicationDbContext applicationDbContext)
+            IPasswordHasher<ApplicationUser> passwordHashed, ApplicationDbContext applicationDbContext, IBanker banker)
         {
             _userManager = userManager;
             _passwordHashed = passwordHashed;
             _applicationDbContext = applicationDbContext;
+            _banker = banker;
         }
 
         //return merchant index - default page
         public async Task<IActionResult> Index()
         {
-            //pass all users to view
-            var user = await _userManager.GetUserAsync(User);
+            // validate wallet and show balance
+            var wallet = await _banker.GetWalletByDisplayName(User.Identity.Name);
+            var apiKey = string.IsNullOrEmpty(wallet.ApplicationUser.APIKey) == true ? "" : wallet.ApplicationUser.APIKey;
+            var dashboardData = new MerchantDashboardViewModel()
+            {
+                Balance = wallet.Balance,
+                WalletId = wallet.DisplayName,
+                ApiKey = apiKey
+            };
 
-            return View(user);
+            // get transactions and return transactions view models
+            var transactions = await _banker.GetTransactionsByWallet(wallet.Id);
+            foreach (var transaction in transactions.OrderByDescending(t => t.TransactionTimeUtc))
+            {
+                dashboardData.RecentTransactions.Add(
+                    new TransactionViewModel()
+                    {
+                        Amount = transaction.Amount,
+                        Date = transaction.TransactionTimeUtc,
+                        Description = transaction.Comment,
+                    });
+            }
+            //show the view with the data that we have grabbed
+            return View("Index", dashboardData);
         }
 
         //update Api key view behind the scenes 
@@ -49,7 +73,7 @@ namespace Zorro.WebApplication.Models
 
             await _userManager.UpdateAsync(user);
             //send the view with the updates user and their new key
-            return View("Index",user);
+            return RedirectToAction("Index");
         }
 
         //return register view for merchant 

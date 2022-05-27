@@ -1,99 +1,113 @@
-
 @using Microsoft.AspNetCore.Identity
 @using Zorro.Dal.Models
-@model Zorro.Dal.Models.ApplicationUser
+@model Zorro.WebApplication.ViewModels.MerchantDashboardViewModel;
 @inject UserManager<ApplicationUser> UserManager
 
-    <div class="spacer"></div>
+<div class="spacer"></div>
 
 <div class="center-block" style="display:flex;justify-content:center;">
     <div class="content-width">
 
         <div class="inputbox">
 
-             <h1>Merchant Dashboard</h1>
-
-            
-        <hr class="my-3" />
-
-        <!-- Merchant details -->
-        <ul class="list-group pb-3">
-            <li class="list-group-item">
-                <label class="form-label" style="margin-top: .5rem;"><b>User ID:</b></label><span id="walletId">@Html.DisplayFor(model => model.Email)</span> <i role="button" id="copyButton" class="bi bi-clipboard"></i>
-            </li>
-            <li class="list-group-item">
-                <label class="form-label" style="margin-top: .5rem;"><b>API Key:</b></label><span id="APIKey">@Html.DisplayFor(model => model.APIKey)</span> <i role="button" id="copyButton" class="bi bi-clipboard"></i>
-                <a class="p-2 btn btn-dark" asp-controller="Merchant" asp-action="UpdateAPIKey">Generate New Key</a>
-            </li>
-            <li class="list-group-item">
-                <label class="form-label" style="margin-top: .5rem;"><b>Zorro Commission: </b></label><span id="Commission">$18.80 (1% Commission Rate)</span>
-            </li>
-        </ul>
+            <h1>Merchant Dashboard</h1>
 
             <hr class="my-3" />
 
-            <h2>Recent Transactions (Sample Only)</h2>
+            <!-- Merchant details -->
+            <ul class="list-group pb-3">
+                <li class="list-group-item">
+                    <label class="form-label" style="margin-top: .5rem;"><b>User ID:</b></label><span id="walletId">@Html.DisplayFor(model => model.WalletId)</span> <i data-value-to-copy="@Model.WalletId" role="button" id="copyWalletId" class="copy-button bi bi-clipboard"></i>
+                </li>
+                <li class="list-group-item">
+                    <label class="form-label" style="margin-top: .5rem;"><b>Balance:</b></label><span id="balance">$@Html.DisplayFor(model => model.Balance)</span>
+                </li>
+                <li class="list-group-item">
+                    <label class="form-label" style="margin-top: .5rem;"><b>API Key:</b></label><span id="APIKey">@Html.DisplayFor(model => model.ApiKey)</span> <i data-value-to-copy="@Model.ApiKey" role="button" id="copyApiKey" class="copy-button bi bi-clipboard"></i>
+                    <a class="p-2 btn btn-dark" asp-controller="Merchant" asp-action="UpdateAPIKey">Generate New Key</a>
+                </li>
+                <li class="list-group-item">
+                    <label class="form-label" style="margin-top: .5rem;"><b>Zorro Commission: </b></label><span id="Commission">$18.80 (1% Commission Rate)</span>
+                </li>
+            </ul>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Date
-                    </th>
-                    <th>
-                        USER ID
-                    </th>
-                    <th>
-                        Amount
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>25/04/2022 9:43:53 PM</td><td>damien@gmail.com</td><td>$541.50</td></tr>
-                <tr><td>19/04/2022 8:08:21 AM</td><td>cbanville@rmit.com.au</td><td>$60.35</td></tr>
-                <tr><td>14/04/2022 1:08:45 PM</td><td>luis.dabruzzo@gmail.com</td><td>$104.5</td></tr>
-                <tr><td>12/04/2022 10:41:59 AM</td><td>john.smith@gmail.com</td><td>$1200.95</td></tr>
-            </tbody>
-        </table>
+            <hr class="my-3" />
+
+            <h2>Recent Transactions</h2>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RecentTransactions[0].Date)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RecentTransactions[0].Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RecentTransactions[0].Amount)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.RecentTransactions)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Amount)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
 
-    </div>
         </div>
+    </div>
 
-            </div>
+</div>
 
 
 
 @section Scripts
-{
-<script>
-        const copyButton = document.getElementById("copyButton");
+    {
+    <script>
+        // wire up copy events for wallet and api key
+        const copyWalletButton = document.getElementById("copyWalletId");
+        const copyApiKeyButton = document.getElementById("copyApiKey");
 
-        copyButton.addEventListener("mouseover", function () {
+        copyWalletButton.addEventListener("click", copyToClipboard, false);
+        copyApiKeyButton.addEventListener("click", copyToClipboard, false);
+
+        copyWalletButton.addEventListener("mouseover", function() {
             this.classList.add("bi-clipboard-check");
             this.classList.remove("bi-clipboard");
         }, false);
 
-        copyButton.addEventListener("mouseleave", function () {
+        copyWalletButton.addEventListener("mouseleave", function() {
             this.classList.remove("bi-clipboard-check");
             this.classList.add("bi-clipboard");
         }, false);
 
-        copyButton.addEventListener("click", copyWallet, false);
-
-        function copyWallet() {
-            var copyText = document.getElementById("walletId");
+        function copyToClipboard() {
+            console.log(this);
             var textArea = document.createElement("textarea");
-            textArea.value = copyText.textContent;
+            textArea.value = this.dataset.valueToCopy;
             document.body.appendChild(textArea);
             textArea.select();
             document.execCommand("Copy");
             textArea.remove();
-            
+
             this.classList.remove("bi-clipboard-check");
             this.classList.remove("bi-clipboard");
             this.classList.add("bi-clipboard-check-fill");
         }
 
-</script>
+    </script>
 }

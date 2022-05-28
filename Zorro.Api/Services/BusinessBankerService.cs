@@ -7,22 +7,28 @@ namespace Zorro.Api.Services
 {
     public class BusinessBankerService : IBusinessBankerService
     {
-        private readonly ILogger<BusinessBankerService> _logger;
-        private const decimal _conversionFee = 0.01M;
+        public static readonly decimal conversionFee = 0.01M;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public BusinessBankerService(ILogger<BusinessBankerService> logger, IServiceScopeFactory serviceScopeFactory)
+        public BusinessBankerService(IServiceScopeFactory serviceScopeFactory)
         {
-            _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
         }
 
-        private static decimal ConvertCurrency(decimal amount, Currency currencyType)
-            => amount * CurrencyRateMap.GetConversionRate(currencyType);
+        public static decimal ConvertCurrency(decimal amount, Currency currencyType)
+            => Math.Round(amount * CurrencyRateMap.GetConversionRate(currencyType), 2);
+
+        public static decimal GetFee(decimal amount) =>
+            Math.Round(amount * conversionFee, 2);
 
         public async Task<Guid> ProcessPayment(string merchantWalletId, string customerWalletId,
-            decimal amount, Currency currencyType, string comment)
+            decimal amount, int currencyTypeInt, string comment)
         {
+            // verify currency type
+            if (!Enum.IsDefined(typeof(Currency), currencyTypeInt))
+                throw new InvalidCurrencyTypeException($"{currencyTypeInt} does't correspond with a supported currency");
+            var currencyType = (Currency)currencyTypeInt;
+
             amount = Math.Round(amount, 2);
             using var scope = _serviceScopeFactory.CreateScope();
             using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -36,16 +42,13 @@ namespace Zorro.Api.Services
                 throw new WalletNotFoundException("Unable to find customer wallet");
 
             // convert currency and determine fee (if applicable)
-            decimal convertedAmount = Math.Round(ConvertCurrency(amount, currencyType), 2);
+            decimal convertedAmount = ConvertCurrency(amount, currencyType);
             if (convertedAmount < 1)
                 throw new InvalidAmountException("Amount must be at least $1.00 AUD");
 
             decimal fee = new();
             if (currencyType != Currency.Aud)
-            {
-                fee = Math.Round(convertedAmount * _conversionFee);
-                convertedAmount += fee;
-            }
+                fee = GetFee(convertedAmount);
 
             if (customerWallet.Balance < (convertedAmount + fee))
                 throw new InsufficientFundsException("Customer has insufficient funds for payment");
@@ -56,7 +59,7 @@ namespace Zorro.Api.Services
 
             var customerTX = new Transaction()
             {
-                Amount = convertedAmount * -1,
+                Amount = (convertedAmount + fee) * -1,
                 Comment = transactionComment,
                 CurrencyType = Currency.Aud,
                 TransactionTimeUtc = now,

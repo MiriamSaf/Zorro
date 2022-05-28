@@ -21,6 +21,17 @@
         }
     }
 
+    public class InvalidCurrencyTypeException : AbstractZorroException
+    {
+        public InvalidCurrencyTypeException()
+        {
+        }
+
+        public InvalidCurrencyTypeException(string message) : base(message)
+        {
+        }
+    }
+
     public class InvalidAmountException : AbstractZorroException
     {
         public InvalidAmountException()

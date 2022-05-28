@@ -49,11 +49,12 @@ app.MapPost("/ProcessPayment", [Authorize] async ([FromServices] IBusinessBanker
         var merchantWallet = req.HttpContext.User.Identity.Name;
 
         var receipt = await banker.ProcessPayment(
-        merchantWallet,
-        transactionRequest.CustomerWalletId,
-        transactionRequest.Amount,
-        transactionRequest.Currency,
-        transactionRequest.Description);
+            merchantWallet,
+            transactionRequest.CustomerWalletId,
+            transactionRequest.Amount,
+            transactionRequest.Currency,
+            transactionRequest.Description
+            );
 
         return Results.Ok(new Receipt() { ReceiptNumber = receipt.ToString() });
     }
@@ -75,7 +76,7 @@ class TransactionRequest
     public string CustomerWalletId { get; set; } = "";
     public decimal Amount { get; set; }
     public string Description { get; set; } = "";
-    public Currency Currency { get; set; } = Currency.Aud;
+    public int Currency { get; set; }
 }
 
 class Receipt
